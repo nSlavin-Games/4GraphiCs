@@ -1,4 +1,4 @@
-package com.fourgraphics;
+package com.fourgraphics.test;
 
 public class Main {
 
