@@ -1,6 +1,7 @@
 package com.fourgraphics.scenemanagement;
 
-import com.fourgraphics.gameobjects.GameObject;
+import com.fourgraphics.gameobjects.*;
+import processing.core.PApplet;
 
 import java.util.ArrayList;
 
@@ -11,24 +12,44 @@ public class SceneManager {
     /**
      * La lista delle scene esistenti
      */
-    static ArrayList<SceneBlueprint> sceneList = new ArrayList<>();
+    private static ArrayList<SceneBlueprint> sceneList;
     /**
      *  L’index che indica quale elemento della lista delle scene deve essere la lista attiva
      */
-    static int activeSceneIndex;
+    private static int activeSceneIndex;
 
+    /**
+     * Il riferimento all'app principale del gioco
+     */
+    private static PApplet mainApp;
+
+    /**
+     * La durata dell'ultimo frame in secondi, utilizzato per fare gli adattamenti al framerate
+     */
+    private static float deltaTime;
+    /**
+     * Il valore del tempo di esecuzione dell'app che viene utilizzato per calcolare il deltaTime
+     */
+    private static float time;
 
     /**
      * Inizializza la lista delle scene e l’index della scena attiva
      */
-    static void initialize() {
-        //TODO(samu): not implemented
+    public static void initialize(PApplet app) {
+        mainApp = app;
+        sceneList = new ArrayList<>();
     }
 
     /**
      * Esegue la scena attualmente selezionata
      */
-    static void executeScene() {
+    public static void executeScene() {
+        //Eseguo come prima cosa il calcolo del deltaTime, ovvero quanto è durato l'ultimo frame
+        float lastTime = time; //salvo quand'è cominciata l'ultima escuzione
+        time = mainApp.millis(); //segno quand'è cominciata questa esecuzione
+        //calcolo il deltaTime facendo la differenza fra i due tempi così so quanto tempo è durato il frame in millisecondi
+        //poi lo divido per 1000 per averlo in secondi
+        deltaTime = (time-lastTime)/1000f;
         //TODO(samu): not implemented
     }
 
@@ -36,7 +57,7 @@ public class SceneManager {
      * Carica la scena con l’index specificato
      * @param index Index della scena da caricare
      */
-    static void loadScene(int index) {
+    public static void loadScene(int index) {
         //TODO(samu): not implemented
     }
 
@@ -44,7 +65,7 @@ public class SceneManager {
      * Aggiunge la scena specificata alla lista delle scene esistenti
      * @param blueprint Scena da aggiungere
      */
-    static void addScene(SceneBlueprint blueprint) {
+    public static void addScene(SceneBlueprint blueprint) {
         //TODO(samu): not implemented
     }
 
@@ -52,7 +73,7 @@ public class SceneManager {
      * Getter per activeScene
      * @return Restituisce la scena attiva
      */
-    static SceneBlueprint getActiveScene() {
+    public static SceneBlueprint getActiveScene() {
         return sceneList.get(activeSceneIndex);
     }
 
@@ -60,7 +81,7 @@ public class SceneManager {
      * Getter per activeSceneIndex
      * @return Restituisce l’index della scena attiva
      */
-    static int getActiveSceneIndex() {
+    public static int getActiveSceneIndex() {
         return activeSceneIndex;
     }
 
@@ -68,7 +89,7 @@ public class SceneManager {
      * Aggiunge un oggetto alla scena attualmente attiva
      * @param object Oggetto da aggiungere
      */
-    static void instantiate(GameObject object) {
+    public static void instantiate(GameObject object) {
         //TODO(samu): not implemented
     }
 
@@ -76,7 +97,23 @@ public class SceneManager {
      * Rimuove un oggetto dalla scena attualmente attiva
      * @param object Oggetto da rimuovere
      */
-    static void destroy(GameObject object) {
+    public static void destroy(GameObject object) {
         //TODO(samu): not implemented
+    }
+
+    /**
+     * Getter per l'app principale
+     * @return l'app principale
+     */
+    public static PApplet getApp() {
+        return mainApp;
+    }
+
+    /**
+     * Getter per il deltaTime
+     * @return il valore del deltaTime
+     */
+    public static float deltaTime() {
+        return deltaTime;
     }
 }

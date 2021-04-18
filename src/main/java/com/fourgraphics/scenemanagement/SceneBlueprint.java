@@ -1,10 +1,9 @@
 package com.fourgraphics.scenemanagement;
 
-import com.fourgraphics.colliders.Collider;
-import com.fourgraphics.gameobjects.GameObject;
-import com.fourgraphics.gameobjects.Script;
-import com.fourgraphics.graphicsystem.Renderable;
-import com.fourgraphics.ui.UIElement;
+import com.fourgraphics.colliders.*;
+import com.fourgraphics.gameobjects.*;
+import com.fourgraphics.graphicsystem.*;
+import com.fourgraphics.ui.*;
 
 import java.util.ArrayList;
 
