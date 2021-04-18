@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/out/production/4GraphiCs" />
+    <output-test url="file://$MODULE_DIR$/out/test/4GraphiCs" />
     <exclude-output />
     <javadoc-paths>
       <root url="file://$MODULE_DIR$/.documentation/JavaDoc" />
@@ -21,7 +23,9 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
-        <JAVADOC />
+        <JAVADOC>
+          <root url="https://processing.github.io/processing-javadocs/core/" />
+        </JAVADOC>
         <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
