@@ -13,11 +13,11 @@ public abstract class UIElement {
     /**
      * L’oggetto a cui è attaccato l’elemento
      */
-    protected GameObject gameObject;
+    public GameObject gameObject;
     /**
      * Posizione e dimensione dell’oggetto a cui è attaccato l’elemento
      */
-    protected Transform transform;
+    public Transform transform;
     /**
      * Il testo scritto
      */
