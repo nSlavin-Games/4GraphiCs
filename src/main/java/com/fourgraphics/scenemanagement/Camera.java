@@ -3,6 +3,8 @@ package com.fourgraphics.scenemanagement;
 import com.fourgraphics.gameobjects.GameObject;
 import com.fourgraphics.gameobjects.Vector2;
 
+import processing.core.PApplet;
+
 /**
  * Gestione della telecamera di gioco e impostazione di un sistema per seguire un target(per esempio un giocatore)
  */
@@ -19,6 +21,12 @@ public class Camera {
      * L’offset della telecamera dalla sua posizione
      */
     private Vector2 offset;
+    
+    private PApplet sketch;
+    
+    Camera() {
+    	sketch = SceneManager.getApp();
+    }
 
     /**
      * Getter per target
@@ -45,14 +53,24 @@ public class Camera {
     }
 
     public void setPosition(Vector2 position) {
-        this.position = position;
+        this.position.set(position);
     }
 
     public void setOffset(Vector2 offset) {
-        this.offset = offset;
+        this.offset.set(offset);
+    }
+    
+    public Vector2 getOffsetPosition() {
+    	Vector2 newVector = new Vector2();
+    	newVector.sum(position);
+    	newVector.sum(offset);
+    	return newVector;
     }
 
     public void calculateCamera() {
-        //TODO(samu): not implemented
+        if (target != null) {
+        	setPosition(target.transform.getPosition());
+        }
+        sketch.camera(getOffsetPosition().getX(), getOffsetPosition().getY(), (sketch.height/2) / sketch.tan(sketch.PI*30 / 180), getOffsetPosition().getX(), getOffsetPosition().getY(), 0, 0, 1, 0);
     }
 }
