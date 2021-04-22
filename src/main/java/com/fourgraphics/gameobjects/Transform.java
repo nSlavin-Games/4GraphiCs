@@ -1,7 +1,6 @@
 package com.fourgraphics.gameobjects;
 
 public class Transform {
-
     private Vector2 position;//posizione dell'oggetto
     private Vector2 scale;//dimensione dell'oggetto
 
@@ -26,7 +25,7 @@ public class Transform {
     }
 
     /**
-     * imposta la posizione delloggetto
+     * imposta la posizione dell'oggetto
      * @param position
      */
     public void setPosition(Vector2 position) {
@@ -42,7 +41,7 @@ public class Transform {
     }
 
     /**
-     * imposta la dimensione delloggetto
+     * imposta la dimensione dell'oggetto
      * @param scale
      */
     public void setScale(Vector2 scale) {
@@ -50,7 +49,7 @@ public class Transform {
     }
 
     /**
-     * imposta la posizione delloggetto
+     * imposta la posizione dell'oggetto
      * @param x
      * @param y
      */
@@ -60,7 +59,7 @@ public class Transform {
     }
 
     /**
-     * imposta la dimensione delloggetto
+     * imposta la dimensione dell'oggetto
      * @param x
      * @param y
      */
@@ -68,4 +67,15 @@ public class Transform {
         scale.set(x,y);
     }
 
+}
+=======
+    public Vector2 getPosition() {
+        //TODO(samu): Not implemented
+        return null;
+    }
+
+    public Vector2 getScale() {
+        //TODO(samu): Not implemented
+        return null;
+    }
 }
