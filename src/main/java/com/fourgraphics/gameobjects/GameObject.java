@@ -21,12 +21,11 @@ public class GameObject {
     /**
      * Costruttore
      * @param componentList
-     * @param transform
      * @param name
      */
-    public GameObject(ArrayList<Object> componentList, Transform transform, String name) {
+    public GameObject(ArrayList<Object> componentList, String name) {
         this.componentList = componentList;
-        this.transform = transform;
+        this.transform = new Transform();
         this.name = name;
     }
 
