@@ -76,7 +76,11 @@ public class SceneBlueprint {
 	 * script attaccati
 	 */
 	public void start() {
-		// TODO(samu): not implemented
+		if (isInitialized == true) {
+			for (Script s : scriptList) {
+				s.Start();
+			}
+		}
 	}
 
 	/**
@@ -84,7 +88,9 @@ public class SceneBlueprint {
 	 * di tutti gli script attaccati
 	 */
 	public void update() {
-		// TODO(samu): not implemented
+		for (Script s : scriptList) {
+			s.Update();
+		}
 	}
 
 	/**
@@ -94,8 +100,7 @@ public class SceneBlueprint {
 	 * @return Restituisce l’oggetto equivalente all’id selezionato
 	 */
 	GameObject getObject(int objectID) {
-		// TODO(samu): not implemented
-		return new GameObject();
+		return objectList.get(objectID);
 	}
 
 	/**
@@ -108,8 +113,12 @@ public class SceneBlueprint {
 	 *         sono più oggetti con lo stesso nome restituisce il primo
 	 */
 	GameObject getObject(String objectName) {
-		// TODO(samu): not implemented
-		return new GameObject();
+		for (int i = 0; i < objectList.size(); i++) {
+			if (objectList.get(i).getName().equals(objectName)) {
+				return objectList.get(i);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -143,14 +152,18 @@ public class SceneBlueprint {
 	 * Esegue tutti i render necessari, fra renderer e animator
 	 */
 	void renderObjects() {
-		// TODO(samu): not implemented
+		for (Renderable r : renderableElements) {
+			r.render();
+		}
 	}
 
 	/**
 	 * Disegna tutti gli elementi dell’UI
 	 */
 	void renderUI() {
-		// TODO(samu): not implemented
+		for (UIElement uiE : uiElements) {
+			uiE.display();
+		}
 	}
 
 	/**
@@ -162,7 +175,19 @@ public class SceneBlueprint {
 	 * e basta
 	 */
 	void calculateCollisions() {
-		// TODO(samu): not implemented
+		for (Collider c : dynamicColliders) { // primo collider
+			for (Collider c2 : dynamicColliders) { // secondo collider (dinamico)
+				if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { // se collide con un collider
+																						// dinamico diverso da se stesso
+					c.gameObject.getComponent(Script.class).onCollisionEnter(c, c2); // esegue lo script alla collisione
+				}
+			}
+			for (Collider c2 : collidersList) { // secondo collider (statico)
+				if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { // se collide con un collider statico
+					c.gameObject.getComponent(Script.class).onCollisionEnter(c, c2); // esegue lo script alla collisione
+				}
+			}
+		}
 	}
 
 	void setObjectList(ArrayList<GameObject> objectList) {
