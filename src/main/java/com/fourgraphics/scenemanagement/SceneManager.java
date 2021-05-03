@@ -14,7 +14,7 @@ public class SceneManager {
      */
     private static ArrayList<SceneBlueprint> sceneList;
     /**
-     *  L’index che indica quale elemento della lista delle scene deve essere la lista attiva
+     *  L’index che indica quale elemento della lista delle scene deve essere la scena attiva
      */
     private static int activeSceneIndex;
 
@@ -50,7 +50,7 @@ public class SceneManager {
         //calcolo il deltaTime facendo la differenza fra i due tempi così so quanto tempo è durato il frame in millisecondi
         //poi lo divido per 1000 per averlo in secondi
         deltaTime = (time-lastTime)/1000f;
-        //TODO(samu): not implemented
+        loadScene(getActiveSceneIndex());
     }
 
     /**
@@ -58,7 +58,7 @@ public class SceneManager {
      * @param index Index della scena da caricare
      */
     public static void loadScene(int index) {
-        //TODO(samu): not implemented
+        sceneList.get(index).initialize();
     }
 
     /**
@@ -66,7 +66,7 @@ public class SceneManager {
      * @param blueprint Scena da aggiungere
      */
     public static void addScene(SceneBlueprint blueprint) {
-        //TODO(samu): not implemented
+        sceneList.add(blueprint);
     }
 
     /**
@@ -90,7 +90,7 @@ public class SceneManager {
      * @param object Oggetto da aggiungere
      */
     public static void instantiate(GameObject object) {
-        //TODO(samu): not implemented
+        sceneList.get(activeSceneIndex).addObject(object);
     }
 
     /**
@@ -98,7 +98,7 @@ public class SceneManager {
      * @param object Oggetto da rimuovere
      */
     public static void destroy(GameObject object) {
-        //TODO(samu): not implemented
+        sceneList.get(activeSceneIndex).removeObject(object);
     }
 
     /**
