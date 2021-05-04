@@ -9,14 +9,18 @@ public class CheckBox extends UIElement {
 	private int fillColor;
 	private boolean checked;
 
-	public CheckBox(String text, int color, PImage texture) {
+	public CheckBox(String text, int color, PImage texture,PImage defaultCheck,String fillTexture,String fillTextureIcon) {
 		super(text, color, texture);	
-
+		this.defaultCheck=defaultCheck;
+		this.fillTexture =sketch.loadImage(fillTexture);
+		this.checkIcon= sketch.loadImage(fillTextureIcon);
 	}
 
-	public CheckBox(String text,int color,String fileName) {
+	public CheckBox(String text,int color,String fileName,PImage defaultCheck,PImage fillTexture,PImage checkIcon) {
 		super(text,color,fileName);
-
+		this.defaultCheck=defaultCheck;
+		this.fillTexture=fillTexture;
+		this.checkIcon=checkIcon;
 	}
 	@Override
 	public void display() {
@@ -24,8 +28,8 @@ public class CheckBox extends UIElement {
 			if(!isChecked())
 				sketch.fill(color);
 			else
-				//				sketch.fill(fillColor);
-				sketch.noStroke();
+				sketch.fill(fillColor);
+			sketch.noStroke();
 			sketch.rectMode(sketch.CORNER);
 			sketch.rect(transform.getPosition().getX()-transform.getScale().getX()/2,transform.getPosition().getY()-transform.getScale().getY()/2,transform.getScale().getY(), transform.getScale().getY());
 
@@ -36,7 +40,10 @@ public class CheckBox extends UIElement {
 			sketch.image(texture, transform.getPosition().getX(),  transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
 		}else {
 			sketch.imageMode(sketch.CENTER);
-			sketch.image(fillTexture, transform.getPosition().getX(),  transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
+			if(checkIcon!=null)
+			sketch.image(checkIcon, transform.getPosition().getX(),  transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
+			else
+				sketch.image(defaultCheck, transform.getPosition().getX(),  transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
 		}
 		sketch.textMode(sketch.CORNER);
 		sketch.text(text, transform.getPosition().getX()+transform.getScale().getY(),transform.getPosition().getY(),transform.getScale().getX(),transform.getScale().getY());
