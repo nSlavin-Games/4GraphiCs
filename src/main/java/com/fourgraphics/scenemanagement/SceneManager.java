@@ -50,7 +50,7 @@ public class SceneManager {
         //calcolo il deltaTime facendo la differenza fra i due tempi così so quanto tempo è durato il frame in millisecondi
         //poi lo divido per 1000 per averlo in secondi
         deltaTime = (time-lastTime)/1000f;
-        loadScene(getActiveSceneIndex());
+        sceneList.get(activeSceneIndex).update();
     }
 
     /**
@@ -59,6 +59,7 @@ public class SceneManager {
      */
     public static void loadScene(int index) {
         sceneList.get(index).initialize();
+        activeSceneIndex = index;
     }
 
     /**
