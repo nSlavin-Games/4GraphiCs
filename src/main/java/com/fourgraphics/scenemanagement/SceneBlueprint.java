@@ -91,6 +91,10 @@ public class SceneBlueprint {
 		for (Script s : scriptList) {
 			s.Update();
 		}
+		calculateCollisions();
+		renderObjects();
+		renderUI();
+		sceneCamera.calculateCamera();
 	}
 
 	/**
@@ -176,15 +180,24 @@ public class SceneBlueprint {
 	 */
 	void calculateCollisions() {
 		for (Collider c : dynamicColliders) { // primo collider
-			for (Collider c2 : dynamicColliders) { // secondo collider (dinamico)
-				if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { // se collide con un collider
-																						// dinamico diverso da se stesso
-					c.gameObject.getComponent(Script.class).onCollisionEnter(c, c2); // esegue lo script alla collisione
-				}
-			}
 			for (Collider c2 : collidersList) { // secondo collider (statico)
-				if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { // se collide con un collider statico
-					c.gameObject.getComponent(Script.class).onCollisionEnter(c, c2); // esegue lo script alla collisione
+
+				if(c2.isDynamic()) {
+					if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { 
+						for(Object o: c.gameObject.getComponents() ) {
+							if(o instanceof Script) {
+								((Script)o).OnCollisionEnter(c,c2);
+							}
+						}
+					}
+				}else {	
+					if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { // se collide con un collider statico
+						for(Object o: c.gameObject.getComponents() ) {
+							if(o instanceof Script) {
+								((Script)o).OnCollisionEnter(c,c2);
+							}
+						}
+					}
 				}
 			}
 		}
