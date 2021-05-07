@@ -55,4 +55,9 @@ public class Camera {
     public void calculateCamera() {
         //TODO(samu): not implemented
     }
+
+	public Vector2 getOffsetPosition() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
