@@ -59,10 +59,7 @@ public class Button extends UIElement {
 			if(!worldSpace)
 				sketch.popMatrix();
 	}
-	Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
-	sketch.pushMatrix();	
-	sketch.translate(cameraPosition.getX(), cameraPosition.getY());
-	sketch.popMatrix();
+	
 	/**
 	 * Indica se il mouse è sopra il bottone
 	 *
