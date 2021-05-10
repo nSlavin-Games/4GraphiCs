@@ -38,7 +38,11 @@ public class Button extends UIElement {
 	 */
 	public void display() {
 		//world space, i blocchi, man mano che ti sposti scompaiono
-		if(worldSpace) {
+		if(!worldSpace) {
+			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
+			sketch.pushMatrix();	
+			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
+		}
 			sketch.noStroke();
 			sketch.rectMode(sketch.CENTER);
 			if (texture == null) {
@@ -52,29 +56,13 @@ public class Button extends UIElement {
 			sketch.textAlign(sketch.CENTER, sketch.CENTER);
 			sketch.textSize(20);
 			sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-		}else {
-			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
-			sketch.noStroke();
-			sketch.rectMode(sketch.CENTER);
-			sketch.pushMatrix();	
-			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
-			if (texture == null) {
-				sketch.fill(color);
-				sketch.rect(transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-			}else {
-				sketch.imageMode(sketch.CENTER);
-				sketch.image(texture, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-			}
-			sketch.fill(0);
-			sketch.textAlign(sketch.CENTER, sketch.CENTER);
-			sketch.textSize(20);
-			sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-			sketch.popMatrix();
-		}
-
+			if(!worldSpace)
+				sketch.popMatrix();
 	}
-
-
+	Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
+	sketch.pushMatrix();	
+	sketch.translate(cameraPosition.getX(), cameraPosition.getY());
+	sketch.popMatrix();
 	/**
 	 * Indica se il mouse è sopra il bottone
 	 *

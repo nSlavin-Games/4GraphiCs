@@ -30,7 +30,7 @@ public class CheckBox extends UIElement {
 		if(!worldSpace) {
 			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
 			sketch.noStroke();
-			sketch.rectMode(sketch.CENTER);
+			
 			sketch.pushMatrix();	
 			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
 			
@@ -56,7 +56,8 @@ public class CheckBox extends UIElement {
 			}
 			sketch.textMode(sketch.CORNER);
 			sketch.text(text, transform.getPosition().getX()+transform.getScale().getY(),transform.getPosition().getY(),transform.getScale().getX(),transform.getScale().getY());
-		
+			if(!worldSpace)
+				sketch.popMatrix();
 	}
 	public boolean mouseOver() {
 		if (sketch.mouseX > transform.getPosition().getX() - transform.getScale().getX() / 2 && sketch.mouseX < transform.getPosition().getX() + transform.getScale().getX() / 2 && sketch.mouseY > transform.getPosition().getY() - transform.getScale().getY() / 2 && sketch.mouseY < transform.getPosition().getY() + transform.getScale().getY() / 2)

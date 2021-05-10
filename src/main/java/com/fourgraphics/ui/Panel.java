@@ -38,7 +38,11 @@ public class Panel extends UIElement {
 	 * Mostra il pannello di testo
 	 */
 	public void display() {
-		if(worldSpace) {
+		if(!worldSpace) {
+			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
+			sketch.pushMatrix();	
+			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
+		}
 
 
 			sketch.noStroke();
@@ -54,25 +58,8 @@ public class Panel extends UIElement {
 			sketch.textAlign(sketch.CENTER, sketch.CENTER);
 			sketch.textSize(20);
 			sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-		}else {
-			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
-			sketch.noStroke();
-			sketch.rectMode(sketch.CENTER);
-			sketch.pushMatrix();	
-			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
-			if (texture == null) {
-				sketch.fill(color);
-				sketch.rect(transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-			}else {
-				sketch.imageMode(sketch.CENTER);
-				sketch.image(texture, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-			}
-			sketch.fill(0);
-			sketch.textAlign(sketch.CENTER, sketch.CENTER);
-			sketch.textSize(20);
-			sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
+		if(!worldSpace)
 			sketch.popMatrix();
-		}
 	}
 
 }
