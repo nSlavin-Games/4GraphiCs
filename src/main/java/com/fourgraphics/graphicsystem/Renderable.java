@@ -1,5 +1,6 @@
+
 package com.fourgraphics.graphicsystem;
-import com.fourgraphics.gameobjects;
+import com.fourgraphics.gameobjects.*;
 import processing.core.PApplet;
 
 /**
@@ -7,7 +8,7 @@ import processing.core.PApplet;
  */
 
 /**
- * @author axel9
+ * @author Dareisa, Furriolo, Iurcea
  *
  */
 public abstract class Renderable {
@@ -15,8 +16,10 @@ public abstract class Renderable {
 	public Transform transform; 
 	protected PApplet sketch;
 	
-	abstract void Render();
+	abstract void render();
 
 
 
 }
+
+

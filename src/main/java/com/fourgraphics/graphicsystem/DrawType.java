@@ -1,9 +1,6 @@
-/**
- * 
- */
 package com.fourgraphics.graphicsystem;
 /**
- * @author axel9
+ * @author Dareisa, Furriolo, Iurcea
  *
  */
 public enum DrawType {

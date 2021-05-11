@@ -1,4 +1,7 @@
+
 package com.fourgraphics.graphicsystem;
+import com.fourgraphics.scenemanagement.SceneManager;
+
 import processing.core.*;
 
 /**
@@ -6,7 +9,7 @@ import processing.core.*;
  */
 
 /**
- * @author axel9
+ * @author Dareisa, Furriolo, Iurcea
  *
  */
 public class Renderer extends Renderable {
@@ -15,19 +18,19 @@ public class Renderer extends Renderable {
 	private DrawType renderType;
 	
 
-	public Renderer(int color,PImage texture,DrawType renderType, PApplet sketch) {
+	public Renderer(int color,PImage texture,DrawType renderType) {
 		this.color=color;
 		this.texture=texture;
 		this.renderType=renderType;
-		this.sketch=sketch;
+		sketch=SceneManager.getApp();
 	}
 
 	@Override
-	void Render() {
-		float x=transform.GetPosition().GetX();
-		float y=transform.GetPosition().GetY();
-		float w=transform.GetScale().GetX();
-		float h=transform.GetScale().GetY();
+	public void render() {
+		float x=transform.getPosition().getX();
+		float y=transform.getPosition().getY();
+		float w=transform.getScale().getX();
+		float h=transform.getScale().getY();
 		switch(renderType) {
 		case TEXTURED:
 			sketch.imageMode(sketch.CENTER);
