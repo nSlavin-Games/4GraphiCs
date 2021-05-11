@@ -1,4 +1,21 @@
 package com.fourgraphics.graphicsystem;
+import processing.core.PApplet;
 
-public class Renderable {
+/**
+ * 
+ */
+
+/**
+ * @author axel9
+ *
+ */
+public abstract class Renderable {
+	public GameObject gameObject;      
+	public Transform transform; 
+	protected PApplet sketch;
+	
+	abstract void Render();
+
+
+
 }
