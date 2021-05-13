@@ -10,65 +10,67 @@ import processing.core.*;
  */
 public abstract class UIElement {
 
-    /**
-     * L’oggetto a cui è attaccato l’elemento
-     */
-    public GameObject gameObject;
-    /**
-     * Posizione e dimensione dell’oggetto a cui è attaccato l’elemento
-     */
-    public Transform transform;
-    /**
-     * Il testo scritto
-     */
-    protected String text;
-    /**
-     * Il colore dell’elemento UI
-     */
-    protected int color;
-    /**
-     * La texture dell’elemento UI
-     */
-    protected PImage texture;
-    /**
-     * Riferimento all'applet di Processing
-     */
-    protected PApplet sketch;
+	/**
+	 * L’oggetto a cui è attaccato l’elemento
+	 */
+	public GameObject gameObject;
+	/**
+	 * Posizione e dimensione dell’oggetto a cui è attaccato l’elemento
+	 */
+	public Transform transform;
+	/**
+	 * Il testo scritto
+	 */
+	protected String text;
+	/**
+	 * Il colore dell’elemento UI
+	 */
+	protected int color;
+	/**
+	 * La texture dell’elemento UI
+	 */
+	protected PImage texture;
+	/**
+	 * Riferimento all'applet di Processing
+	 */
+	protected PApplet sketch;
+	protected boolean worldSpace;
 
+	/**
+	 * Costruttore generico per un elemento dell'interfaccia grafica con una texutre data tramite PImage
+	 *
+	 * @param text    Testo dell'elemento
+	 * @param color   Colore default dell'elemento
+	 * @param texture Texture dell'elemento (PImage)
+	 */
+	public UIElement(String text, int color, PImage texture,boolean space) {
+		this.text = text;
+		this.color = color;
+		this.texture = texture;
+		sketch = SceneManager.getApp();
+		this.worldSpace=space;
 
-    /**
-     * Costruttore generico per un elemento dell'interfaccia grafica con una texutre data tramite PImage
-     *
-     * @param text    Testo dell'elemento
-     * @param color   Colore default dell'elemento
-     * @param texture Texture dell'elemento (PImage)
-     */
-    public UIElement(String text, int color, PImage texture) {
-        this.text = text;
-        this.color = color;
-        this.texture = texture;
-        sketch = SceneManager.getApp();
+	}
 
-    }
+	/**
+	 * Costruttore generico per un elemento dell'interfaccia grafica con una texutre data tramite il percorso del file
+	 *
+	 * @param text     Testo dell'elemento
+	 * @param color    Colore default dell'elemento
+	 * @param fileName Percorso del file della texture
+	 */
+	public UIElement(String text, int color, String fileName,boolean space) {
+		this.text = text;
+		this.color = color;
+		sketch = SceneManager.getApp();
+		texture = sketch.loadImage(fileName);
+		this.space=space;
+	}
 
-    /**
-     * Costruttore generico per un elemento dell'interfaccia grafica con una texutre data tramite il percorso del file
-     *
-     * @param text     Testo dell'elemento
-     * @param color    Colore default dell'elemento
-     * @param fileName Percorso del file della texture
-     */
-    public UIElement(String text, int color, String fileName) {
-        this.text = text;
-        this.color = color;
-        sketch = SceneManager.getApp();
-        texture = sketch.loadImage(fileName);
-    }
-
-    /**
-     * Mostra l'elemento dell'UI
-     */
-    abstract public void display();
+	/**
+	 * Mostra l'elemento dell'UI
+	 */
+	abstract public void display();
 
 
 }
