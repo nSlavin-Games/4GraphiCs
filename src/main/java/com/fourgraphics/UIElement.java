@@ -1,7 +1,4 @@
-package com.fourgraphics.ui;
-
-import com.fourgraphics.gameobjects.*;
-import com.fourgraphics.scenemanagement.*;
+package com.fourgraphics;
 
 import processing.core.*;
 
@@ -41,37 +38,30 @@ public abstract class UIElement {
 	 *
 	 * @param text    Testo dell'elemento
 	 * @param color   Colore default dell'elemento
-	 * @param texture Texture dell'elemento (PImage)
 	 */
-	public UIElement(String text, int color, PImage texture,boolean space) {
+	public UIElement(String text, int color,boolean space) {
 		this.text = text;
 		this.color = color;
-		this.texture = texture;
 		sketch = SceneManager.getApp();
 		this.worldSpace=space;
-
 	}
 
 	/**
 	 * Costruttore generico per un elemento dell'interfaccia grafica con una texutre data tramite il percorso del file
 	 *
 	 * @param text     Testo dell'elemento
-	 * @param color    Colore default dell'elemento
-	 * @param fileName Percorso del file della texture
+	 * @param texture Percorso del file della texture
 	 */
-	public UIElement(String text, int color, String fileName,boolean space) {
+	public UIElement(String text, PImage texture,boolean space) {
 		this.text = text;
-		this.color = color;
 		sketch = SceneManager.getApp();
-		texture = sketch.loadImage(fileName);
-		this.space=space;
+		this.texture = texture;
+		this.worldSpace=space;
 	}
 
 	/**
 	 * Mostra l'elemento dell'UI
 	 */
-	abstract public void display();
-
-
+	abstract protected void display();
 }
 

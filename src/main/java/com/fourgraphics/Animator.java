@@ -1,4 +1,5 @@
-package com.fourgraphics.graphicsystem;
+package com.fourgraphics;
+
 import java.util.ArrayList;
 
 /**
@@ -7,10 +8,10 @@ import java.util.ArrayList;
  */
 public class Animator extends Renderable {
 
-	private ArrayList<Animation> animationList ;//la lista delle animazioni per l’animator
+	private ArrayList<Animation> animationList ;//la lista delle animazioni per lï¿½animator
 
 
-	private Animation currentAnimation ;// l’animazione attualmente in riproduzione
+	private Animation currentAnimation ;// lï¿½animazione attualmente in riproduzione
 
 
 	public Animator(){//costruttore
@@ -23,7 +24,7 @@ public class Animator extends Renderable {
 
 
 
-	public void render(){//Esegue le animazioni in base agli state handler
+	protected void render(){//Esegue le animazioni in base agli state handler
 		currentAnimation.stateHandler();
 		sketch.imageMode(sketch.CENTER);
 		sketch.image(currentAnimation.frames.get(currentAnimation.getCurrentFrameIndex()), transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
@@ -31,7 +32,7 @@ public class Animator extends Renderable {
 	}
 
 
-	public void playAnimation(String name) {// ferma l’animazione in corso e fa partire l’animazione in base al nome
+	public void playAnimation(String name) {// ferma lï¿½animazione in corso e fa partire lï¿½animazione in base al nome
 
 		for(int i=0;i<animationList.size();i++) {
 
@@ -48,14 +49,14 @@ public class Animator extends Renderable {
 	}
 
 
-	public void stopAnimation() {// ferma l’animazione
+	public void stopAnimation() {// ferma lï¿½animazione
 
 		currentAnimation.stop();
 
 	}
 
 
-	public void pauseAnimation() {//mette in pausa l’animazione in base al currentAnimation
+	public void pauseAnimation() {//mette in pausa lï¿½animazione in base al currentAnimation
 
 		currentAnimation.pause();
 
@@ -69,7 +70,7 @@ public class Animator extends Renderable {
 	}
 
 
-	public void addAnimation(Animation anim) {// aggiunge un’animazione alla lista
+	public void addAnimation(Animation anim) {// aggiunge unï¿½animazione alla lista
 
 		animationList.add(anim);
 

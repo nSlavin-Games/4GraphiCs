@@ -1,7 +1,4 @@
-package com.fourgraphics.ui;
-
-import com.fourgraphics.gameobjects.Vector2;
-import com.fourgraphics.scenemanagement.SceneManager;
+package com.fourgraphics;
 
 import processing.core.PImage;
 
@@ -15,28 +12,26 @@ public class Button extends UIElement {
 	 *
 	 * @param text    Testo del bottone
 	 * @param color   Colore default del bottone
-	 * @param texture Texture del bottone (PImage)
 	 */
-	public Button(String text, int color, PImage texture,boolean space) {
-		super(text, color, texture,space);
+	public Button(String text, int color,boolean space) {
+		super(text, color,space);
 	}
 
 	/**
 	 * Costruttore per la classe Button che accetta il percorso del file come texutre
 	 *
 	 * @param text     Testo del bottone
-	 * @param color    Colore default del bottone
-	 * @param fileName Percorso del file della texture
+	 * @param texture Percorso del file della texture
 	 */
-	public Button(String text, int color, String fileName,boolean space) {
-		super(text, color, fileName,space);
+	public Button(String text, PImage texture,boolean space) {
+		super(text, texture,space);
 	}
 
 
 	/**
 	 * Mostra il bottone
 	 */
-	public void display() {
+	protected void display() {
 		//world space, i blocchi, man mano che ti sposti scompaiono
 		if(!worldSpace) {
 			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();

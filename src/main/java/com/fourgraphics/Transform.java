@@ -1,4 +1,4 @@
-package com.fourgraphics.gameobjects;
+package com.fourgraphics;
 
 public class Transform {
     private Vector2 position;//posizione dell'oggetto
@@ -65,17 +65,5 @@ public class Transform {
      */
     public void setScale(float x, float y) {//
         scale.set(x,y);
-    }
-
-}
-=======
-    public Vector2 getPosition() {
-        //TODO(samu): Not implemented
-        return null;
-    }
-
-    public Vector2 getScale() {
-        //TODO(samu): Not implemented
-        return null;
     }
 }

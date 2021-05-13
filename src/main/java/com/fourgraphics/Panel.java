@@ -1,8 +1,4 @@
-package com.fourgraphics.ui;
-
-import com.fourgraphics.gameobjects.Transform;
-import com.fourgraphics.gameobjects.Vector2;
-import com.fourgraphics.scenemanagement.SceneManager;
+package com.fourgraphics;
 
 import processing.core.PImage;
 
@@ -16,28 +12,26 @@ public class Panel extends UIElement {
 	 *
 	 * @param text    Testo del pannello di testo
 	 * @param color   Colore default del pannello di testo
-	 * @param texture Texture del pannello di testo (PImage)
 	 */
-	public Panel(String text, int color, PImage texture,boolean space) {
-		super(text, color, texture,space);
+	public Panel(String text, int color,boolean space) {
+		super(text, color,space);
 	}
 
 	/**
 	 * Costruttore per la classe Panel che accetta il percorso del file come texutre
 	 *
 	 * @param text     Testo del pannello di testo
-	 * @param color    Colore default del pannello di testo
-	 * @param fileName Percorso del file della texture
+	 * @param texture Percorso del file della texture
 	 */
-	public Panel(String text, int color, String fileName,boolean space) {
-		super(text, color, fileName,space);
+	public Panel(String text, PImage texture,boolean space) {
+		super(text, texture,space);
 	}
 
 
 	/**
 	 * Mostra il pannello di testo
 	 */
-	public void display() {
+	protected void display() {
 		if(!worldSpace) {
 			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
 			sketch.pushMatrix();	

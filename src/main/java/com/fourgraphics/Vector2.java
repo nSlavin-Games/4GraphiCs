@@ -1,4 +1,4 @@
-package com.fourgraphics.gameobjects;
+package com.fourgraphics;
 
 /**
  * Il modello di un vettore bidimensionale, contiene il riferimento
@@ -223,16 +223,5 @@ public class Vector2 {
      */
     public float getY() {
         return y;
-    }
-
-
-    public float getX() {
-        //TODO(samu): Not implemented
-        return 0;
-    }
-
-    public float getY() {
-        //TODO(samu): Not implemented
-        return 0;
     }
 }

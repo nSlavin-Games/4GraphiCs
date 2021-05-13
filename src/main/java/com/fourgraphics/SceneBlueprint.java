@@ -1,9 +1,4 @@
-package com.fourgraphics.scenemanagement;
-
-import com.fourgraphics.colliders.*;
-import com.fourgraphics.gameobjects.*;
-import com.fourgraphics.graphicsystem.*;
-import com.fourgraphics.ui.*;
+package com.fourgraphics;
 
 import java.util.ArrayList;
 
@@ -52,11 +47,9 @@ public class SceneBlueprint {
 	 * dellâ€™ui e dei collider attaccati ai GameObject, specifica in una lista
 	 * separata i collider dinamici e poi indica che Ã¨ stato inizializzato, in
 	 * qualsiasi caso dopo tutto quanto chiama il metodo Start
-	 *
-	 * @param objectList Lista degli oggetti da inizializzare
 	 */
-	public void initialize() {
-		if (isInitialized == false) { //se la scena non è ancora stata inizializzata
+	protected void initialize() {
+		if (!isInitialized) { //se la scena non ï¿½ ancora stata inizializzata
 			//assegnazione di tutti i GameObject
 			sceneCamera = new Camera();
 			scriptList = new ArrayList<>();
@@ -68,7 +61,7 @@ public class SceneBlueprint {
 				initializeObject(o); //inizializzazione di ogni oggetto di tipo GameObject
 			}
 		}
-		isInitialized = true; //scena già inizializzata precedentemente
+		isInitialized = true; //scena giï¿½ inizializzata precedentemente
 		start(); //caricamento della scena
 	}
 
@@ -76,8 +69,8 @@ public class SceneBlueprint {
 	 * Eseguito al caricamento di una scena, deve eseguire lo start di tutti gli
 	 * script attaccati
 	 */
-	public void start() {
-		if (isInitialized == true) { //scena già inizializzata
+	protected void start() {
+		if (isInitialized) { //scena giï¿½ inizializzata
 			for (Script s : scriptList) { //per ogni script della lista scriptList
 				s.Start(); //inizializzazione di tutti gli script della scena
 			}
@@ -88,7 +81,7 @@ public class SceneBlueprint {
 	 * Tutti i metodi ed elementi da eseguire ogni frame, deve eseguire lâ€™update
 	 * di tutti gli script attaccati
 	 */
-	public void update() {
+	protected void update() {
 		for (Script s : scriptList) { //per ogni script della lista scriptList
 			s.Update(); //esecuzione dell'aggiornamento degli script
 		}
@@ -104,7 +97,7 @@ public class SceneBlueprint {
 	 * @param objectID ID dell'oggetto
 	 * @return Restituisce lâ€™oggetto equivalente allâ€™id selezionato
 	 */
-	GameObject getObject(int objectID) {
+	public GameObject getObject(int objectID) {
 		return objectList.get(objectID); //restituzione dell'oggetto contenuto in objectList con ID corrispondente al parametro
 	}
 
@@ -117,7 +110,7 @@ public class SceneBlueprint {
 	 * @return Restituisce lâ€™oggetto che corrisponde al nome specificato, se ci
 	 *         sono piÃ¹ oggetti con lo stesso nome restituisce il primo
 	 */
-	GameObject getObject(String objectName) {
+	public GameObject getObject(String objectName) {
 		for (int i = 0; i < objectList.size(); i++) { //analisi di ogni oggetto nella lista di objectList
 			if (objectList.get(i).getName().equals(objectName)) { //confronto del nome dell'oggetto corrente con quello dell'oggetto passato come parametro
 				return objectList.get(i); //restituzione dell'oggetto nella posizione corrente (i)
@@ -131,7 +124,7 @@ public class SceneBlueprint {
 	 *
 	 * @return Restituisce la lista degli oggetti
 	 */
-	ArrayList<GameObject> getObjectList() {
+	public ArrayList<GameObject> getObjectList() {
 		return objectList;
 	}
 
@@ -140,7 +133,7 @@ public class SceneBlueprint {
 	 *
 	 * @return Resituisce la lista degli elementi dellâ€™UI
 	 */
-	ArrayList<UIElement> getUiElements() {
+	public ArrayList<UIElement> getUiElements() {
 		return uiElements;
 	}
 
@@ -149,14 +142,14 @@ public class SceneBlueprint {
 	 *
 	 * @return Restituisce la telecamera della scena
 	 */
-	Camera getCamera() {
+	public Camera getCamera() {
 		return sceneCamera;
 	}
 
 	/**
 	 * Esegue tutti i render necessari, fra renderer e animator
 	 */
-	void renderObjects() {
+	private void renderObjects() {
 		for (Renderable r : renderableElements) { //per ogni oggetto di tipo Renderable della lista renderableElements
 			r.render(); //esecuzione animazioni degli oggetti Renderable
 		}
@@ -165,7 +158,7 @@ public class SceneBlueprint {
 	/**
 	 * Disegna tutti gli elementi dellâ€™UI
 	 */
-	void renderUI() {
+	private void renderUI() {
 		for (UIElement uiE : uiElements) { //per ogni oggetto di tipo UIElement della lista uiElements
 			uiE.display(); //rappresentazione grafica degli oggetti dell'UI
 		}
@@ -179,21 +172,21 @@ public class SceneBlueprint {
 	 * della collisione con SNAP, altrimenti va eseguito il calcolo della collisione
 	 * e basta
 	 */
-	void calculateCollisions() {
+	private void calculateCollisions() {
 		for (Collider c : dynamicColliders) { //primo collider
 			for (Collider c2 : collidersList) { //secondo collider (statico)
-				if (c2.isDynamic()) { //se il secondo collider è dinamico
-					if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { //se c'è collisione tra i due collider e questi sono diversi tra loro
+				if (c2.isDynamic()) { //se il secondo collider ï¿½ dinamico
+					if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { //se c'ï¿½ collisione tra i due collider e questi sono diversi tra loro
 						for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-							if (o instanceof Script) { //se l'oggetto è di tipo Script
+							if (o instanceof Script) { //se l'oggetto ï¿½ di tipo Script
 								((Script) o).OnCollisionEnter(c, c2); //casting dell'oggetto da Object a Script e collisione tra i due collider
 							}
 						}
 					}
-				} else { //altrimenti se il collider è statico
-					if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { //se c'è collisione tra i due collider, di cui uno statico
+				} else { //altrimenti se il collider ï¿½ statico
+					if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { //se c'ï¿½ collisione tra i due collider, di cui uno statico
 						for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-							if (o instanceof Script) { //se l'oggetto è di tipo Script
+							if (o instanceof Script) { //se l'oggetto ï¿½ di tipo Script
 								((Script) o).OnCollisionEnter(c, c2); //casting dell'oggetto da Object a Script e collisione tra i due collider
 							}
 						}
@@ -203,50 +196,51 @@ public class SceneBlueprint {
 		}
 	}
 
-	void setObjectList(ArrayList<GameObject> objectList) {
+	public void setObjectList(ArrayList<GameObject> objectList) {
 		this.objectList = objectList;
+		isInitialized = false;
 	}
 
-	void addObject(GameObject object) {
+	protected void addObject(GameObject object) {
 		objectList.add(object); //inserimento alla lista objectList dell'oggetto passato come parametro
 		initializeObject(object); //inizializzazione oggetto
 	}
 
-	void removeObject(GameObject object) {
+	protected void removeObject(GameObject object) {
 		objectList.remove(object); //rimozione dalla lista objectList dell'oggetto passato come parametro
 		deinitializeObject(object); //deinizializzazione oggetto
 	}
 
-	void initializeObject(GameObject object) {
+	private void initializeObject(GameObject object) {
 		ArrayList<Object> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
 		for (Object o : obj) { //per ogni oggetto di tipo Object della lista obj
-			if (o instanceof Script) { //se l'oggetto è uno script
+			if (o instanceof Script) { //se l'oggetto ï¿½ uno script
 				scriptList.add((Script) o); //casting da Object a Script e inserimento dell'oggetto alla lista per gli script
-			} else if (o instanceof Renderable) { //se l'oggetto è un render
+			} else if (o instanceof Renderable) { //se l'oggetto ï¿½ un render
 				renderableElements.add((Renderable) o); //casting da Object a Renderable e inserimento dell'oggetto alla lista per i render
-			} else if (o instanceof UIElement) { //se l'oggetto è un elemento UI
+			} else if (o instanceof UIElement) { //se l'oggetto ï¿½ un elemento UI
 				uiElements.add((UIElement) o); //casting da Object a UIElement e inserimento dell'oggetto alla lista per gli elementi dell'UI
-			} else if (o instanceof Collider) { //se l'oggetto è un collider
+			} else if (o instanceof Collider) { //se l'oggetto ï¿½ un collider
 				collidersList.add((Collider) o); //casting da Object a Collider e inserimento dell'oggetto alla lista per i collider
-				if (((Collider) o).dynamicObject) { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
+				if (((Collider) o).isDynamic()) { //casting in Collider e controllo se l'oggetto ï¿½ in movimento (quindi ï¿½ dinamico)
 					dynamicColliders.add((Collider) o); //casting dell'oggetto in Collider e inserimento alla lista per i collider dinamici
 				}
 			}
 		}
 	}
 
-	void deinitializeObject(GameObject object) {
+	private void deinitializeObject(GameObject object) {
 		ArrayList<Object> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
 		for (Object o : obj) { //per ogni oggetto di tipo Object della lista obj
-			if (o instanceof Script) { //se l'oggetto è uno script
+			if (o instanceof Script) { //se l'oggetto ï¿½ uno script
 				scriptList.remove((Script) o); //casting da Object a Script e rimozione dell'oggetto alla lista per gli script
-			} else if (o instanceof Renderable) { //se l'oggetto è un render
+			} else if (o instanceof Renderable) { //se l'oggetto ï¿½ un render
 				renderableElements.remove((Renderable) o); //casting da Object a Renderable e rimozione dell'oggetto alla lista per i render
-			} else if (o instanceof UIElement) { //se l'oggetto è un elemento UI
+			} else if (o instanceof UIElement) { //se l'oggetto ï¿½ un elemento UI
 				uiElements.remove((UIElement) o); //casting da Object a UIElement e rimozione dell'oggetto alla lista per gli elementi dell'UI
-			} else if (o instanceof Collider) { //se l'oggetto è un collider
+			} else if (o instanceof Collider) { //se l'oggetto ï¿½ un collider
 				collidersList.remove((Collider) o); //casting da Object a Collider e rimozione dell'oggetto alla lista per i collider
-				if (((Collider) o).dynamicObject) { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
+				if (((Collider) o).isDynamic()) { //casting in Collider e controllo se l'oggetto ï¿½ in movimento (quindi ï¿½ dinamico)
 					dynamicColliders.remove((Collider) o); //casting dell'oggetto in Collider e rimozione alla lista per i collider dinamici
 				}
 			}

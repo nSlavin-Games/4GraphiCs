@@ -1,6 +1,5 @@
-package com.fourgraphics.scenemanagement;
+package com.fourgraphics;
 
-import com.fourgraphics.gameobjects.*;
 import processing.core.PApplet;
 
 import java.util.ArrayList;

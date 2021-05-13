@@ -1,8 +1,6 @@
-package com.fourgraphics.gameobjects;
+package com.fourgraphics;
 //librerie importate
-import com.fourgraphics.colliders.Collider;
-import com.fourgraphics.graphicsystem.Renderable;
-import com.fourgraphics.ui.UIElement;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
@@ -105,7 +103,7 @@ public class GameObject {
     }
 
     //metodo getter di componentList
-    public <T> ArrayList<Object> GetComponents(){
+    public ArrayList<Object> getComponents(){
         return componentList;
     }
 

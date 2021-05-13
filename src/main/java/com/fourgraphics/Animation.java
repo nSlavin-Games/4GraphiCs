@@ -1,10 +1,11 @@
 /**
  * 
  */
-package com.fourgraphics.graphicsystem;
+package com.fourgraphics;
 
 import java.util.ArrayList;
-import com.fourgraphics.scenemanagement.*;
+
+import com.fourgraphics.SceneManager;
 
 import processing.core.PImage;
 
@@ -44,9 +45,9 @@ public class Animation {
 		this.name=name;
 	}
 
-	public void stateHandler() {
+	protected void stateHandler() {
 		if(isPlaying) {
-			timer-=SceneManager.deltaTime();
+			timer-= SceneManager.deltaTime();
 			if(timer<=0) {
 				timer=frameDelay;
 				currentFrame++;
@@ -60,20 +61,20 @@ public class Animation {
 		}
 	}
 
-	public void play() {
+	protected void play() {
 		timer=frameDelay;
 		isEnded=false;
 		isPlaying=true;
 		currentFrame=0;
 	}
 
-	public void stop() {
+	protected void stop() {
 		isEnded=true;
 		isPlaying=false;
 		currentFrame=0;
 	}
 
-	public void pause() {
+	protected void pause() {
 		isPlaying=!isPlaying;
 	}
 

@@ -1,7 +1,4 @@
-package com.fourgraphics.colliders;
-
-import com.fourgraphics.gameobjects.GameObject;
-import com.fourgraphics.gameobjects.Vector2;
+package com.fourgraphics;
 
 import processing.core.PApplet;
 
@@ -14,24 +11,18 @@ public class CircleCollider extends Collider {
 
 	}
 
-	public CircleCollider(boolean dynamicObject, PApplet sketch) {
+	protected CollisionDirection checkCollision(Collider other) {
 
-		super(dynamicObject, sketch);
-
-	}
-
-	public CollisionDirection CheckCollision(Collider other) {
-
-		if(isDebug()==true) {
+		if(isDebug()) {
 			sketch.fill(0,255,0,200);
 			sketch.circle(transform.getPosition().getX(),transform.getPosition().getY(), transform.getScale().getX());
 		}
 
 		if (other instanceof CircleCollider) {
 
-			if (isDebug() == true) {
-				sketch.ellipseMode(sketch.CENTER);
-				sketch.fill(255, 0, 0, 200);
+			if (isDebug()) {
+				if(!other.isDynamic())
+					sketch.fill(255, 0, 0, 200);
 				sketch.circle(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
 						other.transform.getScale().getX());
 
@@ -75,9 +66,10 @@ public class CircleCollider extends Collider {
 		}
 		if (other instanceof RectCollider) {
 
-			if (isDebug() == true) {
+			if (isDebug()) {
 				sketch.rectMode(sketch.CENTER);
-				sketch.fill(255, 0, 0, 200);
+				if(!other.isDynamic())
+					sketch.fill(255, 0, 0, 200);
 				sketch.rect(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
 						other.transform.getScale().getX(), other.transform.getScale().getY());
 				
@@ -144,17 +136,17 @@ public class CircleCollider extends Collider {
 		return CollisionDirection.NONE;
 	}
 
-	public CollisionDirection CheckCollisionSnap(Collider other) {
-		if(isDebug()==true) {
+	protected CollisionDirection checkCollisionSnap(Collider other) {
+		if(isDebug()) {
 			sketch.fill(0,255,0,200);
 			sketch.circle(transform.getPosition().getX(),transform.getPosition().getY(), transform.getScale().getX());
 		}
 
 		if (other instanceof CircleCollider) {
 
-			if (isDebug() == true) {
-				sketch.ellipseMode(sketch.CENTER);
-				sketch.fill(255, 0, 0, 200);
+			if (isDebug()) {
+				if(!other.isDynamic())
+					sketch.fill(255, 0, 0, 200);
 				sketch.circle(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
 						other.transform.getScale().getX());
 
@@ -210,9 +202,10 @@ public class CircleCollider extends Collider {
 		}
 		if (other instanceof RectCollider) {
 
-			if (isDebug() == true) {
+			if (isDebug()) {
 				sketch.rectMode(sketch.CENTER);
-				sketch.fill(255, 0, 0, 200);
+				if(!other.isDynamic())
+					sketch.fill(255, 0, 0, 200);
 				sketch.rect(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
 						other.transform.getScale().getX(), other.transform.getScale().getY());
 				

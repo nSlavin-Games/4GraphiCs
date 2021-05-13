@@ -1,17 +1,11 @@
-package com.fourgraphics.colliders;
-
-import com.fourgraphics.gameobjects.GameObject;
-import com.fourgraphics.gameobjects.Vector2;
-import com.fourgraphics.scenemanagement.SceneManager;
+package com.fourgraphics;
 
 import processing.core.PApplet;
-
-import com.fourgraphics.gameobjects.Transform;
 
 abstract public class Collider {
 	
 	public GameObject gameObject;
-	Vector2 previousPosition;
+	Vector2 previousPosition; //WARNING: UNUSED
 	public Transform  transform;
 	private boolean dynamicObject;
 	private boolean debug;
@@ -25,16 +19,10 @@ abstract public class Collider {
 		sketch=SceneManager.getApp();
 	}
 	
-	public Collider(boolean dynamicObject, PApplet sketch) {
-		
-		setDynamic(dynamicObject);
-		this.sketch=sketch;
-	}
 	
+	abstract protected CollisionDirection checkCollision(Collider other);
 	
-	abstract CollisionDirection CheckCollision(Collider other);
-	
-	abstract CollisionDirection CheckCollisionSnap(Collider other);
+	abstract protected CollisionDirection checkCollisionSnap(Collider other);
 
 
 	public boolean isDynamic() {
@@ -55,9 +43,4 @@ abstract public class Collider {
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
-	
-	
-	
-	
-
 }

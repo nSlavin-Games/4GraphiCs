@@ -1,7 +1,4 @@
-package com.fourgraphics.ui;
-
-import com.fourgraphics.gameobjects.Vector2;
-import com.fourgraphics.scenemanagement.SceneManager;
+package com.fourgraphics;
 
 import processing.core.*;
 
@@ -12,21 +9,20 @@ public class CheckBox extends UIElement {
 	private int fillColor;
 	private boolean checked;
 
-	public CheckBox(String text, int color, PImage texture,PImage defaultCheck,String fillTexture,String fillTextureIcon,boolean space) {
-		super(text, color, texture,space);	
-		this.defaultCheck=defaultCheck;
-		this.fillTexture =sketch.loadImage(fillTexture);
-		this.checkIcon= sketch.loadImage(fillTextureIcon);
+	public CheckBox(String text, int color,int fillColor, PImage checkIcon,boolean space) {
+		super(text, color,space);
+		this.fillColor = fillColor;
+		this.checkIcon= checkIcon;
+		defaultCheck = sketch.loadImage("");
 	}
 
-	public CheckBox(String text,int color,String fileName,PImage defaultCheck,PImage fillTexture,PImage checkIcon,boolean space) {
-		super(text,color,fileName,space);
-		this.defaultCheck=defaultCheck;
+	public CheckBox(String text,int color, PImage texture,PImage fillTexture,PImage checkIcon,boolean space) {
+		super(text,texture,space);
 		this.fillTexture=fillTexture;
 		this.checkIcon=checkIcon;
 	}
 	@Override
-	public void display() {
+	protected void display() {
 		if(!worldSpace) {
 			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
 			sketch.noStroke();
@@ -66,7 +62,7 @@ public class CheckBox extends UIElement {
 		return false;
 	}
 	public void toggleChecked() {
-		if(checked) 
+		if(checked)
 			checked=false;
 		else
 			checked=true;

@@ -1,4 +1,4 @@
-package com.fourgraphics.colliders;
+package com.fourgraphics;
 
 public enum CollisionDirection {
 	
