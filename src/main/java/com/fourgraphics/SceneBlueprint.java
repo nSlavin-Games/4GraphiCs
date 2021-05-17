@@ -176,18 +176,23 @@ public class SceneBlueprint {
 		for (Collider c : dynamicColliders) { //primo collider
 			for (Collider c2 : collidersList) { //secondo collider (statico)
 				if (c2.isDynamic()) { //se il secondo collider � dinamico
-					if (c.checkCollision(c2) != CollisionDirection.NONE && !c.equals(c2)) { //se c'� collisione tra i due collider e questi sono diversi tra loro
-						for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-							if (o instanceof Script) { //se l'oggetto � di tipo Script
-								((Script) o).OnCollisionEnter(c, c2); //casting dell'oggetto da Object a Script e collisione tra i due collider
+					if (!c.equals(c2)) { //se c'� collisione tra i due collider e questi sono diversi tra loro
+						CollisionDirection direction = c.checkCollision(c2);
+						if(direction != CollisionDirection.NONE)
+						{
+							for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
+								if (o instanceof Script) { //se l'oggetto � di tipo Script
+									((Script) o).OnCollisionEnter(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
+								}
 							}
 						}
 					}
 				} else { //altrimenti se il collider � statico
-					if (c.checkCollisionSnap(c2) != CollisionDirection.NONE) { //se c'� collisione tra i due collider, di cui uno statico
+					CollisionDirection direction = c.checkCollisionSnap(c2);
+					if (direction != CollisionDirection.NONE) { //se c'� collisione tra i due collider, di cui uno statico
 						for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
 							if (o instanceof Script) { //se l'oggetto � di tipo Script
-								((Script) o).OnCollisionEnter(c, c2); //casting dell'oggetto da Object a Script e collisione tra i due collider
+								((Script) o).OnCollisionEnter(c, c, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
 							}
 						}
 					}

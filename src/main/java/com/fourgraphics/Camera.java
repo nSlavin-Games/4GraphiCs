@@ -32,6 +32,8 @@ public class Camera {
 	 */
 	Camera() {
 		sketch = SceneManager.getApp();
+		position = new Vector2();
+		offset = new Vector2();
 	}
 
 	/**

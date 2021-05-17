@@ -4,8 +4,6 @@ public class Transform {
     private Vector2 position;//posizione dell'oggetto
     private Vector2 scale;//dimensione dell'oggetto
 
-
-
     /**
      * Costruttore
      *
@@ -13,7 +11,6 @@ public class Transform {
     public Transform() {
         this.position = new Vector2();
         this.scale = new Vector2();
-
     }
 
     /**

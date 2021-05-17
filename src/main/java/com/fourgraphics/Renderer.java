@@ -17,15 +17,21 @@ public class Renderer extends Renderable {
 	private DrawType renderType;
 	
 
-	public Renderer(int color,PImage texture,DrawType renderType) {
+	public Renderer(PImage texture) {
 		this.color=color;
-		this.texture=texture;
+		renderType = DrawType.TEXTURED;
+		sketch=SceneManager.getApp();
+	}
+
+	public Renderer(int color,DrawType renderType) {
+		this.color=color;
 		this.renderType=renderType;
 		sketch=SceneManager.getApp();
 	}
 
 	@Override
 	protected void render() {
+		sketch.noStroke();
 		float x=transform.getPosition().getX();
 		float y=transform.getPosition().getY();
 		float w=transform.getScale().getX();

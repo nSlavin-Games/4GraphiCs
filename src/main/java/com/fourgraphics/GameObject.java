@@ -22,9 +22,12 @@ public class GameObject {
      * @param name
      */
     public GameObject(ArrayList<Object> componentList, String name) {
-        this.componentList = componentList;
+        this.componentList = new ArrayList<>();
         this.transform = new Transform();
         this.name = name;
+
+        for(Object component : componentList)
+            addComponent(component);
     }
 
     /**
@@ -52,20 +55,24 @@ public class GameObject {
      * @param <T>
      */
     public <T> void addComponent(T component) {
-        ////ciclo for each per ogni oggetto di tipo Object in componentList
-        for (Object obj : componentList) {
-            //se c'è già un oggetto dello stesso tipo di component parte un'eccezione
-            if(component.getClass().equals(obj.getClass())){
-                throw new InvalidParameterException("A component of the specified type already exists");
-            }
-            //se esiste già un componente che è un'istanza di 'Renderable' o 'UIElement' idem
-            if(component instanceof Renderable && obj instanceof Renderable){
-                throw new InvalidParameterException("A component of the specified type already exists");
-            }
-            if(component instanceof UIElement && obj instanceof UIElement){
-                throw new InvalidParameterException("A component of the specified type already exists");
+        //ciclo for each per ogni oggetto di tipo Object in componentList
+        if(componentList != null)
+        {
+            for (Object obj : componentList) {
+                //se c'è già un oggetto dello stesso tipo di component parte un'eccezione
+                if(component.getClass().equals(obj.getClass())){
+                    throw new InvalidParameterException("A component of the specified type already exists");
+                }
+                //se esiste già un componente che è un'istanza di 'Renderable' o 'UIElement' idem
+                if(component instanceof Renderable && obj instanceof Renderable){
+                    throw new InvalidParameterException("A component of the specified type already exists");
+                }
+                if(component instanceof UIElement && obj instanceof UIElement){
+                    throw new InvalidParameterException("A component of the specified type already exists");
+                }
             }
         }
+
         //se component è un'istanza di di 'Script', 'Collider', 'Renderable' o 'UIElement' allora vengono inizializzate gli attributi transform e gameObject
         if(component instanceof Script){
             ((Script) component).transform = transform;

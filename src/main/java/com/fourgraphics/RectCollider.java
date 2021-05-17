@@ -185,14 +185,14 @@ public class RectCollider extends Collider {
 
 					if (disty > 0) {
 						transform.getPosition().setY(other.transform.getPosition().getY()
-								+other.transform.getScale().getX()/2
-								+transform.getScale().getX()/2);
+								+other.transform.getScale().getY()/2
+								+transform.getScale().getY()/2);
 						return CollisionDirection.UP;
 						
 					} else {
 						transform.getPosition().setY(other.transform.getPosition().getY()
-								-other.transform.getScale().getX()/2
-								-transform.getScale().getX()/2);
+								-other.transform.getScale().getY()/2
+								-transform.getScale().getY()/2);
 						return CollisionDirection.DOWN;
 					
 					}
