@@ -191,7 +191,9 @@ public class Vector2 {
      * Il metodo imposta i valori del vettore
      */
     public void set(Vector2 vec) {
+        //System.out.print("Setting X from " + this.x + " to " + vec.x);
         this.x=vec.x;
+        //System.out.println("! X is now " + this.x + "!");
         this.y=vec.y;
     }
 

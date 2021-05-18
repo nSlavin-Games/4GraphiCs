@@ -14,9 +14,9 @@ abstract public class Collider {
 	//SceneManager.getApp()
 	
 	public Collider(boolean dynamicObject) {
-		
 		setDynamic(dynamicObject);
 		sketch=SceneManager.getApp();
+		previousPosition = new Vector2();
 	}
 	
 	

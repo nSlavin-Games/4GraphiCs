@@ -45,11 +45,11 @@ public class RectCollider extends Collider {
 				if (overlapX > overlapY) {
 
 					if (disty > 0) {
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.UP;
-				
 					} else {
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.DOWN;
-					
 					}
 
 				}
@@ -57,11 +57,11 @@ public class RectCollider extends Collider {
 				if (overlapY > overlapX) {
 
 					if (distx > 0) {
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.LEFT;
-				
 					} else {
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.RIGHT;
-					
 					}
 
 				}
@@ -101,7 +101,7 @@ public class RectCollider extends Collider {
 					float distance = (float)Math.sqrt(dy*dy);
 					if(distance <= other.transform.getScale().getX()/2)
 					{
-				
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.DOWN;
 					}
 					
@@ -112,7 +112,7 @@ public class RectCollider extends Collider {
 					float distance = (float)Math.sqrt(dy*dy);
 					if(distance <= other.transform.getScale().getX()/2)
 					{
-				
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.UP;
 					}
 				}
@@ -125,7 +125,7 @@ public class RectCollider extends Collider {
 					float distance = (float)Math.sqrt(dx*dx);
 					if(distance <= other.transform.getScale().getX()/2)
 					{
-					
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.RIGHT;
 					}
 					
@@ -136,13 +136,14 @@ public class RectCollider extends Collider {
 					float distance = (float)Math.sqrt(dx*dx);
 					if(distance <= other.transform.getScale().getX()/2)
 					{
-				
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.LEFT;
 					}
 				}
 			}
 		}
 
+		previousPosition.set(transform.getPosition());
 		return CollisionDirection.NONE;
 
 	}
@@ -178,6 +179,52 @@ public class RectCollider extends Collider {
 			float overlapX = hWidths - Math.abs(distx);
 			float overlapY = hHeights - Math.abs(disty);
 
+			if(overlapX > overlapY)
+			{
+				if(Math.abs(distx) <= hWidths)
+				{
+					if(previousPosition.getY() < other.transform.getPosition().getY() && transform.getPosition().getY() > other.transform.getPosition().getY())
+					{
+
+						transform.getPosition().setY(other.transform.getPosition().getY()
+								-other.transform.getScale().getY()/2
+								-transform.getScale().getY()/2);
+						previousPosition.set(transform.getPosition());
+						return CollisionDirection.DOWN;
+					} else if(previousPosition.getY() > other.transform.getPosition().getY() && transform.getPosition().getY() < other.transform.getPosition().getY())
+					{
+
+						transform.getPosition().setY(other.transform.getPosition().getY()
+								+other.transform.getScale().getY()/2
+								+transform.getScale().getY()/2);
+						previousPosition.set(transform.getPosition());
+						return CollisionDirection.UP;
+					}
+				}
+			} else
+			{
+				if(Math.abs(disty) <= hHeights)
+				{
+					if (previousPosition.getX() < other.transform.getPosition().getX() && transform.getPosition().getX() > other.transform.getPosition().getX())
+					{
+						transform.getPosition().setX(other.transform.getPosition().getX()
+								-other.transform.getScale().getX()/2
+								-transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
+						return CollisionDirection.RIGHT;
+
+					} else if (previousPosition.getX() > other.transform.getPosition().getX() && transform.getPosition().getX() < other.transform.getPosition().getX())
+					{
+						transform.getPosition().setX(other.transform.getPosition().getX()
+								+other.transform.getScale().getX()/2
+								+transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
+						return CollisionDirection.LEFT;
+
+					}
+				}
+			}
+
 			if (Math.abs(distx) <= hWidths && Math.abs(disty) <= hHeights) {
 				
 				transform.setPosition(transform.getPosition().getX(),transform.getPosition().getY());
@@ -187,12 +234,14 @@ public class RectCollider extends Collider {
 						transform.getPosition().setY(other.transform.getPosition().getY()
 								+other.transform.getScale().getY()/2
 								+transform.getScale().getY()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.UP;
 						
 					} else {
 						transform.getPosition().setY(other.transform.getPosition().getY()
 								-other.transform.getScale().getY()/2
 								-transform.getScale().getY()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.DOWN;
 					
 					}
@@ -205,12 +254,14 @@ public class RectCollider extends Collider {
 						transform.getPosition().setX(other.transform.getPosition().getX()
 								+other.transform.getScale().getX()/2
 								+transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.LEFT;
 						
 					} else {
 						transform.getPosition().setX(other.transform.getPosition().getX()
 								-other.transform.getScale().getX()/2
 								-transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.RIGHT;
 			
 					}
@@ -255,6 +306,7 @@ public class RectCollider extends Collider {
 						transform.getPosition().setY(other.transform.getPosition().getY()
 								-other.transform.getScale().getX()/2
 								-transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.DOWN;
 					}
 					
@@ -268,6 +320,7 @@ public class RectCollider extends Collider {
 						transform.getPosition().setY(other.transform.getPosition().getY()
 								+other.transform.getScale().getX()/2
 								+transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.UP;
 					}
 				}
@@ -283,6 +336,7 @@ public class RectCollider extends Collider {
 						transform.getPosition().setX(other.transform.getPosition().getX()
 								-other.transform.getScale().getX()/2
 								-transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.RIGHT;
 					}
 					
@@ -296,12 +350,13 @@ public class RectCollider extends Collider {
 						transform.getPosition().setX(other.transform.getPosition().getX()
 								+other.transform.getScale().getX()/2
 								+transform.getScale().getX()/2);
+						previousPosition.set(transform.getPosition());
 						return CollisionDirection.LEFT;
 					}
 				}
 			}
 		}
-		
+		previousPosition.set(transform.getPosition());
 		return CollisionDirection.NONE;
 
 	}

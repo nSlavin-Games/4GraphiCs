@@ -17,8 +17,15 @@ public class Main extends PApplet
     {
         size(1000,1000, P3D);
         SceneManager.initialize(this);
+        Input.createAxis("Horizontal","d","a","","");
+        Input.createButton("Jump","space","w");
         TestScene();
         SceneManager.loadScene(0);
+    }
+
+    public void setup()
+    {
+        //frameRate(1000);
     }
 
     void TestScene()
@@ -46,7 +53,7 @@ public class Main extends PApplet
         componentList.add(test);
         object = new GameObject(componentList,"player");
         object.transform.setScale(50,75);
-        object.transform.setPosition(50,-500);
+        object.transform.setPosition(50,-1000);
         gameObjects.add(object);
 
         scene.setObjectList(gameObjects);

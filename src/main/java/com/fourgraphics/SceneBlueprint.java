@@ -70,6 +70,11 @@ public class SceneBlueprint {
 	 * script attaccati
 	 */
 	protected void start() {
+		for(Collider coll : dynamicColliders)
+		{
+			coll.previousPosition.set(coll.gameObject.transform.getPosition());
+		}
+
 		if (isInitialized) { //scena gi� inizializzata
 			for (Script s : scriptList) { //per ogni script della lista scriptList
 				s.Start(); //inizializzazione di tutti gli script della scena
@@ -82,13 +87,21 @@ public class SceneBlueprint {
 	 * di tutti gli script attaccati
 	 */
 	protected void update() {
+		//MODIFICA - FURFARO ora esegue solo l'update degli script
 		for (Script s : scriptList) { //per ogni script della lista scriptList
 			s.Update(); //esecuzione dell'aggiornamento degli script
 		}
-		calculateCollisions(); //controllo le collisioni tra i collider
-		renderObjects(); //esecuzione di tutti i render
-		renderUI(); //disegna tutti gli elementi dell'UI
-		sceneCamera.calculateCamera(); //impostazione visuale della telecamera
+	}
+
+	/**
+	 * Esegue il fixed update di tutti gli script
+	 */
+	protected void fixedUpdate()
+	{
+		for(Script s : scriptList)
+		{
+			s.FixedUpdate();
+		}
 	}
 
 	/**
@@ -149,7 +162,7 @@ public class SceneBlueprint {
 	/**
 	 * Esegue tutti i render necessari, fra renderer e animator
 	 */
-	private void renderObjects() {
+	protected void renderObjects() {
 		for (Renderable r : renderableElements) { //per ogni oggetto di tipo Renderable della lista renderableElements
 			r.render(); //esecuzione animazioni degli oggetti Renderable
 		}
@@ -158,7 +171,7 @@ public class SceneBlueprint {
 	/**
 	 * Disegna tutti gli elementi dell’UI
 	 */
-	private void renderUI() {
+	protected void renderUI() {
 		for (UIElement uiE : uiElements) { //per ogni oggetto di tipo UIElement della lista uiElements
 			uiE.display(); //rappresentazione grafica degli oggetti dell'UI
 		}
@@ -172,27 +185,27 @@ public class SceneBlueprint {
 	 * della collisione con SNAP, altrimenti va eseguito il calcolo della collisione
 	 * e basta
 	 */
-	private void calculateCollisions() {
+	protected void calculateCollisions() {
 		for (Collider c : dynamicColliders) { //primo collider
 			for (Collider c2 : collidersList) { //secondo collider (statico)
-				if (c2.isDynamic()) { //se il secondo collider � dinamico
-					if (!c.equals(c2)) { //se c'� collisione tra i due collider e questi sono diversi tra loro
+				if (c2.isDynamic()) { //se il secondo collider è dinamico
+					if (!c.equals(c2)) { //se c'è collisione tra i due collider e questi sono diversi tra loro
 						CollisionDirection direction = c.checkCollision(c2);
 						if(direction != CollisionDirection.NONE)
 						{
 							for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-								if (o instanceof Script) { //se l'oggetto � di tipo Script
+								if (o instanceof Script) { //se l'oggetto è di tipo Script
 									((Script) o).OnCollisionEnter(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
 								}
 							}
 						}
 					}
-				} else { //altrimenti se il collider � statico
+				} else { //altrimenti se il collider è statico
 					CollisionDirection direction = c.checkCollisionSnap(c2);
 					if (direction != CollisionDirection.NONE) { //se c'� collisione tra i due collider, di cui uno statico
 						for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
 							if (o instanceof Script) { //se l'oggetto � di tipo Script
-								((Script) o).OnCollisionEnter(c, c, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
+								((Script) o).OnCollisionEnter(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
 							}
 						}
 					}
