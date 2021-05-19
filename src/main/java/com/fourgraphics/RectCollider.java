@@ -1,7 +1,5 @@
 package com.fourgraphics;
 
-import processing.core.PApplet;
-
 public class RectCollider extends Collider {
 
 	public RectCollider(boolean dynamicObject) {
@@ -296,32 +294,31 @@ public class RectCollider extends Collider {
 			
 			if(overlapX > overlapY)
 			{
-				if(disty > 0)
-				{
-					testY = transform.getPosition().getY()+transform.getScale().getY()/2;
-					float dy = other.transform.getPosition().getY() - testY;
-					float distance = (float)Math.sqrt(dy*dy);
-					if(distance <= other.transform.getScale().getX()/2)
-					{
-						transform.getPosition().setY(other.transform.getPosition().getY()
-								-other.transform.getScale().getX()/2
-								-transform.getScale().getX()/2);
-						previousPosition.set(transform.getPosition());
-						return CollisionDirection.DOWN;
-					}
-					
-				} else
-				{
-					testY = transform.getPosition().getY()-transform.getScale().getY()/2;
-					float dy = other.transform.getPosition().getY() - testY;
-					float distance = (float)Math.sqrt(dy*dy);
-					if(distance <= other.transform.getScale().getX()/2)
-					{
-						transform.getPosition().setY(other.transform.getPosition().getY()
-								+other.transform.getScale().getX()/2
-								+transform.getScale().getX()/2);
-						previousPosition.set(transform.getPosition());
-						return CollisionDirection.UP;
+				if (disty > 0) {
+					if (previousPosition.getY() < other.transform.getPosition().getY() && transform.getPosition().getY() > other.transform.getPosition().getY()) {
+						testY = transform.getPosition().getY() + transform.getScale().getY() / 2;
+						float dy = other.transform.getPosition().getY() - testY;
+						float distance = (float) Math.sqrt(dy * dy);
+						if (distance <= other.transform.getScale().getX() / 2) {
+							transform.getPosition().setY(other.transform.getPosition().getY()
+									- other.transform.getScale().getX() / 2
+									- transform.getScale().getX() / 2);
+							previousPosition.set(transform.getPosition());
+							return CollisionDirection.DOWN;
+						}
+					} else if (previousPosition.getY() > other.transform.getPosition().getY() && transform.getPosition().getY() < other.transform.getPosition().getY()) {
+
+					} else {
+						testY = transform.getPosition().getY() - transform.getScale().getY() / 2;
+						float dy = other.transform.getPosition().getY() - testY;
+						float distance = (float) Math.sqrt(dy * dy);
+						if (distance <= other.transform.getScale().getX() / 2) {
+							transform.getPosition().setY(other.transform.getPosition().getY()
+									+ other.transform.getScale().getX() / 2
+									+ transform.getScale().getX() / 2);
+							previousPosition.set(transform.getPosition());
+							return CollisionDirection.UP;
+						}
 					}
 				}
 			} else

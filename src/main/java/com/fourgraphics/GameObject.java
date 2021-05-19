@@ -3,6 +3,7 @@ package com.fourgraphics;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GameObject {
 
@@ -26,12 +27,24 @@ public class GameObject {
         this.transform = new Transform();
         this.name = name;
 
-        for(Object component : componentList)
+        for (Object component : componentList)
             addComponent(component);
     }
 
     /**
+     * Costruttore
+     *
+     * @param name
+     */
+    public GameObject(String name) {
+        this.componentList = new ArrayList<>();
+        this.transform = new Transform();
+        this.name = name;
+    }
+
+    /**
      * metodo getComponent restituisce un componente in base al tipo di classe inserita
+     *
      * @param type tipo di classe
      * @param <T>
      * @return obj oggetto del tipo di classe inserito
@@ -110,13 +123,18 @@ public class GameObject {
     }
 
     //metodo getter di componentList
-    public ArrayList<Object> getComponents(){
+    public ArrayList<Object> getComponents() {
         return componentList;
     }
 
     //metodo getter di name
-    public String getName(){
+    public String getName() {
         return name;
     }
 
+    public GameObject clone() {
+        ArrayList<Object> clonedList = new ArrayList<>(componentList.size());
+        Collections.copy(clonedList, componentList);
+        return new GameObject(clonedList, this.name);
+    }
 }

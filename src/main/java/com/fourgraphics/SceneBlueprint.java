@@ -87,22 +87,20 @@ public class SceneBlueprint {
 	 * di tutti gli script attaccati
 	 */
 	protected void update() {
-		//MODIFICA - FURFARO ora esegue solo l'update degli script
-		for (Script s : scriptList) { //per ogni script della lista scriptList
-			s.Update(); //esecuzione dell'aggiornamento degli script
-		}
-	}
+        //MODIFICA - FURFARO ora esegue solo l'update degli script
+        for (int i = scriptList.size() - 1; i >= 0; i--) {
+            scriptList.get(i).Update();
+        }
+    }
 
-	/**
-	 * Esegue il fixed update di tutti gli script
-	 */
-	protected void fixedUpdate()
-	{
-		for(Script s : scriptList)
-		{
-			s.FixedUpdate();
-		}
-	}
+    /**
+     * Esegue il fixed update di tutti gli script
+     */
+    protected void fixedUpdate() {
+        for (int i = scriptList.size() - 1; i >= 0; i--) {
+            scriptList.get(i).FixedUpdate();
+        }
+    }
 
 	/**
 	 * Getter che ottiene un oggetto singolo dalla objectList tramite il suo ID
@@ -163,18 +161,18 @@ public class SceneBlueprint {
 	 * Esegue tutti i render necessari, fra renderer e animator
 	 */
 	protected void renderObjects() {
-		for (Renderable r : renderableElements) { //per ogni oggetto di tipo Renderable della lista renderableElements
-			r.render(); //esecuzione animazioni degli oggetti Renderable
-		}
+        for (int i = renderableElements.size() - 1; i >= 0; i--) { //per ogni oggetto di tipo Renderable della lista renderableElements
+            renderableElements.get(i).render(); //esecuzione animazioni degli oggetti Renderable
+        }
 	}
 
 	/**
 	 * Disegna tutti gli elementi dell’UI
 	 */
 	protected void renderUI() {
-		for (UIElement uiE : uiElements) { //per ogni oggetto di tipo UIElement della lista uiElements
-			uiE.display(); //rappresentazione grafica degli oggetti dell'UI
-		}
+        for (int i = uiElements.size() - 1; i >= 0; i--) {
+            uiElements.get(i).display();
+        }
 	}
 
 	/**
@@ -186,20 +184,22 @@ public class SceneBlueprint {
 	 * e basta
 	 */
 	protected void calculateCollisions() {
-		for (Collider c : dynamicColliders) { //primo collider
-			for (Collider c2 : collidersList) { //secondo collider (statico)
-				if (c2.isDynamic()) { //se il secondo collider è dinamico
-					if (!c.equals(c2)) { //se c'è collisione tra i due collider e questi sono diversi tra loro
-						CollisionDirection direction = c.checkCollision(c2);
-						if(direction != CollisionDirection.NONE)
-						{
-							for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-								if (o instanceof Script) { //se l'oggetto è di tipo Script
-									((Script) o).OnCollisionEnter(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
-								}
-							}
-						}
-					}
+
+        for (int i = dynamicColliders.size() - 1; i >= 0; i--) {
+            Collider c = dynamicColliders.get(i); //primo collider
+            for (int j = collidersList.size() - 1; j >= 0; j--) {
+                Collider c2 = collidersList.get(j); //secondo collider (statico)
+                if (c2.isDynamic()) { //se il secondo collider è dinamico
+                    if (!c.equals(c2)) { //se c'è collisione tra i due collider e questi sono diversi tra loro
+                        CollisionDirection direction = c.checkCollision(c2);
+                        if (direction != CollisionDirection.NONE) {
+                            for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
+                                if (o instanceof Script) { //se l'oggetto è di tipo Script
+                                    ((Script) o).OnCollisionEnter(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
+                                }
+                            }
+                        }
+                    }
 				} else { //altrimenti se il collider è statico
 					CollisionDirection direction = c.checkCollisionSnap(c2);
 					if (direction != CollisionDirection.NONE) { //se c'� collisione tra i due collider, di cui uno statico

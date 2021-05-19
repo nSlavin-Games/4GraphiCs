@@ -2,23 +2,21 @@ package com.fourgraphics.test;
 
 import com.fourgraphics.*;
 
-public class PlayerMovement extends Script
-{
+public class PlayerMovement extends Script {
     boolean isGrounded;
     float yVelocity;
     float yForce;
     float jumpForce = 400f; //potenza del salto
     float gravityScale = 9.81f; //valore della gravità
 
-    float speed = 150f;
+    public int lastDirection = 1; //l'ultima direzione verso cui si è girato il giocatore
+    float speed = 150f; //warawrrsr
 
-    public void Start()
-    {
+    public void Start() {
         SceneManager.getActiveScene().getCamera().setTarget(gameObject);
     }
 
-    public void Update()
-    {
+    public void Update() {
         /*Muovo il personaggio sull'asse orizzontale
 
         Spiegazione Calcolo:
@@ -32,19 +30,17 @@ public class PlayerMovement extends Script
         Detto questo se non premo niente non mi muoverò di nulla, se premo il tasto positivo mi potrò muovere verso destra perché sto moltiplicando per 1
         altrimenti mi muovo verso sinistra perché moltiplico per -1
         */
-        transform.getPosition().sum(Vector2.RIGHT().multiply(speed * SceneManager.deltaTime() * Input.getAxis("Horizontal")));
+        transform.getPosition().sum(Vector2.RIGHT().multiply(speed * SceneManager.deltaTime() * Input.getAxis("Horizontal")));  //yes
+
+        lastDirection = Input.getAxis("Horizontal") != 0 ? (int) Input.getAxis("Horizontal") : lastDirection;
 
         //Controllo se sono a terra
-        if(isGrounded)
-        {
+        if (isGrounded) {
             //Se premo i possibili input per il salto
-            if(Input.getButtonDown("Jump"))
-            {
+            if (Input.getButtonDown("Jump")) {
                 yForce = Vector2.UP().multiply(jumpForce).getY(); //imposto la forza da applicare all'asse Y indicandogli una direzione verso l'alto
                 //Vector2.UP() Restituisce X = 0 e Y = -1
             }
-            else //Se non provo a saltare allora imposto la velocity a 0 in modo da non continuare a spingere il personaggio verso il basso
-                yVelocity = 0;
         }
 
         isGrounded = false; //resetto il grounded
@@ -62,18 +58,17 @@ public class PlayerMovement extends Script
 
         Sommo il tutto
          */
-        transform.getPosition().sum(Vector2.DOWN().multiply(yVelocity * SceneManager.fixedDeltaTime() + (yForce/2 * (float)Math.pow(SceneManager.fixedDeltaTime(),2))));
+        transform.getPosition().sum(Vector2.DOWN().multiply(yVelocity * SceneManager.fixedDeltaTime() + ((yForce / 2) * (float) Math.pow(SceneManager.fixedDeltaTime(), 2))));
 
         yVelocity += yForce * SceneManager.fixedDeltaTime(); //A questo punto alla velocity aggiungo la forza moltiplicata per il timestep
-        /*if(yVelocity > gravity)
-            yVelocity = gravity;*/
     }
 
     public void OnCollisionEnter(Collider self, Collider other, CollisionDirection direction)
     {
-        if(direction == CollisionDirection.DOWN && other.gameObject.getName().equalsIgnoreCase("terrain"))
-        {
+        if (direction == CollisionDirection.DOWN && other.gameObject.getName().equalsIgnoreCase("terrain")) {
             isGrounded = true;
+            yVelocity = 0;
+            yForce = 0;
         }
     }
 }

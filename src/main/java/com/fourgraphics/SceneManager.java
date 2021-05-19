@@ -42,6 +42,9 @@ public class SceneManager
      * il deltaTime
      */
     private static float time;
+
+    private static float firstDraw;
+
     /**
      * Il valore del fixed timestep, ovvero ogni quanto vengono eseguiti i metodi dato un tempo predefinito
      */
@@ -67,6 +70,7 @@ public class SceneManager
      */
     public static void executeScene()
     {
+
         // Eseguo come prima cosa il calcolo del deltaTime, ovvero quanto è durato
         // l'ultimo frame
         float lastTime = time; // salvo quand'è cominciata l'ultima escuzione
@@ -78,11 +82,15 @@ public class SceneManager
 
         accumulator += deltaTime(); //utilizzato per eseguire un metodo in un fixed timestep
 
+        if (firstDraw == 0) {
+            firstDraw = mainApp.millis();
+            accumulator = 0;
+        }
+
         sceneList.get(activeSceneIndex).update();
 
         //il valore si può accumulare fino a diventare maggiore del fixed timestep e viene eseguito finché non torna minore
-        while (accumulator >= fixedTimestep)
-        {
+        while (accumulator >= fixedTimestep) {
             sceneList.get(activeSceneIndex).fixedUpdate(); //eseguo il fixed update nella scena attuale
             accumulator -= fixedTimestep; //all'accumulator tolgo il valore del fixed timestep, se rimane sopra rieseguo il fixed update
         }
