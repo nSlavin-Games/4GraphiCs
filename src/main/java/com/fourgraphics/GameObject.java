@@ -3,7 +3,6 @@ package com.fourgraphics;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class GameObject {
 
@@ -132,9 +131,10 @@ public class GameObject {
         return name;
     }
 
-    public GameObject clone() {
-        ArrayList<Object> clonedList = new ArrayList<>(componentList.size());
-        Collections.copy(clonedList, componentList);
-        return new GameObject(clonedList, this.name);
-    }
+    //NOTE(samu): Ma scusa abbiamo Object.clone di default, che cazzo di bisongo c'è?????
+//    public GameObject clone() {
+//        ArrayList<Object> clonedList = new ArrayList<>(componentList.size());
+//        Collections.copy(clonedList, componentList);
+//        return new GameObject(clonedList, this.name);
+//    }
 }
