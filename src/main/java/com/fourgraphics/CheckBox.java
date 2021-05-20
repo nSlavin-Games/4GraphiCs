@@ -78,4 +78,17 @@ public class CheckBox extends UIElement {
 		this.checked = checked;
 	}
 
+	@Override
+	public CheckBox clone() {
+		try {
+			return new CheckBox(this.text, this.color, (PImage) this.texture.clone(), (PImage) this.fillTexture.clone(), (PImage) this.checkIcon.clone(), this.worldSpace);
+		} catch (Exception ignored) {    //NOTE(sv-molinari): kinda cursed ngl
+			try {
+				return new CheckBox(this.text, this.color, this.fillColor, (PImage) this.checkIcon.clone(), this.worldSpace);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
 }

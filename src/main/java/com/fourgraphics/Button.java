@@ -66,6 +66,15 @@ public class Button extends UIElement {
         if (sketch.mouseX > transform.getPosition().getX() - transform.getScale().getX() / 2 && sketch.mouseX < transform.getPosition().getX() + transform.getScale().getX() / 2 && sketch.mouseY > transform.getPosition().getY() - transform.getScale().getY() / 2 && sketch.mouseY < transform.getPosition().getY() + transform.getScale().getY() / 2)
             return true;
 
-		return false;
-	}
+        return false;
+    }
+
+    @Override
+    public Button clone() {
+        try {
+            return new Button(this.text, (PImage) this.texture.clone(), this.worldSpace);
+        } catch (Exception ignored) {
+            return new Button(this.text, this.color, this.worldSpace);
+        }
+    }
 }

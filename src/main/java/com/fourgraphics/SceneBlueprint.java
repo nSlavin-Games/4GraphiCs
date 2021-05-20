@@ -53,7 +53,8 @@ public class SceneBlueprint
     {
         //assegnazione di tutti i GameObject
         objectList = new ArrayList<>();
-        objectList.addAll(defaultObjectList);
+        for (int i = 0; i < defaultObjectList.size(); i++)
+            objectList.add(defaultObjectList.get(i).clone());
 
         sceneCamera = new Camera();
         scriptList = new ArrayList<>();
