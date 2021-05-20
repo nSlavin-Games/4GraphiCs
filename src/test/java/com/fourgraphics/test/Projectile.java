@@ -7,7 +7,7 @@ import static com.fourgraphics.SceneManager.destroy;
 public class Projectile extends Script {
     String parentName; //parent info
 
-    float projectileSpeed = 80f;
+    float projectileSpeed = 70f;
     Vector2 projectileDirection = new Vector2();
     float lifeTime = 2f; //tempo di vita in secondi
     float timeLived; //da quanto è nato
@@ -29,7 +29,7 @@ public class Projectile extends Script {
     }
 
     @Override
-    public void OnCollisionEnter(Collider self, Collider other, CollisionDirection direction) {
+    public void OnCollisionStay(Collider self, Collider other, CollisionDirection direction) {
         if (other.gameObject.getName().equalsIgnoreCase("player") && !parentName.equalsIgnoreCase("player")) {
             //TODO: implement damage dealing
             other.gameObject.getComponent(PlayerCombat.class).damage();
@@ -42,16 +42,20 @@ public class Projectile extends Script {
 
     public static void CreateProjectile(Vector2 spawnPosition, Vector2 direction, String parent) {
         CircleCollider coll = new CircleCollider(true);
-        Renderer renderer = new Renderer(SceneManager.getApp().color(255, 0, 0), DrawType.CIRCLE);
+        //Renderer renderer = new Renderer(SceneManager.getApp().color(255, 0, 0), DrawType.CIRCLE);
+        Animator animator = new Animator();
+        animator.addAnimation(ShowcaseGame.fireballAnimation.clone());
         Projectile proj = new Projectile();
         proj.projectileDirection.set(direction);
         proj.SetParent(parent);
         GameObject obj = new GameObject("projectile");
         obj.addComponent(coll);
-        obj.addComponent(renderer);
+        obj.addComponent(animator);
         obj.addComponent(proj);
         obj.transform.setPosition(spawnPosition);
-        obj.transform.setScale(25, 0);
+        int size = 35;
+        obj.transform.setScale(size*1.66f, size);
+        animator.playAnimation("fireball");
         SceneManager.instantiate(obj);
     }
 }

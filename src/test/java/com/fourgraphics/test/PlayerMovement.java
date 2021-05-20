@@ -1,19 +1,21 @@
 package com.fourgraphics.test;
 
 import com.fourgraphics.*;
+import static com.fourgraphics.SceneManager.fixedDeltaTime;
 
 public class PlayerMovement extends Script {
     boolean isGrounded;
     float yVelocity;
     float yForce;
-    float jumpForce = 400f; //potenza del salto
-    float gravityScale = 9.81f; //valore della gravità
+    float jumpForce = 700f; //potenza del salto
+    float gravityScale = 20f; //valore della gravità
 
     public int lastDirection = 1; //l'ultima direzione verso cui si è girato il giocatore
-    float speed = 150f; //warawrrsr
+    float speed = 250f; //warawrrsr
 
     public void Start() {
         SceneManager.getActiveScene().getCamera().setTarget(gameObject);
+        SceneManager.getActiveScene().getCamera().setOffset(new Vector2(0,-sketch.height/2+300));
     }
 
     public void Update() {
@@ -49,6 +51,11 @@ public class PlayerMovement extends Script {
     public void FixedUpdate()
     {
         yForce += gravityScale; //alla forza applicata aggiungo la gravità, ogni calcolo è effettuato senza tenere in conto la massa dell'oggetto
+        if(isGrounded)
+        {
+            yForce = 0;
+            yVelocity = 0;
+        }
 
         /*A questo punto muovo il personaggio applicandogli le varie forze
 
@@ -58,12 +65,12 @@ public class PlayerMovement extends Script {
 
         Sommo il tutto
          */
-        transform.getPosition().sum(Vector2.DOWN().multiply(yVelocity * SceneManager.fixedDeltaTime() + ((yForce / 2) * (float) Math.pow(SceneManager.fixedDeltaTime(), 2))));
+        transform.getPosition().sum(Vector2.DOWN().multiply(yVelocity * fixedDeltaTime() + ((yForce / 2) * (float) Math.pow(fixedDeltaTime(), 2))));
 
-        yVelocity += yForce * SceneManager.fixedDeltaTime(); //A questo punto alla velocity aggiungo la forza moltiplicata per il timestep
+        yVelocity += yForce * fixedDeltaTime(); //A questo punto alla velocity aggiungo la forza moltiplicata per il timestep
     }
 
-    public void OnCollisionEnter(Collider self, Collider other, CollisionDirection direction)
+    public void OnCollisionStay(Collider self, Collider other, CollisionDirection direction)
     {
         if (direction == CollisionDirection.DOWN && other.gameObject.getName().equalsIgnoreCase("terrain")) {
             isGrounded = true;

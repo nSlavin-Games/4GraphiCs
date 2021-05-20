@@ -63,5 +63,10 @@ public abstract class UIElement {
 	 * Mostra l'elemento dell'UI
 	 */
 	abstract protected void display();
+
+	public UIElement clone()
+	{
+		return null;
+	}
 }
 

@@ -42,6 +42,20 @@ public class GameObject {
         this.name = name;
     }
 
+    protected GameObject(GameObject other)
+    {
+        transform = new Transform();
+        transform.setPosition(other.transform.getPosition());
+        transform.setScale(other.transform.getScale());
+        componentList = new ArrayList<>();
+        for(int i = 0; i < other.componentList.size(); i++)
+        {
+            if(other.componentList.get(i) instanceof UIElement)
+                addComponent(((UIElement) other.componentList.get(i)).clone());
+        }
+        name = other.name;
+    }
+
     /**
      * metodo getComponent restituisce un componente in base al tipo di classe inserita
      *
@@ -73,15 +87,10 @@ public class GameObject {
         {
             for (Object obj : componentList) {
                 //se c'è già un oggetto dello stesso tipo di component parte un'eccezione
-                if(component.getClass().equals(obj.getClass())){
-                    throw new InvalidParameterException("A component of the specified type already exists");
-                }
-                //se esiste già un componente che è un'istanza di 'Renderable' o 'UIElement' idem
-                if(component instanceof Renderable && obj instanceof Renderable){
-                    throw new InvalidParameterException("A component of the specified type already exists");
-                }
-                if(component instanceof UIElement && obj instanceof UIElement){
-                    throw new InvalidParameterException("A component of the specified type already exists");
+                if(component.getClass().equals(obj.getClass())
+                || (component instanceof Renderable && obj instanceof Renderable)
+                || (component instanceof UIElement && obj instanceof UIElement)){
+                    throw new InvalidParameterException("A component of the specified type (" + component.getClass().getName() + ") already exists");
                 }
             }
         }
@@ -131,10 +140,9 @@ public class GameObject {
     public String getName() {
         return name;
     }
+    public void setName(String name) { this.name = name; }
 
     public GameObject clone() {
-        ArrayList<Object> clonedList = new ArrayList<>(componentList.size());
-        Collections.copy(clonedList, componentList);
-        return new GameObject(clonedList, this.name);
+        return new GameObject(this);
     }
 }

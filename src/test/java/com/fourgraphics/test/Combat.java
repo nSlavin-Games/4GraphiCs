@@ -8,7 +8,6 @@ public class Combat extends Script {
     public int currentHealth;
 
     public void damage() {
-        //TODO: remove health bar
         currentHealth--;
     }
 

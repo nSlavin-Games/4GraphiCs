@@ -97,4 +97,13 @@ public class Animation {
 	public boolean isEnded() {
 		return isEnded;
 	}
+
+	public int getFrameAmount() { return frames.size(); }
+
+	public Animation clone()
+	{
+		Animation anim = new Animation(frameDelay,loop,name);
+		anim.setFrames(frames);
+		return anim;
+	}
 }

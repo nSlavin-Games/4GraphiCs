@@ -1,5 +1,7 @@
 package com.fourgraphics;
 
+import javafx.scene.Scene;
+
 import java.util.ArrayList;
 
 /**
@@ -15,11 +17,9 @@ public class Animator extends Renderable {
 
 
 	public Animator(){//costruttore
-
 		animationList =new ArrayList<>();
-
 		currentAnimation=null;
-
+		sketch = SceneManager.getApp();
 	}
 
 

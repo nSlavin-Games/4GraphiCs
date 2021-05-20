@@ -1,5 +1,6 @@
 package com.fourgraphics;
 
+import javafx.scene.layout.Pane;
 import processing.core.PImage;
 
 /**
@@ -56,4 +57,11 @@ public class Panel extends UIElement {
 			sketch.popMatrix();
 	}
 
+	public Panel clone()
+	{
+		if(texture == null)
+			return new Panel(text,color,worldSpace);
+		else
+			return new Panel(text,texture,worldSpace);
+	}
 }

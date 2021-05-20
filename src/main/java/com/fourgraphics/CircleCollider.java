@@ -233,8 +233,8 @@ public class CircleCollider extends Collider {
 					if(distance <= transform.getScale().getX()/2)
 					{
 						transform.getPosition().setY(other.transform.getPosition().getY()
-								+other.transform.getScale().getX()/2
-								+transform.getScale().getX()/2);
+								+transform.getScale().getX()/2
+								+other.transform.getScale().getY()/2);
 						return CollisionDirection.UP;
 					}
 					
@@ -246,8 +246,8 @@ public class CircleCollider extends Collider {
 					if(distance <= transform.getScale().getX()/2)
 					{
 						transform.getPosition().setY(other.transform.getPosition().getY()
-								-other.transform.getScale().getX()/2
-								-transform.getScale().getX()/2);
+								-transform.getScale().getX()/2
+								-other.transform.getScale().getY()/2);
 						return CollisionDirection.DOWN;
 					}
 				}
