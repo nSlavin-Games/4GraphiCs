@@ -1,6 +1,6 @@
 package com.fourgraphics;
 
-import processing.core.*;
+import processing.core.PImage;
 
 public class CheckBox extends UIElement {
 	static PImage defaultCheck;
@@ -9,24 +9,25 @@ public class CheckBox extends UIElement {
 	private int fillColor;
 	private boolean checked;
 
-	public CheckBox(String text, int color,int fillColor, PImage checkIcon,boolean space) {
-		super(text, color,space);
+	public CheckBox(String text, int color, int fillColor, PImage checkIcon, boolean isWorldSpace) {
+		super(text, color, isWorldSpace);
 		this.fillColor = fillColor;
-		this.checkIcon= checkIcon;
+		this.checkIcon = checkIcon;
 		defaultCheck = sketch.loadImage("");
 	}
 
-	public CheckBox(String text,int color, PImage texture,PImage fillTexture,PImage checkIcon,boolean space) {
-		super(text,texture,space);
-		this.fillTexture=fillTexture;
-		this.checkIcon=checkIcon;
+	public CheckBox(String text, int color, PImage texture, PImage fillTexture, PImage checkIcon, boolean isWorldSpace) {
+		super(text, texture, isWorldSpace);
+		this.fillTexture = fillTexture;
+		this.checkIcon = checkIcon;
 	}
+
 	@Override
 	protected void display() {
-		if(!worldSpace) {
+		if (!worldSpace) {
 			Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
 			sketch.noStroke();
-			
+
 			sketch.pushMatrix();	
 			sketch.translate(cameraPosition.getX(), cameraPosition.getY());
 			

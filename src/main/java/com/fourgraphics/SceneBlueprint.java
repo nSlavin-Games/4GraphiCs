@@ -61,8 +61,7 @@ public class SceneBlueprint
         uiElements = new ArrayList<>();
         dynamicColliders = new ArrayList<>();
         collidersList = new ArrayList<>();
-        for (GameObject o : objectList)
-        { //per ogni oggetto di tipo GameObject nella lista di objectList
+        for (GameObject o : objectList) { //per ogni oggetto di tipo GameObject nella lista di objectList
             initializeObject(o); //inizializzazione di ogni oggetto di tipo GameObject
         }
         start(); //caricamento della scena
@@ -79,7 +78,7 @@ public class SceneBlueprint
             coll.previousPosition.set(coll.gameObject.transform.getPosition());
         }
 
-        //scena gi� inizializzata
+        //scena già inizializzata
         for (Script s : scriptList)
         { //per ogni script della lista scriptList
             s.Start(); //inizializzazione di tutti gli script della scena

@@ -9,6 +9,15 @@ public class Enemy extends Combat {
         Mage
     }
 
+    public Enemy() {
+    }
+
+    ;
+
+    public Enemy(EnemyType type) {
+        this.type = type;
+    }
+
     public EnemyType type;
 
     //gestione gravità

@@ -1,6 +1,5 @@
 package com.fourgraphics;
 
-import javafx.scene.layout.Pane;
 import processing.core.PImage;
 
 /**
@@ -49,19 +48,19 @@ public class Panel extends UIElement {
 				sketch.imageMode(sketch.CENTER);
 				sketch.image(texture, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
 			}
-			sketch.fill(0);
-			sketch.textAlign(sketch.CENTER, sketch.CENTER);
-			sketch.textSize(20);
-			sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
-		if(!worldSpace)
+		sketch.fill(0);
+		sketch.textAlign(sketch.CENTER, sketch.CENTER);
+		sketch.textSize(20);
+		sketch.text(text, transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
+		if (!worldSpace)
 			sketch.popMatrix();
 	}
 
-	public Panel clone()
-	{
-		if(texture == null)
-			return new Panel(text,color,worldSpace);
+	@Override
+	public Panel clone() {
+		if (texture == null)
+			return new Panel(text, color, worldSpace);
 		else
-			return new Panel(text,texture,worldSpace);
+			return new Panel(text, texture, worldSpace);
 	}
 }

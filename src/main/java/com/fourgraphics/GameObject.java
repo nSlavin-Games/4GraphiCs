@@ -3,9 +3,8 @@ package com.fourgraphics;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class GameObject {
+public class GameObject implements Cloneable {
 
     /**
      * La classe GameObject indica un oggetto qualsiasi della scena
@@ -25,6 +24,22 @@ public class GameObject {
     public GameObject(ArrayList<Object> componentList, String name) {
         this.componentList = new ArrayList<>();
         this.transform = new Transform();
+        this.name = name;
+
+        for (Object component : componentList)
+            addComponent(component);
+    }
+
+    /**
+     * Costruttore
+     *
+     * @param componentList Lista dei componenti
+     * @param name          Nome dell'oggetto
+     * @param transform     Dimensione e posizione
+     */
+    public GameObject(ArrayList<Object> componentList, String name, Transform transform) {
+        this.componentList = new ArrayList<>();
+        this.transform = transform;
         this.name = name;
 
         for (Object component : componentList)
