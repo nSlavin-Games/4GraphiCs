@@ -3,7 +3,6 @@ package com.fourgraphics.test;
 import com.fourgraphics.Input;
 import com.fourgraphics.SceneManager;
 import com.fourgraphics.Vector2;
-import javafx.scene.Scene;
 
 public class PlayerCombat extends Combat {
 
@@ -31,6 +30,7 @@ public class PlayerCombat extends Combat {
             meleeTimer = meleeRecovery;
         }
 
+        if (Input.getButtonDown("DebugSuicide")) currentHealth--;
         if (Input.getButtonDown("Ranged") && canUseRanged && fireballTimer <= 0) {
             Vector2 direction = gameObject.getComponent(PlayerMovement.class).lastDirection == 1 ? Vector2.RIGHT() : Vector2.LEFT();
             Vector2 cloneDirection = new Vector2();

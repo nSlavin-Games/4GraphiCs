@@ -4,7 +4,7 @@ package com.fourgraphics;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
-public class GameObject implements Cloneable {
+public class GameObject {
 
     /**
      * La classe GameObject indica un oggetto qualsiasi della scena
