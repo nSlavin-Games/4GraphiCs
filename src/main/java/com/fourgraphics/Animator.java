@@ -55,7 +55,7 @@ public class Animator extends Renderable {
     }
 
     @Override
-    protected Animator clone() throws CloneNotSupportedException {
+    protected Animator clone() {
         ArrayList<Animation> clonedAnimationList = new ArrayList<>();
         animationList.forEach(animation -> {
             clonedAnimationList.add(animation.clone());

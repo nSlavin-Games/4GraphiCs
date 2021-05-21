@@ -54,11 +54,10 @@ public class Renderer extends Renderable {
         }
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        try {
-            return new Renderer((PImage) this.texture.clone());
-        } catch (Exception ignored) {
+    protected Renderer clone() {
+        if (this.renderType == DrawType.TEXTURED) {
+            return new Renderer(this.texture);
+        } else {
             return new Renderer(this.color, this.renderType);
         }
     }

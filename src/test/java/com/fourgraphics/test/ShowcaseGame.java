@@ -1,6 +1,7 @@
 package com.fourgraphics.test;
 
 import com.fourgraphics.*;
+import com.fourgraphics.utils.ObjectComposer;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -24,7 +25,7 @@ public class ShowcaseGame extends PApplet
 
     public void settings()
     {
-        size(800, 800, P3D);
+        size(1000, 1000, P3D);
         smooth(0);
         SceneManager.initialize(this);
         Input.createAxis("Horizontal", "d", "a", "", "");
@@ -69,27 +70,34 @@ public class ShowcaseGame extends PApplet
         gameObjects.add(object);
 
         //Creazione Personaggio
-        componentList = new ArrayList<>();
-        coll = new RectCollider(true);
-        renderer = new Renderer(color(100), DrawType.RECT);
-        PlayerMovement movement = new PlayerMovement();
-        PlayerCombat combat = new PlayerCombat();
-        componentList.add(coll);
-        componentList.add(renderer);
-        componentList.add(movement);
-        componentList.add(combat);
-        object = new GameObject(componentList, "player");
-        object.transform.setScale(50, 75);
-        object.transform.setPosition(50, -100);
-        gameObjects.add(object);
+//        componentList = new ArrayList<>();
+//        coll = new RectCollider(true);
+//        renderer = new Renderer(color(100), DrawType.RECT);
+//        PlayerMovement movement = new PlayerMovement();
+//        PlayerCombat combat = new PlayerCombat();
+//        componentList.add(coll);
+//        componentList.add(renderer);
+//        componentList.add(movement);
+//        componentList.add(combat);
+//        object = new GameObject(componentList, "player");
+//        object.transform.setScale(50, 75);
+//        object.transform.setPosition(50, -100);
+        gameObjects.add(new ObjectComposer(
+                "player",
+                50, 75,
+                50, -100,
+                new RectCollider(true),
+                new Renderer(color(100), DrawType.RECT),
+                new PlayerMovement(), new PlayerCombat()    //NOTE(samu): god bless varargs
+        ).compose());
 
         //Cuore UI
         componentList = new ArrayList<>();
-        Panel panel = new Panel(" ",loadImage("../resources/Images/UI/Heart.png"),false);
+        Panel panel = new Panel(" ", loadImage("../resources/Images/UI/Heart.png"), false);
         componentList.add(panel);
         object = new GameObject(componentList, "Health 1");
         int hearthHeight = 55;
-        int heartWidth = (int)(hearthHeight*1.16666666f);
+        int heartWidth = (int) (hearthHeight * 1.16666666f);
         object.transform.setScale(heartWidth, hearthHeight);
         object.transform.setPosition(-width / 2f + heartWidth / 2f + 20, height / 2f - hearthHeight / 2f - 20);
         gameObjects.add(object);
@@ -103,26 +111,26 @@ public class ShowcaseGame extends PApplet
         gameObjects.add(object);
 
         //Creazione Nemico
-        componentList = new ArrayList<>();
-        coll = new RectCollider(true);
-        renderer = new Renderer(color(100), DrawType.RECT);
+//        componentList = new ArrayList<>();
+//        coll = new RectCollider(true);
+//        renderer = new Renderer(color(100), DrawType.RECT);
         Enemy enemy = new Enemy();
-        enemy.type = Enemy.EnemyType.Mage;
-        componentList.add(coll);
-        componentList.add(renderer);
-        componentList.add(enemy);
-        object = new GameObject(componentList, "enemy");
-        object.transform.setScale(50, 75);
-        object.transform.setPosition(550, -100);
-        gameObjects.add(object);
-//        gameObjects.add(new ObjectComposer(
-//                "enemy",
-//                new Enemy(Enemy.EnemyType.Mage),
-//                550, -100,
-//                50, 75,
-//                new RectCollider(true),
-//                new Renderer(color(100), DrawType.RECT)
-//        ).compose());
+//        enemy.type = Enemy.EnemyType.Mage;
+//        componentList.add(coll);
+//        componentList.add(renderer);
+//        componentList.add(enemy);
+//        object = new GameObject(componentList, "enemy");
+//        object.transform.setScale(50, 75);
+//        object.transform.setPosition(550, -100);
+//        gameObjects.add(object);
+        gameObjects.add(new ObjectComposer(
+                "enemy",
+                new Enemy(Enemy.EnemyType.Mage),
+                550, -100,
+                50, 75,
+                new RectCollider(true),
+                new Renderer(color(100), DrawType.RECT)
+        ).compose());
         //Copia nemico
         componentList = new ArrayList<>();
         coll = new RectCollider(true);

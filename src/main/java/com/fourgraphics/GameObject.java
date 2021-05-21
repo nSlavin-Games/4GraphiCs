@@ -3,6 +3,8 @@ package com.fourgraphics;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameObject {
 
@@ -57,16 +59,28 @@ public class GameObject {
         this.name = name;
     }
 
-    protected GameObject(GameObject other)
-    {
+    protected GameObject(GameObject other) {
         transform = new Transform();
         transform.setPosition(other.transform.getPosition());
         transform.setScale(other.transform.getScale());
         componentList = new ArrayList<>();
-        for(int i = 0; i < other.componentList.size(); i++)
-        {
-            if(other.componentList.get(i) instanceof UIElement)
-                addComponent(((UIElement) other.componentList.get(i)).clone());
+        try {
+            for (int i = 0; i < other.componentList.size(); i++) {
+                if (other.componentList.get(i) instanceof UIElement)
+                    addComponent(((UIElement) other.componentList.get(i)).clone());
+
+                if (other.componentList.get(i) instanceof Renderable)
+                    addComponent(((Renderable) other.componentList.get(i)).clone());
+
+                if (other.componentList.get(i) instanceof Collider)
+                    addComponent(((Collider) other.componentList.get(i)).clone());
+
+                if (other.componentList.get(i) instanceof Script)
+                    addComponent(other.componentList.get(i));
+            }
+        } catch (Exception e) {
+            Logger.getLogger("4GraphiCs | GameObject").log(Level.WARNING, "Unable to clone element in GameObject: ");
+            e.printStackTrace();
         }
         name = other.name;
     }

@@ -1,7 +1,5 @@
 package com.fourgraphics;
 
-import processing.core.PApplet;
-
 public class CircleCollider extends Collider {
 
 
@@ -274,8 +272,8 @@ public class CircleCollider extends Collider {
 					if(distance <= transform.getScale().getX()/2)
 					{
 						transform.getPosition().setX(other.transform.getPosition().getX()
-								-other.transform.getScale().getX()/2
-								-transform.getScale().getX()/2);
+								- other.transform.getScale().getX() / 2
+								- transform.getScale().getX() / 2);
 						return CollisionDirection.RIGHT;
 					}
 				}
@@ -284,4 +282,7 @@ public class CircleCollider extends Collider {
 		return CollisionDirection.NONE;
 	}
 
+	public CircleCollider clone() {
+		return new CircleCollider(isDynamic());
+	}
 }

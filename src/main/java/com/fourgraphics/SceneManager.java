@@ -43,7 +43,7 @@ public class SceneManager
      */
     private static float time;
 
-    private static float firstDraw;
+    private static float skipInitialFrames;
 
     /**
      * Il valore del fixed timestep, ovvero ogni quanto vengono eseguiti i metodi dato un tempo predefinito
@@ -82,8 +82,8 @@ public class SceneManager
 
         accumulator += deltaTime(); //utilizzato per eseguire un metodo in un fixed timestep
 
-        if (firstDraw == 0) {
-            firstDraw = mainApp.millis();
+        if (skipInitialFrames < 5) {
+            skipInitialFrames++;
             accumulator = 0;
         }
 

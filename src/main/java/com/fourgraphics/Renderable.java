@@ -13,10 +13,7 @@ public abstract class Renderable implements Cloneable {
 
     abstract protected void render();
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+    protected abstract Renderable clone();
 }
 
 

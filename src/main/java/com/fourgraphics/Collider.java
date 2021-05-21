@@ -35,21 +35,14 @@ abstract public class Collider implements Cloneable {
 	}
 
 
-	public boolean isDebug() {
-		return debug;
-	}
+    public boolean isDebug() {
+        return debug;
+    }
 
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
 
-	/**
-	 * @deprecated not finished
-	 */
-	@Deprecated
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    protected abstract Collider clone();
 }

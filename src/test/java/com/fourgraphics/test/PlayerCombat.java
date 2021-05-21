@@ -16,7 +16,7 @@ public class PlayerCombat extends Combat {
     float fireballTimer;
 
     public void Start() {
-        currentHealth = 3;  //sdfsdhshfdhs
+        currentHealth = 3;
     }
 
     public void Update() {
@@ -30,7 +30,6 @@ public class PlayerCombat extends Combat {
             meleeTimer = meleeRecovery;
         }
 
-        if (Input.getButtonDown("DebugSuicide")) currentHealth--;
         if (Input.getButtonDown("Ranged") && canUseRanged && fireballTimer <= 0) {
             Vector2 direction = gameObject.getComponent(PlayerMovement.class).lastDirection == 1 ? Vector2.RIGHT() : Vector2.LEFT();
             Vector2 cloneDirection = new Vector2();
