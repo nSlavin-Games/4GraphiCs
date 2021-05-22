@@ -1,4 +1,4 @@
-package com.fourgraphics.test.Scripts.UI;
+package com.fourgraphics.test.scripts.UI;
 
 import com.fourgraphics.SceneManager;
 import com.fourgraphics.Script;

@@ -1,8 +1,7 @@
-package com.fourgraphics.test.Scripts.Enemies;
+package com.fourgraphics.test.scripts.Enemies;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.Scripts.Generic.Combat;
-import com.fourgraphics.test.Scripts.Generic.Projectile;
+import com.fourgraphics.test.scripts.Generic.Combat;
 
 public class Enemy extends Combat
 {

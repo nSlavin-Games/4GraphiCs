@@ -1,10 +1,10 @@
-package com.fourgraphics.test.Scripts.Enemies;
+package com.fourgraphics.test.scripts.Enemies;
 
 import com.fourgraphics.Animator;
 import com.fourgraphics.Collider;
 import com.fourgraphics.CollisionDirection;
 import com.fourgraphics.Vector2;
-import com.fourgraphics.test.Scripts.Generic.Projectile;
+import com.fourgraphics.test.scripts.Generic.Projectile;
 
 public class Mage extends Enemy
 {

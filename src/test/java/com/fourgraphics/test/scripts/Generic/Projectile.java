@@ -1,9 +1,9 @@
-package com.fourgraphics.test.Scripts.Generic;
+package com.fourgraphics.test.scripts.Generic;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.Scripts.Enemies.Enemy;
-import com.fourgraphics.test.Scripts.Player.PlayerCombat;
 import com.fourgraphics.test.ShowcaseGame;
+import com.fourgraphics.test.scripts.Enemies.Enemy;
+import com.fourgraphics.test.scripts.Player.PlayerCombat;
 import com.fourgraphics.utils.ObjectComposer;
 
 import static com.fourgraphics.SceneManager.destroy;

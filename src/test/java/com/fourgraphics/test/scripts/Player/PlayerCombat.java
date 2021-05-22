@@ -1,11 +1,11 @@
-package com.fourgraphics.test.Scripts.Player;
+package com.fourgraphics.test.scripts.Player;
 
 import com.fourgraphics.Input;
 import com.fourgraphics.SceneManager;
 import com.fourgraphics.Vector2;
-import com.fourgraphics.test.Scripts.Generic.Combat;
-import com.fourgraphics.test.Scripts.Generic.Melee;
-import com.fourgraphics.test.Scripts.Generic.Projectile;
+import com.fourgraphics.test.scripts.Generic.Combat;
+import com.fourgraphics.test.scripts.Generic.Melee;
+import com.fourgraphics.test.scripts.Generic.Projectile;
 
 public class PlayerCombat extends Combat
 {
@@ -50,7 +50,7 @@ public class PlayerCombat extends Combat
     public void die()
     {
         super.die();
-        SceneManager.loadScene(0);
+        SceneManager.loadScene(1);
     }
 
     @Override

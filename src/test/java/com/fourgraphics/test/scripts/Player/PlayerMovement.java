@@ -1,6 +1,7 @@
-package com.fourgraphics.test.Scripts.Player;
+package com.fourgraphics.test.scripts.Player;
 
 import com.fourgraphics.*;
+
 import static com.fourgraphics.SceneManager.fixedDeltaTime;
 
 public class PlayerMovement extends Script {

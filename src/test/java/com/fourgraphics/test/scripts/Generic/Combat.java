@@ -1,4 +1,4 @@
-package com.fourgraphics.test.Scripts.Generic;
+package com.fourgraphics.test.scripts.Generic;
 
 import com.fourgraphics.Script;
 
