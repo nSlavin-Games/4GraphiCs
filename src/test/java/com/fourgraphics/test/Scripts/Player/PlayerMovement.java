@@ -1,4 +1,4 @@
-package com.fourgraphics.test;
+package com.fourgraphics.test.Scripts.Player;
 
 import com.fourgraphics.*;
 import static com.fourgraphics.SceneManager.fixedDeltaTime;
@@ -7,8 +7,8 @@ public class PlayerMovement extends Script {
     boolean isGrounded;
     float yVelocity;
     float yForce;
-    float jumpForce = 700f; //potenza del salto
-    float gravityScale = 20f; //valore della gravità
+    float jumpForce = 850f; //potenza del salto
+    float gravityScale = 25f; //valore della gravità
 
     public int lastDirection = 1; //l'ultima direzione verso cui si è girato il giocatore
     float speed = 250f; //warawrrsr
@@ -41,6 +41,7 @@ public class PlayerMovement extends Script {
             //Se premo i possibili input per il salto
             if (Input.getButtonDown("Jump")) {
                 yForce = Vector2.UP().multiply(jumpForce).getY(); //imposto la forza da applicare all'asse Y indicandogli una direzione verso l'alto
+                yVelocity += yForce * fixedDeltaTime();
                 //Vector2.UP() Restituisce X = 0 e Y = -1
             }
         }

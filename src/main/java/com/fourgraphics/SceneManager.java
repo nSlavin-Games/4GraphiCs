@@ -94,8 +94,10 @@ public class SceneManager
         while (accumulator >= fixedTimestep) {
             sceneList.get(activeSceneIndex).fixedUpdate(); //eseguo il fixed update nella scena attuale
             accumulator -= fixedTimestep; //all'accumulator tolgo il valore del fixed timestep, se rimane sopra rieseguo il fixed update
+            sceneList.get(activeSceneIndex).calculateCollisions(); //calcolo le collisioni
             sceneList.get(activeSceneIndex).getCamera().calculateCamera(); //aggiorno la telecamera
         }
+
         sceneList.get(activeSceneIndex).calculateCollisions(); //calcolo le collisioni
 
         sceneList.get(activeSceneIndex).renderObjects(); //renderizzo gli oggetti
@@ -111,8 +113,8 @@ public class SceneManager
      */
     public static void loadScene(int index)
     {
-        sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
         activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
+        sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
     }
 
     /**

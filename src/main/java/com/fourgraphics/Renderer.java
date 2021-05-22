@@ -13,6 +13,7 @@ public class Renderer extends Renderable {
 
     public Renderer(PImage texture) {
         this.color = 0;
+        this.texture = texture;
         renderType = DrawType.TEXTURED;
         sketch = SceneManager.getApp();
     }

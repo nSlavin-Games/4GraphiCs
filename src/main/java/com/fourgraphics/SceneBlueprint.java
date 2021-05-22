@@ -65,6 +65,7 @@ public class SceneBlueprint
         for (GameObject o : objectList) { //per ogni oggetto di tipo GameObject nella lista di objectList
             initializeObject(o); //inizializzazione di ogni oggetto di tipo GameObject
         }
+
         start(); //caricamento della scena
     }
 

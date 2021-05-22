@@ -1,6 +1,7 @@
 package com.fourgraphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Dareisa, Furriolo, Iurcea
@@ -22,6 +23,12 @@ public class Animator extends Renderable {
         sketch = SceneManager.getApp();
     }
 
+    public Animator(Animation... animations) {//costruttore
+        animationList = new ArrayList<>();
+        animationList.addAll(Arrays.asList(animations));
+        currentAnimation = null;
+        sketch = SceneManager.getApp();
+    }
 
     protected void render() {//Esegue le animazioni in base agli state handler
         currentAnimation.stateHandler();
@@ -36,6 +43,11 @@ public class Animator extends Renderable {
                 currentAnimation.play();
             }
         }
+    }
+
+    public Animation getCurrentAnimation()
+    {
+        return currentAnimation;
     }
 
     public void stopAnimation() {// ferma l'animazione
@@ -55,7 +67,7 @@ public class Animator extends Renderable {
     }
 
     @Override
-    protected Animator clone() {
+    public Animator clone() {
         ArrayList<Animation> clonedAnimationList = new ArrayList<>();
         animationList.forEach(animation -> {
             clonedAnimationList.add(animation.clone());

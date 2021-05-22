@@ -13,7 +13,7 @@ public class CheckBox extends UIElement {
 		super(text, color, isWorldSpace);
 		this.fillColor = fillColor;
 		this.checkIcon = checkIcon;
-		defaultCheck = sketch.loadImage("");
+		defaultCheck = sketch.loadImage("../resources/defaultCheck.png");
 	}
 
 	public CheckBox(String text, int color, PImage texture, PImage fillTexture, PImage checkIcon, boolean isWorldSpace) {

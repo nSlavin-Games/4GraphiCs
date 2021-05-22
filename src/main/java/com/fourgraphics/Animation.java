@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * @author Dareisa, Furriolo, Iurcea
  */
-public class Animation implements Cloneable {
+public class Animation {
     protected ArrayList<PImage> frames;
     private final boolean loop;
     private boolean isPlaying;
@@ -49,7 +49,10 @@ public class Animation implements Cloneable {
                     if (loop)
                         currentFrame = 0;
                     else
+                    {
                         stop();
+                        currentFrame = getFrameAmount() - 1;
+                    }
                 }
             }
         }
@@ -65,7 +68,6 @@ public class Animation implements Cloneable {
     protected void stop() {
         isEnded = true;
         isPlaying = false;
-        currentFrame = 0;
     }
 
     protected void pause() {
@@ -96,7 +98,6 @@ public class Animation implements Cloneable {
         return frames.size();
     }
 
-    @Override
     public Animation clone() {
         Animation anim = new Animation(frameDelay, loop, name);
         anim.setFrames(frames);
