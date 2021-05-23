@@ -14,26 +14,28 @@ public class Animator extends Renderable {
     public Animator() {//costruttore
         animationList = new ArrayList<>();
         currentAnimation = null;
-        sketch = SceneManager.getApp();
     }
 
     public Animator(ArrayList<Animation> animationList) {//costruttore
         this.animationList = animationList;
         currentAnimation = null;
-        sketch = SceneManager.getApp();
     }
 
     public Animator(Animation... animations) {//costruttore
         animationList = new ArrayList<>();
         animationList.addAll(Arrays.asList(animations));
         currentAnimation = null;
-        sketch = SceneManager.getApp();
     }
 
     protected void render() {//Esegue le animazioni in base agli state handler
+        float rx = Rescaler.resizeH(transform.getPosition().getX());
+        float ry = Rescaler.resizeH(transform.getPosition().getY());
+        float rw = Rescaler.resizeH(transform.getScale().getX());
+        float rh = Rescaler.resizeH(transform.getScale().getY());
+
         currentAnimation.stateHandler();
         sketch.imageMode(sketch.CENTER);
-        sketch.image(currentAnimation.frames.get(currentAnimation.getCurrentFrameIndex()), transform.getPosition().getX(), transform.getPosition().getY(), transform.getScale().getX(), transform.getScale().getY());
+        sketch.image(currentAnimation.frames.get(currentAnimation.getCurrentFrameIndex()), rx, ry, rw, rh);
     }
 
     public void playAnimation(String name) {// ferma l'animazione in corso e fa partire l'animazione in base al nome

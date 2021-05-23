@@ -15,14 +15,12 @@ public class Renderer extends Renderable {
         this.color = 0;
         this.texture = texture;
         renderType = DrawType.TEXTURED;
-        sketch = SceneManager.getApp();
     }
 
 
     public Renderer(int color, DrawType renderType) {
         this.color = color;
         this.renderType = renderType;
-        sketch = SceneManager.getApp();
     }
 
     public void setColor(int color) {
@@ -32,34 +30,41 @@ public class Renderer extends Renderable {
     @Override
     protected void render() {
         sketch.noStroke();
-        float x = transform.getPosition().getX();
-        float y = transform.getPosition().getY();
-        float w = transform.getScale().getX();
-        float h = transform.getScale().getY();
+
+        float rx = Rescaler.resizeH(transform.getPosition().getX());
+        float ry = Rescaler.resizeH(transform.getPosition().getY());
+        float rw = Rescaler.resizeH(transform.getScale().getX());
+        float rh = Rescaler.resizeH(transform.getScale().getY());
+
         switch (renderType) {
             case TEXTURED:
                 sketch.imageMode(sketch.CENTER);
-                sketch.image(texture, x, y, w, h);
+                sketch.image(texture, rx, ry, rw, rh);
                 sketch.imageMode(sketch.CORNER);
                 break;
             case RECT:
                 sketch.rectMode(sketch.CENTER);
                 sketch.fill(color);
-                sketch.rect(x, y, w, h);
+                sketch.rect(rx, ry, rw, rh);
                 sketch.rectMode(sketch.CORNER);
                 break;
             case CIRCLE:
                 sketch.fill(color);
-                sketch.circle(x, y, w);
+                sketch.circle(rx, ry, rw);
                 break;
         }
     }
 
-    protected Renderer clone() {
+    public Renderer clone() {
         if (this.renderType == DrawType.TEXTURED) {
             return new Renderer(this.texture);
         } else {
             return new Renderer(this.color, this.renderType);
         }
+    }
+
+    public void setTexture(PImage texture)
+    {
+        this.texture = texture;
     }
 }

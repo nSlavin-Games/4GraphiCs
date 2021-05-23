@@ -6,26 +6,18 @@ public class CircleCollider extends Collider {
 	public CircleCollider(boolean dynamicObject) {
 
 		super(dynamicObject);
-
 	}
 
+	protected void debugDisplay()
+    {
+        if(isDebug()) {
+            sketch.fill(0,255,0,100);
+            sketch.circle(Rescaler.resizeH(transform.getPosition().getX()), Rescaler.resizeH(transform.getPosition().getY()), Rescaler.resizeH(transform.getScale().getX()));
+        }
+    }
+
 	protected CollisionDirection checkCollision(Collider other) {
-
-		if(isDebug()) {
-			sketch.fill(0,255,0,200);
-			sketch.circle(transform.getPosition().getX(),transform.getPosition().getY(), transform.getScale().getX());
-		}
-
 		if (other instanceof CircleCollider) {
-
-			if (isDebug()) {
-				if(!other.isDynamic())
-					sketch.fill(255, 0, 0, 200);
-				sketch.circle(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
-						other.transform.getScale().getX());
-
-			}
-
 			float distX = transform.getPosition().getX() - other.transform.getPosition().getX();
 			float distY = transform.getPosition().getY() - other.transform.getPosition().getY();
 			float distance = (float) Math.sqrt(distX * distX + distY * distY);
@@ -63,16 +55,6 @@ public class CircleCollider extends Collider {
 
 		}
 		if (other instanceof RectCollider) {
-
-			if (isDebug()) {
-				sketch.rectMode(sketch.CENTER);
-				if(!other.isDynamic())
-					sketch.fill(255, 0, 0, 200);
-				sketch.rect(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
-						other.transform.getScale().getX(), other.transform.getScale().getY());
-				
-			}
-
 			float distx = transform.getPosition().getX() - other.transform.getPosition().getX();
 			float disty = transform.getPosition().getY() - other.transform.getPosition().getY();
 
@@ -135,20 +117,8 @@ public class CircleCollider extends Collider {
 	}
 
 	protected CollisionDirection checkCollisionSnap(Collider other) {
-		if(isDebug()) {
-			sketch.fill(0,255,0,200);
-			sketch.circle(transform.getPosition().getX(),transform.getPosition().getY(), transform.getScale().getX());
-		}
 
 		if (other instanceof CircleCollider) {
-
-			if (isDebug()) {
-				if(!other.isDynamic())
-					sketch.fill(255, 0, 0, 200);
-				sketch.circle(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
-						other.transform.getScale().getX());
-
-			}
 
 			float distX = transform.getPosition().getX() - other.transform.getPosition().getX();
 			float distY = transform.getPosition().getY() - other.transform.getPosition().getY();
@@ -199,15 +169,6 @@ public class CircleCollider extends Collider {
 
 		}
 		if (other instanceof RectCollider) {
-
-			if (isDebug()) {
-				sketch.rectMode(sketch.CENTER);
-				if(!other.isDynamic())
-					sketch.fill(255, 0, 0, 200);
-				sketch.rect(other.transform.getPosition().getX(), other.transform.getPosition().getY(),
-						other.transform.getScale().getX(), other.transform.getScale().getY());
-				
-			}
 
 			float distx = transform.getPosition().getX() - other.transform.getPosition().getX();
 			float disty = transform.getPosition().getY() - other.transform.getPosition().getY();

@@ -12,7 +12,7 @@ public class PlayerMovement extends Script {
     float gravityScale = 25f; //valore della gravità
 
     public int lastDirection = 1; //l'ultima direzione verso cui si è girato il giocatore
-    float speed = 250f; //warawrrsr
+    float speed = 350f; //warawrrsr
 
     public void Start() {
         SceneManager.getActiveScene().getCamera().setTarget(gameObject);

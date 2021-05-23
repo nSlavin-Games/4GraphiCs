@@ -1,6 +1,10 @@
 package com.fourgraphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javafx.scene.Scene;
+import processing.core.PImage;
 
 /**
  * Il modello di una scena che gestisce l’esecuzione di tutti gli oggetti,
@@ -43,6 +47,16 @@ public class SceneBlueprint
     private Camera sceneCamera;
 
     /**
+     * Immagine di background per la scena corrente
+     */
+    private PImage background;
+
+    /**
+     * Colore di background per la scena corrente
+     */
+    private int backgroundColor = SceneManager.getApp().color(45,73,118);
+
+    /**
      * Se è il primo caricamento inizializza la scena con i vari GameObject, crea
      * la telecamera, inizializza la lista degli script, oggetti renderizzabili,
      * dell’ui e dei collider attaccati ai GameObject, specifica in una lista
@@ -62,7 +76,8 @@ public class SceneBlueprint
         uiElements = new ArrayList<>();
         dynamicColliders = new ArrayList<>();
         collidersList = new ArrayList<>();
-        for (GameObject o : objectList) { //per ogni oggetto di tipo GameObject nella lista di objectList
+        for (GameObject o : objectList)
+        { //per ogni oggetto di tipo GameObject nella lista di objectList
             initializeObject(o); //inizializzazione di ogni oggetto di tipo GameObject
         }
         start(); //caricamento della scena
@@ -74,16 +89,24 @@ public class SceneBlueprint
      */
     protected void start()
     {
-        for (Collider coll : dynamicColliders)
+        if(collidersList.size() > 0)
         {
-            coll.previousPosition.set(coll.gameObject.transform.getPosition());
+            for (Collider coll : dynamicColliders)
+            {
+                coll.previousPosition.set(coll.gameObject.transform.getPosition());
+            }
         }
 
-        //scena già inizializzata
-        for (Script s : scriptList)
-        { //per ogni script della lista scriptList
-            s.Start(); //inizializzazione di tutti gli script della scena
+
+        if(scriptList.size() > 0)
+        {
+            //scena già inizializzata
+            for (Script s : scriptList)
+            { //per ogni script della lista scriptList
+                s.Start(); //inizializzazione di tutti gli script della scena
+            }
         }
+
     }
 
     /**
@@ -92,11 +115,28 @@ public class SceneBlueprint
      */
     protected void update()
     {
-        //MODIFICA - FURFARO ora esegue solo l'update degli script
-        for (int i = scriptList.size() - 1; i >= 0; i--)
+        //NOTE(sv-molinari): Sfondo applicato all'interno dell'update di SceneBlueprint, prima era assente
+        if (background == null)
         {
-            scriptList.get(i).Update();
+            SceneManager.getApp().background(backgroundColor);
+        } else
+        {
+            SceneManager.getApp().imageMode(SceneManager.getApp().CENTER);
+            SceneManager.getApp().pushMatrix();
+            SceneManager.getApp().translate(Rescaler.resizeW(sceneCamera.getOffsetPosition().getX()), Rescaler.resizeH(sceneCamera.getOffsetPosition().getY()));
+            SceneManager.getApp().image(background, 0, 0, SceneManager.getApp().width, SceneManager.getApp().height);
+            SceneManager.getApp().popMatrix();
         }
+
+        if(scriptList.size() > 0)
+        {
+            //NOTE(dfmolinari): ora esegue solo l'update degli script
+            for (int i = scriptList.size() - 1; i >= 0; i--)
+            {
+                scriptList.get(i).Update();
+            }
+        }
+
     }
 
     /**
@@ -104,9 +144,12 @@ public class SceneBlueprint
      */
     protected void fixedUpdate()
     {
-        for (int i = scriptList.size() - 1; i >= 0; i--)
+        if(scriptList.size() > 0)
         {
-            scriptList.get(i).FixedUpdate();
+            for (int i = scriptList.size() - 1; i >= 0; i--)
+            {
+                scriptList.get(i).FixedUpdate();
+            }
         }
     }
 
@@ -177,10 +220,22 @@ public class SceneBlueprint
      */
     protected void renderObjects()
     {
-        for (int i = renderableElements.size() - 1; i >= 0; i--)
-        { //per ogni oggetto di tipo Renderable della lista renderableElements
-            renderableElements.get(i).render(); //esecuzione animazioni degli oggetti Renderable
+        if(renderableElements.size() > 0)
+        {
+            for (int i = 0; i < renderableElements.size(); i++)
+            { //per ogni oggetto di tipo Renderable della lista renderableElements
+                renderableElements.get(i).render(); //esecuzione animazioni degli oggetti Renderable
+            }
         }
+
+        if(collidersList.size() > 0)
+        {
+            for(int i = 0; i < collidersList.size(); i++)
+            {
+                collidersList.get(i).debugDisplay();
+            }
+        }
+
     }
 
     /**
@@ -188,9 +243,12 @@ public class SceneBlueprint
      */
     protected void renderUI()
     {
-        for (int i = uiElements.size() - 1; i >= 0; i--)
+        if(uiElements.size() > 0)
         {
-            uiElements.get(i).display();
+            for (int i = 0; i < uiElements.size(); i++)
+            {
+                uiElements.get(i).display();
+            }
         }
     }
 
@@ -204,20 +262,35 @@ public class SceneBlueprint
      */
     protected void calculateCollisions()
     {
-
-        for (int i = dynamicColliders.size() - 1; i >= 0; i--)
+        if(dynamicColliders.size() > 0)
         {
-            Collider c = dynamicColliders.get(i); //primo collider
-            for (int j = collidersList.size() - 1; j >= 0; j--)
+            for (int i = 0; i < dynamicColliders.size(); i++)
             {
-                Collider c2 = collidersList.get(j); //secondo collider (statico)
-                if (c2.isDynamic())
-                { //se il secondo collider è dinamico
-                    if (!c.equals(c2))
-                    { //se c'è collisione tra i due collider e questi sono diversi tra loro
-                        CollisionDirection direction = c.checkCollision(c2);
+                Collider c = dynamicColliders.get(i); //primo collider
+                for (int j = 0; j < collidersList.size(); j++)
+                {
+                    Collider c2 = collidersList.get(j); //secondo collider (statico)
+                    if (c2.isDynamic())
+                    { //se il secondo collider è dinamico
+                        if (!c.equals(c2))
+                        { //se c'è collisione tra i due collider e questi sono diversi tra loro
+                            CollisionDirection direction = c.checkCollision(c2);
+                            if (direction != CollisionDirection.NONE)
+                            {
+                                for (Object o : c.gameObject.getComponents())
+                                { //per ogni oggetto di tipo Object della lista dei componenti del collider
+                                    if (o instanceof Script)
+                                    { //se l'oggetto è di tipo Script
+                                        ((Script) o).OnCollisionStay(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
+                                    }
+                                }
+                            }
+                        }
+                    } else
+                    { //altrimenti se il collider è statico
+                        CollisionDirection direction = c.checkCollisionSnap(c2);
                         if (direction != CollisionDirection.NONE)
-                        {
+                        { //se c'è collisione tra i due collider, di cui uno statico
                             for (Object o : c.gameObject.getComponents())
                             { //per ogni oggetto di tipo Object della lista dei componenti del collider
                                 if (o instanceof Script)
@@ -227,24 +300,18 @@ public class SceneBlueprint
                             }
                         }
                     }
-                } else
-                { //altrimenti se il collider è statico
-                    CollisionDirection direction = c.checkCollisionSnap(c2);
-                    if (direction != CollisionDirection.NONE) { //se c'è collisione tra i due collider, di cui uno statico
-                        for (Object o : c.gameObject.getComponents()) { //per ogni oggetto di tipo Object della lista dei componenti del collider
-                            if (o instanceof Script) { //se l'oggetto � di tipo Script
-                                ((Script) o).OnCollisionStay(c, c2, direction); //casting dell'oggetto da Object a Script e collisione tra i due collider
-                            }
-                        }
-                    }
                 }
             }
         }
     }
 
-    public void setObjectList(ArrayList<GameObject> objectList)
-    {
+    public SceneBlueprint setObjectList(ArrayList<GameObject> objectList) {
         this.defaultObjectList = objectList;
+        return this;
+    }
+    public SceneBlueprint setObjectList(GameObject... objectList) {
+        this.defaultObjectList = new ArrayList<>(Arrays.asList(objectList));
+        return this;
     }
 
     protected void addObject(GameObject object)
@@ -261,18 +328,23 @@ public class SceneBlueprint
 
     private void initializeObject(GameObject object)
     {
-        ArrayList<Object> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
-        for (Object o : obj)
+        ArrayList<Component> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
+        for (Component o : obj)
         { //per ogni oggetto di tipo Object della lista obj
-            if (o instanceof Script) { //se l'oggetto è uno script
+            if (o instanceof Script)
+            { //se l'oggetto è uno script
                 scriptList.add((Script) o); //casting da Object a Script e inserimento dell'oggetto alla lista per gli script
-            } else if (o instanceof Renderable) { //se l'oggetto è un render
+            } else if (o instanceof Renderable)
+            { //se l'oggetto è un render
                 renderableElements.add((Renderable) o); //casting da Object a Renderable e inserimento dell'oggetto alla lista per i render
-            } else if (o instanceof UIElement) { //se l'oggetto è un elemento UI
+            } else if (o instanceof UIElement)
+            { //se l'oggetto è un elemento UI
                 uiElements.add((UIElement) o); //casting da Object a UIElement e inserimento dell'oggetto alla lista per gli elementi dell'UI
-            } else if (o instanceof Collider) { //se l'oggetto è un collider
+            } else if (o instanceof Collider)
+            { //se l'oggetto è un collider
                 collidersList.add((Collider) o); //casting da Object a Collider e inserimento dell'oggetto alla lista per i collider
-                if (((Collider) o).isDynamic()) { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
+                if (((Collider) o).isDynamic())
+                { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
                     dynamicColliders.add((Collider) o); //casting dell'oggetto in Collider e inserimento alla lista per i collider dinamici
                 }
             }
@@ -281,21 +353,54 @@ public class SceneBlueprint
 
     private void deinitializeObject(GameObject object)
     {
-        ArrayList<Object> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
-        for (Object o : obj)
+        ArrayList<Component> obj = object.getComponents(); //assegnazione dei componenti dell'oggetto passato come parametro all'arrayList di tipo Object (obj)
+        for (Component o : obj)
         { //per ogni oggetto di tipo Object della lista obj
-            if (o instanceof Script) { //se l'oggetto è uno script
+            if (o instanceof Script)
+            { //se l'oggetto è uno script
                 scriptList.remove((Script) o); //casting da Object a Script e rimozione dell'oggetto alla lista per gli script
-            } else if (o instanceof Renderable) { //se l'oggetto è un render
+            } else if (o instanceof Renderable)
+            { //se l'oggetto è un render
                 renderableElements.remove((Renderable) o); //casting da Object a Renderable e rimozione dell'oggetto alla lista per i render
-            } else if (o instanceof UIElement) { //se l'oggetto è un elemento UI
+            } else if (o instanceof UIElement)
+            { //se l'oggetto è un elemento UI
                 uiElements.remove((UIElement) o); //casting da Object a UIElement e rimozione dell'oggetto alla lista per gli elementi dell'UI
-            } else if (o instanceof Collider) { //se l'oggetto è un collider
+            } else if (o instanceof Collider)
+            { //se l'oggetto è un collider
                 collidersList.remove((Collider) o); //casting da Object a Collider e rimozione dell'oggetto alla lista per i collider
-                if (((Collider) o).isDynamic()) { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
+                if (((Collider) o).isDynamic())
+                { //casting in Collider e controllo se l'oggetto è in movimento (quindi è dinamico)
                     dynamicColliders.remove((Collider) o); //casting dell'oggetto in Collider e rimozione alla lista per i collider dinamici
                 }
             }
         }
     }
+
+    /**
+     * Imposta l'immagine di sfondo per il blueprint attuale.
+     *
+     * @param background Immagine di sfondo
+     * @return La scena in utilizzo
+     * @author sv-molinari
+     */
+    public SceneBlueprint setBackground(PImage background)
+    {
+        this.background = background;
+        return this;
+    }
+
+    /**
+     * Imposta il colore di sfondo per il blueprint attuale.
+     *
+     * @param backgroundColor Colore di sfondo
+     * @return La scena in utilizzo
+     * @author sv-molinari
+     */
+    public SceneBlueprint setBackground(int backgroundColor)
+    {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+
 }

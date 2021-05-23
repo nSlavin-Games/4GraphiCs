@@ -4,7 +4,6 @@ import com.fourgraphics.*;
 import com.fourgraphics.test.ShowcaseGame;
 import com.fourgraphics.test.scripts.Enemies.Enemy;
 import com.fourgraphics.test.scripts.Player.PlayerCombat;
-import com.fourgraphics.utils.ObjectComposer;
 
 import static com.fourgraphics.SceneManager.destroy;
 
@@ -48,13 +47,13 @@ public class Melee extends Attack
         atk.SetParent(parent);
         int size = 75;
 
-        SceneManager.instantiate(new ObjectComposer(
+        SceneManager.instantiate(GameObject.Compose(
                 "projectile",
                 spawnPosition,
                 new Vector2(size, size),
                 new RectCollider(true),
                 animator,
                 atk
-        ).compose());
+        ));
     }
 }

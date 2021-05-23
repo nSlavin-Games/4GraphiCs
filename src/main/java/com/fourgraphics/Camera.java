@@ -91,8 +91,8 @@ public class Camera {
 		{ //se si ha un target
 			setPosition(target.transform.getPosition()); //impostazione della posizione della telecamera, prendendo quella del target
 		}
-		sketch.camera(getOffsetPosition().getX(), getOffsetPosition().getY(),
-				(sketch.height / 2) / sketch.tan(sketch.PI * 30 / 180), getOffsetPosition().getX(),
-				getOffsetPosition().getY(), 0, 0, 1, 0); //creazione telecamera con i metodi di processing
+		sketch.camera(Rescaler.resizeW(getOffsetPosition().getX()), Rescaler.resizeH(getOffsetPosition().getY()),
+				(sketch.height / 2) / sketch.tan(sketch.PI * 30 / 180), Rescaler.resizeW(getOffsetPosition().getX()),
+				Rescaler.resizeH(getOffsetPosition().getY()), 0, 0, 1, 0); //creazione telecamera con i metodi di processing
 	}
 }

@@ -3,6 +3,7 @@ package com.fourgraphics;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,7 +15,7 @@ public class GameObject {
      * transform è un oggetto di tipo Transform ed inidica la posizione e la dimesione dell'oggetto
      * name è il nome dell'oggetto
      */
-    private ArrayList<Object> componentList;
+    private ArrayList<Component> componentList;
     public Transform transform;
     private String name;
 
@@ -23,12 +24,12 @@ public class GameObject {
      * @param componentList
      * @param name
      */
-    public GameObject(ArrayList<Object> componentList, String name) {
+    public GameObject(ArrayList<Component> componentList, String name) {
         this.componentList = new ArrayList<>();
         this.transform = new Transform();
         this.name = name;
 
-        for (Object component : componentList)
+        for (Component component : componentList)
             addComponent(component);
     }
 
@@ -39,12 +40,12 @@ public class GameObject {
      * @param name          Nome dell'oggetto
      * @param transform     Dimensione e posizione
      */
-    public GameObject(ArrayList<Object> componentList, String name, Transform transform) {
+    public GameObject(ArrayList<Component> componentList, String name, Transform transform) {
         this.componentList = new ArrayList<>();
         this.transform = transform;
         this.name = name;
 
-        for (Object component : componentList)
+        for (Component component : componentList)
             addComponent(component);
     }
 
@@ -66,17 +67,7 @@ public class GameObject {
         componentList = new ArrayList<>();
         try {
             for (int i = 0; i < other.componentList.size(); i++) {
-                if (other.componentList.get(i) instanceof UIElement)
-                    addComponent(((UIElement) other.componentList.get(i)).clone());
-
-                if (other.componentList.get(i) instanceof Renderable)
-                    addComponent(((Renderable) other.componentList.get(i)).clone());
-
-                if (other.componentList.get(i) instanceof Collider)
-                    addComponent(((Collider) other.componentList.get(i)).clone());
-
-                if (other.componentList.get(i) instanceof Script)
-                    addComponent(other.componentList.get(i));
+                addComponent(other.componentList.get(i).clone());
             }
         } catch (Exception e) {
             Logger.getLogger("4GraphiCs | GameObject").log(Level.WARNING, "Unable to clone element in GameObject: ");
@@ -94,7 +85,7 @@ public class GameObject {
      */
     public <T> T getComponent(Class<T> type) {
         //ciclo for each per ogni oggetto di tipo Object in componentList
-        for (Object obj : componentList) {
+        for (Component obj : componentList) {
             //se l'istanza dell'oggetto corrente è uguale a quella di type:
             if (type.isInstance(obj)) {
                 //viene restituito l'ogetto corrente già castato
@@ -108,9 +99,8 @@ public class GameObject {
     /**
      * metodo addComponent può aggiungere un component in componentList
      * @param component componente preso come parametro
-     * @param <T>
      */
-    public <T> void addComponent(T component) {
+    public void addComponent(Component component) {
         //ciclo for each per ogni oggetto di tipo Object in componentList
         if(componentList != null)
         {
@@ -125,19 +115,9 @@ public class GameObject {
         }
 
         //se component è un'istanza di di 'Script', 'Collider', 'Renderable' o 'UIElement' allora vengono inizializzate gli attributi transform e gameObject
-        if(component instanceof Script){
-            ((Script) component).transform = transform;
-            ((Script) component).gameObject = this;
-        } else if(component instanceof Collider){
-            ((Collider) component).transform = transform;
-            ((Collider) component).gameObject = this;
-        } else if(component instanceof Renderable) {
-            ((Renderable) component).transform = transform;
-            ((Renderable) component).gameObject = this;
-        } else if(component instanceof UIElement) {
-            ((UIElement) component).transform = transform;
-            ((UIElement) component).gameObject = this;
-        }
+        component.transform = transform;
+        component.gameObject = this;
+        component.sketch = SceneManager.getApp();
         //se non sono partite eccezioni viene aggiunto component alla lista
         componentList.add(component);
     }
@@ -145,12 +125,12 @@ public class GameObject {
     /**
      * metodo hasComponent restituisce vero se componentList ha un componente del tipo inserito
      * @param type tipo di classe
-     * @param <T>
      * @return
      */
     public <T> boolean hasComponent(Class<T> type){
+
         //ciclo for each
-        for (Object obj : componentList) {
+        for (Component obj : componentList) {
             //se l'oggetto corrente è un istanza di type allora viene restituito vero
             if (type.isInstance(obj)) {
                 return true;
@@ -161,7 +141,7 @@ public class GameObject {
     }
 
     //metodo getter di componentList
-    public ArrayList<Object> getComponents() {
+    public ArrayList<Component> getComponents() {
         return componentList;
     }
 
@@ -174,4 +154,14 @@ public class GameObject {
     public GameObject clone() {
         return new GameObject(this);
     }
+
+    //region ObjectComposer
+    public static GameObject Compose(String name, float x, float y, float width, float height, Component... components) {
+        return new GameObject(new ArrayList<>(Arrays.asList(components)), name, new Transform(x, y, width, height));
+    }
+
+    public static GameObject Compose(String name, Vector2 position, Vector2 size, Component... components) {
+        return new GameObject(new ArrayList<>(Arrays.asList(components)), name, new Transform(position, size));
+    }
+    //endregion
 }

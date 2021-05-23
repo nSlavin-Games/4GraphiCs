@@ -9,6 +9,9 @@ public class Combat extends Script {
 
     public void damage() {
         currentHealth--;
+
+        if (currentHealth == 0)
+            die();
     }
 
     public void die() {

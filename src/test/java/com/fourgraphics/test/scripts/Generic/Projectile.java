@@ -4,7 +4,6 @@ import com.fourgraphics.*;
 import com.fourgraphics.test.ShowcaseGame;
 import com.fourgraphics.test.scripts.Enemies.Enemy;
 import com.fourgraphics.test.scripts.Player.PlayerCombat;
-import com.fourgraphics.utils.ObjectComposer;
 
 import static com.fourgraphics.SceneManager.destroy;
 
@@ -60,13 +59,13 @@ public class Projectile extends Attack
         proj.SetParent(parent);
         int size = 35;
 
-        SceneManager.instantiate(new ObjectComposer(
+        SceneManager.instantiate(GameObject.Compose(
                 "projectile",
                 spawnPosition,
                 new Vector2(size * 1.66f, size),
                 new CircleCollider(true),
                 animator,
                 proj
-        ).compose());
+        ));
     }
 }

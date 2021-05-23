@@ -6,14 +6,11 @@ import processing.core.PApplet;
 /**
  * @author Dareisa, Furriolo, Iurcea
  */
-public abstract class Renderable implements Cloneable {
-    public GameObject gameObject;
-    public Transform transform;
-    protected PApplet sketch;
+public abstract class Renderable extends Component {
 
     abstract protected void render();
 
-    protected abstract Renderable clone();
+    public abstract Renderable clone();
 }
 
 

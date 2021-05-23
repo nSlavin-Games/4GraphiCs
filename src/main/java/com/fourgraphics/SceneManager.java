@@ -1,8 +1,12 @@
 package com.fourgraphics;
 
 import processing.core.PApplet;
+import processing.core.PImage;
+import processing.opengl.PJOGL;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Il gestore di tutte le scene del gioco, esegue la scena attiva e gestisce la
@@ -54,15 +58,150 @@ public class SceneManager
      */
     private static float accumulator;
 
+    private static ArrayList<PImage> introImages = new ArrayList<>();
+
     /**
      * Inizializza la lista delle scene e l’index della scena attiva
      */
     public static void initialize(PApplet app)
     {
         mainApp = app;
+        app.fullScreen(app.P3D);
         sceneList = new ArrayList<>();
         inputManager = new InputManager();
         Input.setup(inputManager);
+        setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
+        Rescaler.setSize(app.displayWidth, app.displayHeight);
+        introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
+        CreateIntro();
+    }
+
+    public static void initialize(PApplet app, int screen)
+    {
+        mainApp = app;
+        app.fullScreen(app.P3D, screen);
+        sceneList = new ArrayList<>();
+        inputManager = new InputManager();
+        Input.setup(inputManager);
+        setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
+        Rescaler.setSize(app.displayWidth, app.displayHeight);
+        introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
+        CreateIntro();
+    }
+
+    public static void initialize(PApplet app, int width, int height)
+    {
+        mainApp = app;
+        app.size(width,height,app.P3D);
+        sceneList = new ArrayList<>();
+        inputManager = new InputManager();
+        Input.setup(inputManager);
+        setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
+        Rescaler.setSize(width, height);
+        introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
+        CreateIntro();
+    }
+
+    public static void startGame()
+    {
+        loadSceneInternal(0);
+    }
+
+    public static void addIntroLogo(PImage logo)
+    {
+        introImages.add(logo);
+    }
+
+    private static class Intro extends Script
+    {
+        int currentIndex = 0;
+        float introDuration = 2;
+        float introTimer;
+
+        int alpha;
+        boolean fadedIn = false;
+
+        public void Update()
+        {
+            if(!fadedIn && alpha < 255)
+            {
+                alpha += 3;
+                if(alpha >= 255)
+                {
+                    alpha = 255;
+                    fadedIn = true;
+                }
+            }
+            if(fadedIn)
+            {
+                introTimer += SceneManager.deltaTime();
+                if (introTimer >= introDuration)
+                {
+                    if(alpha > 0)
+                    {
+                        alpha -= 3;
+                        if(alpha <= 0)
+                        {
+                            alpha = 0;
+                            currentIndex++;
+                            if (currentIndex == introImages.size())
+                            {
+                                if (sceneList.size() == 1)
+                                    sceneList.add(new SceneBlueprint());
+
+                                sketch.delay(400);
+                                SceneManager.loadScene(1);
+                                alpha = 255;
+                            } else
+                            {
+                                gameObject.getComponent(Renderer.class).setTexture(introImages.get(currentIndex));
+                                fadedIn = false;
+                                introTimer = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            sketch.tint(255,alpha);
+        }
+    }
+
+    private static void CreateIntro()
+    {
+        SceneManager.addScene(new SceneBlueprint()
+                .setObjectList(
+                        GameObject.Compose(
+                                "4GC Logo",
+                                0, 0,
+                                introImages.get(0).width,introImages.get(0).height,
+                                new Renderer(introImages.get(0)),
+                                new Intro()
+                        )
+                ).setBackground(getApp().color(23,24,24)));
+    }
+
+    public static void setProjectIcon(String icon)
+    {
+        PJOGL.setIcon(icon);
+    }
+
+    public static void setProjectTitle(String title)
+    {
+        getApp().getSurface().setTitle(title);
+    }
+
+    public static void setCursorState(boolean state)
+    {
+        if(state)
+            getApp().getSurface().showCursor();
+        else
+            getApp().getSurface().hideCursor();
+    }
+
+    public static void setCursorImage()
+    {
+        //TODO: not yet implemented
+        //getApp().getSurface().setCursor();
     }
 
     /**
@@ -112,6 +251,16 @@ public class SceneManager
      * @param index Index della scena da caricare
      */
     public static void loadScene(int index)
+    {
+        if(index > 0)
+        {
+            activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
+            sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
+        } else
+            throw new InvalidParameterException("Cannot reload intro");
+    }
+
+    private static void loadSceneInternal(int index)
     {
         activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
         sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
@@ -165,6 +314,16 @@ public class SceneManager
     public static void destroy(GameObject object)
     {
         sceneList.get(activeSceneIndex).removeObject(object); //rimozione dell'oggetto, passato come parametro, dalla scena attualmente attiva, indicata da activeSceneIndex
+    }
+
+    public static GameObject findObject(String name)
+    {
+        return sceneList.get(activeSceneIndex).getObject(name);
+    }
+
+    public static GameObject findObject(int index)
+    {
+        return sceneList.get(activeSceneIndex).getObject(index);
     }
 
     /**

@@ -25,9 +25,6 @@ public class Enemy extends Combat
     public void Update() {
         attackTimer -= SceneManager.deltaTime();
 
-        if (currentHealth == 0)
-            die();
-
         isGrounded = false;
     }
 

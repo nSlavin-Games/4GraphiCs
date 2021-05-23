@@ -6,16 +6,7 @@ import processing.core.PImage;
 /**
  * Un elemento generico dell’interfaccia grafica, ha il riferimento al suo oggetto e al suo transform(per comodità anche se si potrebbe ottenere dal gameObject), deve avere riferimenti a tutto ciò che lo definisce graficamente.
  */
-public abstract class UIElement implements Cloneable {
-
-    /**
-     * L’oggetto a cui è attaccato l’elemento
-     */
-    public GameObject gameObject;
-    /**
-     * Posizione e dimensione dell’oggetto a cui è attaccato l’elemento
-     */
-    public Transform transform;
+public abstract class UIElement extends Component {
     /**
      * Il testo scritto
      */
@@ -28,10 +19,7 @@ public abstract class UIElement implements Cloneable {
      * La texture dell’elemento UI
      */
     protected PImage texture;
-    /**
-     * Riferimento all'applet di Processing
-     */
-    protected PApplet sketch;
+
     protected boolean worldSpace;
 
     /**
@@ -43,7 +31,6 @@ public abstract class UIElement implements Cloneable {
     public UIElement(String text, int color, boolean isWorldSpace) {
         this.text = text;
         this.color = color;
-        sketch = SceneManager.getApp();
         this.worldSpace = isWorldSpace;
     }
 
@@ -65,7 +52,6 @@ public abstract class UIElement implements Cloneable {
      */
     abstract protected void display();
 
-    @Override
     public abstract UIElement clone();
 }
 

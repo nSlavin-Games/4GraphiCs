@@ -321,12 +321,10 @@ public class InputManager {
         {
             b = gamepad.getButton("Button 9");
             gamepadButtons.put(b.getName(),3);
-            return;
         } else if(!gamepad.getButton("Button 9").pressed() && gamepadButtons.containsKey("Button 9") && gamepadButtons.get("Button 9") == 3)
         {
             b = gamepad.getButton("Button 9");
             gamepadButtons.put(b.getName(),4);
-            return;
         }
     }
 
@@ -362,8 +360,7 @@ public class InputManager {
                     key = value+48;
                 } catch (NumberFormatException nfe)
                 {
-                    char k = axis.toUpperCase().charAt(0);
-                    key = k;
+                    key = axis.toUpperCase().charAt(0);
                 }
             } else
             {
@@ -411,8 +408,7 @@ public class InputManager {
                     key = value+48;
                 } catch (NumberFormatException nfe)
                 {
-                    char k = button.toUpperCase().charAt(0);
-                    key = k;
+                    key = button.toUpperCase().charAt(0);
                 }
             } else
             {

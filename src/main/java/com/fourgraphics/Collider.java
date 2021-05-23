@@ -2,11 +2,8 @@ package com.fourgraphics;
 
 import processing.core.PApplet;
 
-abstract public class Collider implements Cloneable {
+abstract public class Collider extends Component {
 
-	public GameObject gameObject;
-	public Transform transform;
-	protected PApplet sketch;
 	Vector2 previousPosition; //WARNING: UNUSED
 	private boolean dynamicObject;
 	private boolean debug;
@@ -15,7 +12,6 @@ abstract public class Collider implements Cloneable {
 
 	public Collider(boolean dynamicObject) {
 		setDynamic(dynamicObject);
-		sketch = SceneManager.getApp();
 		previousPosition = new Vector2();
 	}
 
@@ -44,5 +40,7 @@ abstract public class Collider implements Cloneable {
         this.debug = debug;
     }
 
-    protected abstract Collider clone();
+    public abstract Collider clone();
+
+	protected abstract void debugDisplay();
 }
