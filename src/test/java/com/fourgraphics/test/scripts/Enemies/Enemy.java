@@ -15,7 +15,7 @@ public class Enemy extends Combat
     GameObject player;
     float attackRange;
     float attackRecovery;
-    float attackTimer;
+    public float attackTimer;
 
     public void Start() {
         currentHealth = 1;

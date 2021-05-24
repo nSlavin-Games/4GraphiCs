@@ -37,7 +37,7 @@ public class Mage extends Enemy
         {
             Vector2 direction = distVector.getX() > 0 ? Vector2.LEFT() : Vector2.RIGHT();
             Vector2 position = new Vector2().sum(transform.getPosition()).sum(direction.multiplyN(transform.getScale().getX() / 2 + 15));
-            Projectile.CreateAttack(position, direction, gameObject.getName());
+            Projectile.CreateAttack(position, direction, gameObject.getName(), 35);
             PlayAttackAnim(distVector);
             attackTimer = attackRecovery;
         }

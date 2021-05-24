@@ -22,15 +22,13 @@ public class Melee extends Attack
         if (other.gameObject.getName().equalsIgnoreCase("player") && !parentName.equalsIgnoreCase("player"))
         {
             other.gameObject.getComponent(PlayerCombat.class).damage();
-            destroy(gameObject);
         } else if (parentName.equalsIgnoreCase("player") && other.gameObject.hasComponent(Enemy.class))
         {
             other.gameObject.getComponent(Enemy.class).damage();
-            destroy(gameObject);
         }
     }
 
-    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent)
+    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent, int size)
     {
         Animator animator = new Animator();
         if (direction.getX() == -1)
@@ -45,7 +43,6 @@ public class Melee extends Attack
 
         Melee atk = new Melee();
         atk.SetParent(parent);
-        int size = 75;
 
         SceneManager.instantiate(GameObject.Compose(
                 "projectile",

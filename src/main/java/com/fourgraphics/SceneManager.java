@@ -198,7 +198,7 @@ public class SceneManager
             getApp().getSurface().hideCursor();
     }
 
-    public static void setCursorImage()
+    private static void setCursorImage()
     {
         //TODO: not yet implemented
         //getApp().getSurface().setCursor();
@@ -331,7 +331,7 @@ public class SceneManager
      *
      * @return l'app principale
      */
-    public static PApplet getApp()
+    protected static PApplet getApp()
     {
         return mainApp;
     }

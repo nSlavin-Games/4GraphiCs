@@ -41,7 +41,7 @@ public class Projectile extends Attack
         }
     }
 
-    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent)
+    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent, int size)
     {
         Animator animator = new Animator();
         if (direction.getX() == -1)
@@ -57,7 +57,6 @@ public class Projectile extends Attack
         Projectile proj = new Projectile();
         proj.projectileDirection.set(direction);
         proj.SetParent(parent);
-        int size = 35;
 
         SceneManager.instantiate(GameObject.Compose(
                 "projectile",

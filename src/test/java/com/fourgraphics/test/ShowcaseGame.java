@@ -34,6 +34,45 @@ public class ShowcaseGame extends PApplet
     public static Animation mageAttackLeft = new Animation(0.08f, "mageAttackLeft");
     public static Animation mageAttackRight = new Animation(0.08f, "mageAttackRight");
     //endregion
+
+    //endregion
+    //region Slime
+    //region Idle
+    public static Animation slimeIdle = new Animation(0.1f, true, "slimeIdle");
+    //endregion
+    //region Attack
+    public static Animation slimeChaseLeft = new Animation(0.08f, true, "slimeChaseLeft");
+    public static Animation slimeChaseRight = new Animation(0.08f, true, "slimeChaseRight");
+    //endregion
+    //endregion
+    //region Mage
+    //region Idle
+    public static Animation playerIdleLeft = new Animation(0.2f, true, "playerIdleLeft");
+    public static Animation playerIdleRight = new Animation(0.2f, true, "playerIdleRight");
+    //endregion
+    //region Run
+    public static Animation playerRunLeft = new Animation(0.1f, true, "playerRunLeft");
+    public static Animation playerRunRight = new Animation(0.1f, true,"playerRunRight");
+    //endregion
+    //region Slash
+    public static Animation playerSlashLeft = new Animation(0.05f, "playerSlashLeft");
+    public static Animation playerSlashRight = new Animation(0.05f, "playerSlashRight");
+    //endregion
+    //region Throw
+    public static Animation playerThrowLeft = new Animation(0.08f, "playerThrowLeft");
+    public static Animation playerThrowRight = new Animation(0.08f, "playerThrowRight");
+    //endregion
+    //region Jump
+    public static Animation playerJumpLeft = new Animation(0.08f, "playerJumpLeft");
+    public static Animation playerJumpRight = new Animation(0.08f, "playerJumpRight");
+    //endregion
+    //region Fall
+    public static Animation playerFallLeft = new Animation(0.08f, true,"playerFallLeft");
+    public static Animation playerFallRight = new Animation(0.08f, true,"playerFallRight");
+    //endregion
+    //region Damage
+    public static Animation playerDamageLeft = new Animation(0.5f,"playerDamageLeft");
+    public static Animation playerDamageRight = new Animation(0.5f,"playerDamageRight");
     //endregion
     //endregion
 
@@ -71,6 +110,7 @@ public class ShowcaseGame extends PApplet
         fourthLevelBackground = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Backgrounds/BG4.png")).getPath());
 
         //Carica le animazioni
+        //TODO(sv-molinari): DOBBIAMO TROVARE UNA SOLUZIONE A QUESTO SCHIFO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         try
         {
             //Ultimate
@@ -105,7 +145,6 @@ public class ShowcaseGame extends PApplet
                 else
                     mageIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Idle/mage_" + i + ".png")).getPath()));
             }
-
             //Mage Attack
             for (int i = 0; i < 14; i++)
             {
@@ -114,8 +153,69 @@ public class ShowcaseGame extends PApplet
                 else
                     mageAttackRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Attack/mage_attack_" + i + ".png")).getPath()));
             }
+            //Slime Idle
+            for (int i = 0; i < 5; i++)
+            {
+                slimeIdle.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Slime/Idle/slime_" + i + ".png")).getPath()));
+            }
+            //Slime Attack
+            for (int i = 0; i < 12; i++)
+            {
+                if (i < 6)
+                    slimeChaseLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Slime/Attack/slime_attack_" + i + ".png")).getPath()));
+                else
+                    slimeChaseRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Slime/Attack/slime_attack_" + i + ".png")).getPath()));
+            }
+
+            //Player Idle
+            for (int i = 0; i < 8; i++)
+            {
+                if (i < 4)
+                    playerIdleLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
+                else
+                    playerIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
+            }
+            //Player Run
+            for (int i = 0; i < 8; i++)
+            {
+                if (i < 4)
+                    playerRunRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Run/Player_Run_" + i + ".png")).getPath()));
+                else
+                    playerRunLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Run/Player_Run_" + i + ".png")).getPath()));
+            }
+            //Player Slash
+            for (int i = 0; i < 10; i++)
+            {
+                if (i < 5)
+                    playerSlashRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Slash/Player_Slash_" + i + ".png")).getPath()));
+                else
+                    playerSlashLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Slash/Player_Slash_" + i + ".png")).getPath()));
+            }
+            //Player Throw
+            for (int i = 0; i < 8; i++)
+            {
+                if (i < 4)
+                    playerThrowRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Throw/Player_Throw_" + i + ".png")).getPath()));
+                else
+                    playerThrowLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Throw/Player_Throw_" + i + ".png")).getPath()));
+            }
+            //Player Jump
+            playerJumpRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Jump_0.png")).getPath()));
+            playerJumpLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Jump_1.png")).getPath()));
+            //Player Fall
+            for (int i = 0; i < 4; i++)
+            {
+                if (i < 2)
+                    playerFallRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Fall_" + i + ".png")).getPath()));
+                else
+                    playerFallLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Fall_" + i + ".png")).getPath()));
+            }
+            //Player Damage
+            playerDamageRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_0.png")).getPath()));
+            playerDamageLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_1.png")).getPath()));
         } catch (Exception ignored)
         {
+            ignored.printStackTrace();
         }
 
         SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
@@ -146,8 +246,8 @@ public class ShowcaseGame extends PApplet
         ▏╳▕▇▇▕ ▏╳▕▇▇▕
         ╲▂ ╲▂ ╲▂
          */
-        SceneManager.addScene(new SceneBlueprint(
-
+        SceneManager.addScene(new SceneBlueprint().setObjectList(
+            new GameObject("")
         ).setBackground(firstLevelBackground));
     }
 
@@ -161,6 +261,8 @@ public class ShowcaseGame extends PApplet
         int hearthHeight = 55;
         int heartWidth = (int) (hearthHeight * 1.16666666f);
 
+        int playerHeight = 115;
+        int playerWidth = (int)(playerHeight * 0.9375f);
 
         //Ultimate indicator
         int ultSize = 150;
@@ -169,6 +271,9 @@ public class ShowcaseGame extends PApplet
         //Creazione mage
         int mageHeight = 115;
         int mageWidth = (int) (mageHeight * 0.7826f);
+
+        int slimeHeight = 54;
+        int slimeWidth = (int)(slimeHeight * 2.22222f);
 
 
         SceneManager.addScene(new SceneBlueprint()
@@ -186,9 +291,17 @@ public class ShowcaseGame extends PApplet
                         GameObject.Compose(
                                 "player",
                                 0, -terrainHeight/2f,
-                                50, 75,
+                                playerWidth, playerHeight,
                                 new RectCollider(true),
-                                new Renderer(color(100), DrawType.RECT),    //NOTE(samu): god bless varargs
+                                new Animator(
+                                        playerFallLeft.clone(), playerFallRight.clone(),
+                                        playerIdleLeft.clone(), playerIdleRight.clone(),
+                                        playerRunLeft.clone(), playerRunRight.clone(),
+                                        playerJumpLeft.clone(), playerJumpRight.clone(),
+                                        playerSlashLeft.clone(), playerSlashRight.clone(),
+                                        playerThrowLeft.clone(), playerThrowRight.clone(),
+                                        playerDamageLeft.clone(), playerDamageRight.clone()
+                                ),    //NOTE(samu): god bless varargs
                                 new PlayerMovement(), new PlayerCombat()          //NOTE(davide): god bless you for remembering they exist <3
                         ),
                         //endregion
@@ -231,14 +344,14 @@ public class ShowcaseGame extends PApplet
                                 new Mage()
                         ),
                         //endregion
-                        //region Copia nemico
+                        //region Slime
                         GameObject.Compose(
                                 "enemy",
                                 -550, -terrainHeight/2f,
-                                mageWidth, mageHeight,
+                                slimeWidth, slimeHeight,
                                 new RectCollider(true),
-                                new Animator(mageIdleLeft.clone(), mageIdleRight.clone(), mageAttackLeft.clone(), mageAttackRight.clone()),
-                                new Mage()
+                                new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
+                                new Slime()
                         )
                         //endregion
                 )

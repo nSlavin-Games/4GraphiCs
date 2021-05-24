@@ -5,6 +5,9 @@ import com.fourgraphics.*;
 import static com.fourgraphics.SceneManager.fixedDeltaTime;
 
 public class PlayerMovement extends Script {
+
+    Animator anim;
+
     boolean isGrounded;
     float yVelocity;
     float yForce;
@@ -17,6 +20,8 @@ public class PlayerMovement extends Script {
     public void Start() {
         SceneManager.getActiveScene().getCamera().setTarget(gameObject);
         SceneManager.getActiveScene().getCamera().setOffset(new Vector2(0,-sketch.height/2+300));
+        anim = gameObject.getComponent(Animator.class);
+        anim.playAnimation("playerIdleRight");
     }
 
     public void Update() {
@@ -35,15 +40,34 @@ public class PlayerMovement extends Script {
         */
         transform.getPosition().sum(Vector2.RIGHT().multiply(speed * SceneManager.deltaTime() * Input.getAxis("Horizontal")));  //yes
 
+        int temp = lastDirection;
         lastDirection = Input.getAxis("Horizontal") != 0 ? (int) Input.getAxis("Horizontal") : lastDirection;
-
+        boolean dirChanged = temp != lastDirection;
         //Controllo se sono a terra
         if (isGrounded) {
+            if((!anim.getCurrentAnimation().getName().contains("Slash") && !anim.getCurrentAnimation().getName().contains("Throw") && !anim.getCurrentAnimation().getName().contains("Damage")) ||
+              ((anim.getCurrentAnimation().getName().contains("Slash") || anim.getCurrentAnimation().getName().contains("Throw") || anim.getCurrentAnimation().getName().contains("Damage")) && anim.getCurrentAnimation().isEnded()))
+            {
+                if (Input.getAxis("Horizontal") == 0 && (!anim.getCurrentAnimation().getName().contains("Idle") || dirChanged))
+                    PlayIdle();
+                else if (Input.getAxis("Horizontal") != 0 && (!anim.getCurrentAnimation().getName().contains("Run") || dirChanged))
+                    PlayRun();
+            }
             //Se premo i possibili input per il salto
             if (Input.getButtonDown("Jump")) {
                 yForce = Vector2.UP().multiply(jumpForce).getY(); //imposto la forza da applicare all'asse Y indicandogli una direzione verso l'alto
                 yVelocity += yForce * fixedDeltaTime();
                 //Vector2.UP() Restituisce X = 0 e Y = -1
+            }
+        } else
+        {
+            if((!anim.getCurrentAnimation().getName().contains("Slash") && !anim.getCurrentAnimation().getName().contains("Throw") && !anim.getCurrentAnimation().getName().contains("Damage")) ||
+                    ((anim.getCurrentAnimation().getName().contains("Slash") || anim.getCurrentAnimation().getName().contains("Throw") || anim.getCurrentAnimation().getName().contains("Damage")) && anim.getCurrentAnimation().isEnded()))
+            {
+                if (yVelocity < 0 && (!anim.getCurrentAnimation().getName().contains("Jump") || dirChanged))
+                    PlayJump();
+                else if (yVelocity > 0 && (!anim.getCurrentAnimation().getName().contains("Fall") || dirChanged))
+                    PlayFall();
             }
         }
 
@@ -70,6 +94,38 @@ public class PlayerMovement extends Script {
         transform.getPosition().sum(Vector2.DOWN().multiply(yVelocity * fixedDeltaTime() + ((yForce / 2) * (float) Math.pow(fixedDeltaTime(), 2))));
 
         yVelocity += yForce * fixedDeltaTime(); //A questo punto alla velocity aggiungo la forza moltiplicata per il timestep
+    }
+
+    private void PlayRun()
+    {
+        if(lastDirection == 1)
+            anim.playAnimation("playerRunRight");
+        else
+            anim.playAnimation("playerRunLeft");
+    }
+
+    private void PlayIdle()
+    {
+        if(lastDirection == 1)
+            anim.playAnimation("playerIdleRight");
+        else
+            anim.playAnimation("playerIdleLeft");
+    }
+
+    private void PlayJump()
+    {
+        if(lastDirection == 1)
+            anim.playAnimation("playerJumpRight");
+        else
+            anim.playAnimation("playerJumpLeft");
+    }
+
+    private void PlayFall()
+    {
+        if(lastDirection == 1)
+            anim.playAnimation("playerFallRight");
+        else
+            anim.playAnimation("playerFallLeft");
     }
 
     public void OnCollisionStay(Collider self, Collider other, CollisionDirection direction)

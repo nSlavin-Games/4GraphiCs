@@ -35,7 +35,7 @@ public class Ultimate extends Attack
         }
     }
 
-    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent)
+    public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent, int size)
     {
         Animator animator = new Animator();
         if (direction.getX() == -1)
@@ -51,7 +51,6 @@ public class Ultimate extends Attack
         Ultimate ult = new Ultimate();
         ult.projectileDirection.set(direction);
         ult.SetParent(parent);
-        int size = 65;
 
         SceneManager.instantiate(GameObject.Compose(
                 "ult",
