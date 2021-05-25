@@ -324,13 +324,35 @@ public class Input {
 
     public static boolean getMouseButton(int button)
     {
-        if(manager.mouseButtons.containsKey(button)) return manager.mouseButtons.get(button) == 2;
+        switch (button)
+        {
+            case 0:
+                if(manager.mouseButtons.containsKey(37))
+                    return manager.mouseButtons.get(37) == 2;
+            case 1:
+                if(manager.mouseButtons.containsKey(39))
+                    return manager.mouseButtons.get(39) == 2;
+            case 2:
+                if(manager.mouseButtons.containsKey(3))
+                    return manager.mouseButtons.get(3) == 2;
+        }
         return false;
     }
 
     public static boolean getMouseButtonUp(int button)
     {
-        if(manager.mouseButtons.containsKey(button)) return manager.mouseButtons.get(button) == 3;
+        switch (button)
+        {
+            case 0:
+                if(manager.mouseButtons.containsKey(37))
+                    return manager.mouseButtons.get(37) == 3;
+            case 1:
+                if(manager.mouseButtons.containsKey(39))
+                    return manager.mouseButtons.get(39) == 3;
+            case 2:
+                if(manager.mouseButtons.containsKey(3))
+                    return manager.mouseButtons.get(3) == 3;
+        }
         return false;
     }
 
