@@ -269,62 +269,95 @@ public class ShowcaseGame extends PApplet
 
         int ultSize = 150;
 
+        int slimeHeight = 54;
+        int slimeWidth = (int)(slimeHeight * 2.22222f);
+
         SceneManager.addScene(new SceneBlueprint()
                 .setObjectList(
                         GameObject.Compose(
                                 "terrain",
                                 terrainWidth*1.5f-tallWidth*3f-25,-terrainWidth/2f+30,
                                 tallWidth,tallHeight,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainTall)
                         ),
                         GameObject.Compose(
                                 "terrain",
                                 terrainWidth*1.5f-tallWidth/2f,-terrainWidth/2f-80,
                                 tallWidth,tallHeight,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainTall)
                         ),
                         GameObject.Compose(
                                 "terrain",
                                 0,0,
                                 terrainWidth,terrainWidth,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
                                 terrainWidth,0,
                                 terrainWidth,terrainWidth,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*2 + 250,0,
+                                terrainWidth*2 + 450,0,
                                 terrainWidth,terrainWidth,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*3 + 250,0,
+                                terrainWidth*3 + 450,0,
                                 terrainWidth,terrainWidth,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*4 + 250,0,
+                                terrainWidth*4 + 450,0,
                                 terrainWidth,terrainWidth,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*5 + 450,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false, false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*6 + 450,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false, false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "slime",
+                                terrainWidth*2.5f + 450, -terrainWidth/2f,
+                                slimeWidth, slimeHeight,
+                                new RectCollider(true, false),
+                                new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
+                                new Slime(false)
+                        ),
+                        GameObject.Compose(
+                                "slime",
+                                terrainWidth*4f + 450, -terrainWidth/2f,
+                                slimeWidth, slimeHeight,
+                                new RectCollider(true, false),
+                                new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
+                                new Slime(true)
                         ),
                         GameObject.Compose(
                                 "player",
                                 -200,-terrainWidth/2f,
                                 playerWidth, playerHeight,
-                                new RectCollider(true),
+                                new RectCollider(true, false),
                                 new Animator(
                                         playerFallLeft.clone(), playerFallRight.clone(),
                                         playerIdleLeft.clone(), playerIdleRight.clone(),
@@ -397,7 +430,7 @@ public class ShowcaseGame extends PApplet
                                 "terrain",
                                 0, 0,
                                 terrainWidth, terrainHeight,
-                                new RectCollider(false),
+                                new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         //endregion
@@ -406,7 +439,7 @@ public class ShowcaseGame extends PApplet
                                 "player",
                                 0, -terrainHeight/2f,
                                 playerWidth, playerHeight,
-                                new RectCollider(true),
+                                new RectCollider(true, false),
                                 new Animator(
                                         playerFallLeft.clone(), playerFallRight.clone(),
                                         playerIdleLeft.clone(), playerIdleRight.clone(),
@@ -453,7 +486,7 @@ public class ShowcaseGame extends PApplet
                                 "enemy",
                                 550, -terrainHeight/2f,
                                 mageWidth, mageHeight,
-                                new RectCollider(true),
+                                new RectCollider(true, false),
                                 new Animator(mageIdleLeft.clone(), mageIdleRight.clone(), mageAttackLeft.clone(), mageAttackRight.clone()),
                                 new Mage()
                         ),
@@ -463,9 +496,9 @@ public class ShowcaseGame extends PApplet
                                 "enemy",
                                 -550, -terrainHeight/2f,
                                 slimeWidth, slimeHeight,
-                                new RectCollider(true),
+                                new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime()
+                                new Slime(true)
                         )
                         //endregion
                 )

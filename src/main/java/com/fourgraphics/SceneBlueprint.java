@@ -270,7 +270,7 @@ public class SceneBlueprint
                 for (int j = 0; j < collidersList.size(); j++)
                 {
                     Collider c2 = collidersList.get(j); //secondo collider (statico)
-                    if (c2.isDynamic())
+                    if (c2.isDynamic() || c.ignoreSnap)
                     { //se il secondo collider è dinamico
                         if (!c.equals(c2))
                         { //se c'è collisione tra i due collider e questi sono diversi tra loro

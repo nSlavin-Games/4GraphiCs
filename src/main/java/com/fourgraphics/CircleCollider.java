@@ -3,9 +3,9 @@ package com.fourgraphics;
 public class CircleCollider extends Collider {
 
 
-	public CircleCollider(boolean dynamicObject) {
+	public CircleCollider(boolean dynamicObject, boolean ignoreSnap) {
 
-		super(dynamicObject);
+		super(dynamicObject, ignoreSnap);
 	}
 
 	protected void debugDisplay()
@@ -244,6 +244,6 @@ public class CircleCollider extends Collider {
 	}
 
 	public CircleCollider clone() {
-		return new CircleCollider(isDynamic());
+		return new CircleCollider(isDynamic(), ignoreSnap);
 	}
 }

@@ -2,9 +2,9 @@ package com.fourgraphics;
 
 public class RectCollider extends Collider {
 
-	public RectCollider(boolean dynamicObject) {
+	public RectCollider(boolean dynamicObject, boolean ignoreSnap) {
 
-		super(dynamicObject);
+		super(dynamicObject, ignoreSnap);
 	}
 
 	protected void debugDisplay()
@@ -384,6 +384,6 @@ public class RectCollider extends Collider {
     }
 
     public RectCollider clone() {
-        return new RectCollider(isDynamic());
+        return new RectCollider(isDynamic(), ignoreSnap);
     }
 }

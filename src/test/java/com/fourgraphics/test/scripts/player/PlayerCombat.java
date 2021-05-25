@@ -2,7 +2,7 @@ package com.fourgraphics.test.scripts.player;
 
 import com.fourgraphics.*;
 import com.fourgraphics.test.scripts.enemies.Slime;
-import com.fourgraphics.test.scripts.generic.*
+import com.fourgraphics.test.scripts.generic.*;
 
 public class PlayerCombat extends Combat
 {

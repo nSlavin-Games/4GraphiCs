@@ -62,7 +62,7 @@ public class Projectile extends Attack
                 "projectile",
                 spawnPosition,
                 new Vector2(size * 1.66f, size),
-                new CircleCollider(true),
+                new CircleCollider(true, true),
                 animator,
                 proj
         ));

@@ -7,14 +7,15 @@ abstract public class Collider extends Component {
 	Vector2 previousPosition; //WARNING: UNUSED
 	private boolean dynamicObject;
 	private boolean debug;
+	protected boolean ignoreSnap;
 
 	//SceneManager.getApp()
 
-	public Collider(boolean dynamicObject) {
+	public Collider(boolean dynamicObject, boolean ignoreSnap) {
 		setDynamic(dynamicObject);
+		this.ignoreSnap = ignoreSnap;
 		previousPosition = new Vector2();
 	}
-
 
 	abstract protected CollisionDirection checkCollision(Collider other);
 

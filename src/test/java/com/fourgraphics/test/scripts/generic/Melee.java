@@ -48,7 +48,7 @@ public class Melee extends Attack
                 "projectile",
                 spawnPosition,
                 new Vector2(size, size),
-                new RectCollider(true),
+                new RectCollider(true, true),
                 animator,
                 atk
         ));

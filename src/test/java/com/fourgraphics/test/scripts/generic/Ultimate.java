@@ -56,7 +56,7 @@ public class Ultimate extends Attack
                 "ult",
                 spawnPosition,
                 new Vector2(size * 1.66f, size),
-                new CircleCollider(true),
+                new CircleCollider(true, true),
                 animator,
                 ult
         ));
