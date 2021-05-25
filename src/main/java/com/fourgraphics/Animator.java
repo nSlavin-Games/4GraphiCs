@@ -22,6 +22,8 @@ public class Animator extends Renderable
     {//costruttore
         this.animationList = animationList;
         currentAnimation = null;
+        if(this.animationList.size() > 0)
+            playAnimation(0);
     }
 
     public Animator(Animation... animations)
@@ -29,11 +31,13 @@ public class Animator extends Renderable
         animationList = new ArrayList<>();
         animationList.addAll(Arrays.asList(animations));
         currentAnimation = null;
+        if(animationList.size() > 0)
+            playAnimation(0);
     }
 
     protected void render()
     {//Esegue le animazioni in base agli state handler
-        if (renderElement)
+        if (renderElement && animationList.size() > 0)
         {
             float rx = Rescaler.resizeH(transform.getPosition().getX());
             float ry = Rescaler.resizeH(transform.getPosition().getY());
@@ -56,6 +60,12 @@ public class Animator extends Renderable
                 currentAnimation.play();
             }
         }
+    }
+
+    protected void playAnimation(int index)
+    {// ferma l'animazione in corso e fa partire l'animazione in base al nome
+        currentAnimation = animationList.get(0);
+        currentAnimation.play();
     }
 
     public Animation getCurrentAnimation()

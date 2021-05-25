@@ -48,7 +48,7 @@ public class ShowcaseGame extends PApplet
     public static Animation slimeChaseRight = new Animation(0.08f, true, "slimeChaseRight");
     //endregion
     //endregion
-    //region Mage
+    //region Player
     //region Idle
     public static Animation playerIdleLeft = new Animation(0.2f, true, "playerIdleLeft");
     public static Animation playerIdleRight = new Animation(0.2f, true, "playerIdleRight");
@@ -78,11 +78,24 @@ public class ShowcaseGame extends PApplet
     public static Animation playerDamageRight = new Animation(0.5f,"playerDamageRight");
     //endregion
     //endregion
+    //region Portal
+    Animation portal = new Animation(0.07f, true, "portal");
+    //endregion
+    //endregion
 
     private PImage firstLevelBackground;
     private PImage secondLevelBackground;
     private PImage thirdLevelBackground;
     private PImage fourthLevelBackground;
+
+    PImage terrainWide;
+    PImage terrainSquare;
+    PImage terrainTall;
+    PImage terrainDot;
+    PImage terrainMWide;
+    PImage terrainMTall;
+
+    PImage heartImage;
 
     ClassLoader classLoader;
 
@@ -106,6 +119,15 @@ public class ShowcaseGame extends PApplet
         Input.createButton("Melee", "f", "z");
         Input.createButton("Ranged", "g", "x");
         Input.createButton("Ultimate", "c", "c");
+
+        terrainWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_wide.png")).getPath());
+        terrainSquare = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_square.png")).getPath());
+        terrainTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_tall.png")).getPath());
+        terrainDot = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_dot.png")).getPath());
+        terrainMWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mWide.png")).getPath());
+        terrainMTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mTall.png")).getPath());
+
+        heartImage = loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Heart.png")).getPath());
 
         firstLevelBackground = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Backgrounds/BG1.png")).getPath());
         secondLevelBackground = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Backgrounds/BG2.png")).getPath());
@@ -216,12 +238,18 @@ public class ShowcaseGame extends PApplet
             //Player Damage
             playerDamageRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_0.png")).getPath()));
             playerDamageLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_1.png")).getPath()));
+            //Portal
+            for(int i = 0; i < 4; i++)
+            {
+                portal.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Portal/portal_" + i + ".png")).getPath()));
+            }
+
         } catch (Exception ignored)
         {
             ignored.printStackTrace();
         }
 
-        //SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
+        SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
     }
 
     public void setup()
@@ -284,15 +312,6 @@ public class ShowcaseGame extends PApplet
         ▏╳▕▇▇▕ ▏╳▕▇▇▕
         ╲▂ ╲▂ ╲▂
          */
-        PImage terrainWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_wide.png")).getPath());
-        PImage terrainSquare = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_square.png")).getPath());
-        PImage terrainTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_tall.png")).getPath());
-        PImage terrainDot = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_dot.png")).getPath());
-        PImage terrainMWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mWide.png")).getPath());
-        PImage terrainMTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mTall.png")).getPath());
-
-        PImage heartImage = loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Heart.png")).getPath());
-
         int terrainWidth = 500;
         int terrainHeight = (int) (terrainWidth * 0.3379f);
 
@@ -312,6 +331,9 @@ public class ShowcaseGame extends PApplet
 
         int slimeHeight = 54;
         int slimeWidth = (int)(slimeHeight * 2.22222f);
+
+        int portalHeight = 200;
+        int portalWidth = (int)(portalHeight * 0.542857f);
 
         SceneManager.addScene(new SceneBlueprint()
                 .setObjectList(
@@ -457,7 +479,13 @@ public class ShowcaseGame extends PApplet
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true,true)
+                                new Slime(true,false)
+                        ),
+                        GameObject.Compose(
+                                "portal",
+                                terrainWidth*12 + 450,-terrainWidth/2f-portalHeight/2f,
+                                portalWidth,portalHeight,
+                                new Animator(portal.clone())
                         ),
                         GameObject.Compose(
                                 "player",
@@ -513,7 +541,6 @@ public class ShowcaseGame extends PApplet
 
     void FirstLevel() {
         //Terreno
-        PImage terrainWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_wide.png")).getPath());
         int terrainWidth = 2000;
         int terrainHeight = (int) (terrainWidth * 0.3379f);
 
