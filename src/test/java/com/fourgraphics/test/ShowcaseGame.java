@@ -5,8 +5,6 @@ import com.fourgraphics.test.scripts.enemies.*;
 import com.fourgraphics.test.scripts.generic.FellOff;
 import com.fourgraphics.test.scripts.player.*;
 import com.fourgraphics.test.scripts.ui.*;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
@@ -98,20 +96,31 @@ public class ShowcaseGame extends PApplet
     PImage heartImage;
 
     ClassLoader classLoader;
+    static boolean debug = false;
+    static boolean noIntro = false;
 
     public static void main(String[] args)
     {
         //TODO(samu): settings override fatto bene con args (appendere args a appletArgs e sfruttarlo per le options (file options.ini?))
         String[] appletArgs = {"Test Game"};
+        String[] finalArgs = new String[appletArgs.length + args.length];
+        arrayCopy(appletArgs, 0, finalArgs, 0, appletArgs.length);
+        arrayCopy(args, 0, finalArgs, appletArgs.length, args.length);
         ShowcaseGame sketch = new ShowcaseGame();
         PApplet.runSketch(appletArgs, sketch);
+        for (String finalArg : finalArgs)
+        {
+            if (finalArg.equals("debug")) debug = true;
+            if (finalArg.equals("noIntro")) noIntro = true;
+
+        }
     }
 
 
     public void settings()
     {
         classLoader = Thread.currentThread().getContextClassLoader();
-        SceneManager.initialize(this, 2);
+        SceneManager.initialize(this, 2, true);
         noSmooth();
         //TODO(samu): usare un file di config per i keybinds e creare un file default se assente
         Input.createAxis("Horizontal", "d", "a", "right", "left");
