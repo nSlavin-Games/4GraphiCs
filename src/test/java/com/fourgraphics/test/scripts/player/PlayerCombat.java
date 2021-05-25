@@ -1,8 +1,8 @@
-package com.fourgraphics.test.scripts.Player;
+package com.fourgraphics.test.scripts.player;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.scripts.Enemies.Slime;
-import com.fourgraphics.test.scripts.Generic.*;
+import com.fourgraphics.test.scripts.enemies.Slime;
+import com.fourgraphics.test.scripts.generic.*
 
 public class PlayerCombat extends Combat
 {

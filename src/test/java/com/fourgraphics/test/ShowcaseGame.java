@@ -1,9 +1,9 @@
 package com.fourgraphics.test;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.scripts.Enemies.*;
-import com.fourgraphics.test.scripts.Player.*;
-import com.fourgraphics.test.scripts.UI.*;
+import com.fourgraphics.test.scripts.enemies.*;
+import com.fourgraphics.test.scripts.player.*;
+import com.fourgraphics.test.scripts.ui.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;

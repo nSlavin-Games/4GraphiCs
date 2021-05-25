@@ -1,4 +1,4 @@
-package com.fourgraphics.test.scripts.Player;
+package com.fourgraphics.test.scripts.player;
 
 import com.fourgraphics.*;
 

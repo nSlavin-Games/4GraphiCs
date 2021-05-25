@@ -1,17 +1,16 @@
-package com.fourgraphics.test.scripts.Generic;
+package com.fourgraphics.test.scripts.generic;
 
 import com.fourgraphics.*;
 import com.fourgraphics.test.ShowcaseGame;
-import com.fourgraphics.test.scripts.Enemies.Enemy;
-import com.fourgraphics.test.scripts.Player.PlayerCombat;
+import com.fourgraphics.test.scripts.enemies.Enemy;
 
 import static com.fourgraphics.SceneManager.destroy;
 
-public class Projectile extends Attack
+public class Ultimate extends Attack
 {
     float projectileSpeed = 70f;
     Vector2 projectileDirection = new Vector2();
-    float lifeTime = 2f; //tempo di vita in secondi
+    float lifeTime = 5f; //tempo di vita in secondi
     float timeLived; //da quanto è nato
 
     public void Update()
@@ -30,14 +29,9 @@ public class Projectile extends Attack
     @Override
     public void OnCollisionStay(Collider self, Collider other, CollisionDirection direction)
     {
-        if (other.gameObject.getName().equalsIgnoreCase("player") && !parentName.equalsIgnoreCase("player"))
-        {
-            other.gameObject.getComponent(PlayerCombat.class).damage();
-            destroy(gameObject);
-        } else if (parentName.equalsIgnoreCase("player") && other.gameObject.hasComponent(Enemy.class))
+        if (parentName.equalsIgnoreCase("player") && other.gameObject.hasComponent(Enemy.class))
         {
             other.gameObject.getComponent(Enemy.class).damage();
-            destroy(gameObject);
         }
     }
 
@@ -46,25 +40,25 @@ public class Projectile extends Attack
         Animator animator = new Animator();
         if (direction.getX() == -1)
         {
-            animator.addAnimation(ShowcaseGame.fireballAnimationLeft.clone());
-            animator.playAnimation("fireballLeft");
+            animator.addAnimation(ShowcaseGame.ultimateLeft.clone());
+            animator.playAnimation("ultimateLeft");
         } else
         {
-            animator.addAnimation(ShowcaseGame.fireballAnimationRight.clone());
-            animator.playAnimation("fireballRight");
+            animator.addAnimation(ShowcaseGame.ultimateRight.clone());
+            animator.playAnimation("ultimateRight");
         }
 
-        Projectile proj = new Projectile();
-        proj.projectileDirection.set(direction);
-        proj.SetParent(parent);
+        Ultimate ult = new Ultimate();
+        ult.projectileDirection.set(direction);
+        ult.SetParent(parent);
 
         SceneManager.instantiate(GameObject.Compose(
-                "projectile",
+                "ult",
                 spawnPosition,
                 new Vector2(size * 1.66f, size),
                 new CircleCollider(true),
                 animator,
-                proj
+                ult
         ));
     }
 }
