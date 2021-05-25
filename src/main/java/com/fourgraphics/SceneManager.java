@@ -132,7 +132,10 @@ public class SceneManager
     public static void startGame()
     {
         Rescaler.setSize(getApp().width, getApp().height);
-        loadSceneInternal(0);
+        if(!debugMode)
+            loadSceneInternal(0);
+        else
+            loadScene(1);
     }
 
     public static void addIntroLogo(PImage logo)

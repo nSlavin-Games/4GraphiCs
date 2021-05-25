@@ -9,7 +9,8 @@ public class DebugConsole
 
     protected static void LaunchConsole()
     {
-        console = new Console();
+        Console.main(new String[0]);
+        console = Console.Instance;
         Info("Console Initialized...");
     }
 

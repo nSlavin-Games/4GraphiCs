@@ -1,8 +1,7 @@
 package com.fourgraphics;
 
-import jdk.nashorn.internal.runtime.Debug;
-
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -12,11 +11,19 @@ import java.util.Objects;
 
 class Console
 {
+    protected static Console Instance;
+
     private JFrame console;
     protected JLabel displayedMessage;
     private JPanel consoleBase;
     protected JPanel messageList;
     private JScrollPane scroll;
+    private JPanel infoPanel;
+
+    public static void main(String[] args)
+    {
+        Instance = new Console();
+    }
 
     public Console()
     {
@@ -26,6 +33,9 @@ class Console
         console.setVisible(true);
         createUIComponents();
         scroll.setViewportView(messageList);
+        scroll.getViewport().getView().setBackground(Color.getHSBColor(180,0.042f,0.094f));
+        Border border = BorderFactory.createLineBorder(Color.getHSBColor(0,0.813f,0.42f),5);
+        infoPanel.setBorder(border);
         consoleBase.addComponentListener(new ComponentAdapter()
         {
             @Override
@@ -67,8 +77,10 @@ class Console
                 logIcon = new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("consoleInfo.png")));
                 break;
             case ERROR:
+                logIcon = new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("consoleError.png")));
                 break;
             case WARNING:
+                logIcon = new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("consoleWarning.png")));
                 break;
         }
         message.setIcon(logIcon);

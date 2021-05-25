@@ -103,17 +103,8 @@ public class ShowcaseGame extends PApplet
     {
         //TODO(samu): settings override fatto bene con args (appendere args a appletArgs e sfruttarlo per le options (file options.ini?))
         String[] appletArgs = {"Test Game"};
-        String[] finalArgs = new String[appletArgs.length + args.length];
-        arrayCopy(appletArgs, 0, finalArgs, 0, appletArgs.length);
-        arrayCopy(args, 0, finalArgs, appletArgs.length, args.length);
         ShowcaseGame sketch = new ShowcaseGame();
         PApplet.runSketch(appletArgs, sketch);
-        for (String finalArg : finalArgs)
-        {
-            if (finalArg.equals("debug")) debug = true;
-            if (finalArg.equals("noIntro")) noIntro = true;
-
-        }
     }
 
 
