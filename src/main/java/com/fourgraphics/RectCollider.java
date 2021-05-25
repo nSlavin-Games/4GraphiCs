@@ -5,17 +5,21 @@ public class RectCollider extends Collider {
 	public RectCollider(boolean dynamicObject, boolean ignoreSnap) {
 
 		super(dynamicObject, ignoreSnap);
+		//setDebug(true);
 	}
 
 	protected void debugDisplay()
 	{
+		//System.out.print("trying to debug " + gameObject.getName() + " status: " + isDebug() + "...");
 		if (isDebug()) {
+			//System.out.print(" DONE!");
 			sketch.rectMode(sketch.CENTER);
 			sketch.fill(0, 255, 0, 100);
 			sketch.rect(Rescaler.resizeH(transform.getPosition().getX()), Rescaler.resizeH(transform.getPosition().getY()), Rescaler.resizeH(transform.getScale().getX()),
 					Rescaler.resizeH(transform.getScale().getY()));
 
 		}
+		//System.out.println();
 	}
 
 	protected CollisionDirection checkCollision(Collider other) {

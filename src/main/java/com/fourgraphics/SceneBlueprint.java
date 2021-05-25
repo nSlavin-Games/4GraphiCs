@@ -159,7 +159,7 @@ public class SceneBlueprint
      * @param objectID ID dell'oggetto
      * @return Restituisce l’oggetto equivalente all’id selezionato
      */
-    public GameObject getObject(int objectID)
+    protected GameObject getObject(int objectID)
     {
         return objectList.get(objectID); //restituzione dell'oggetto contenuto in objectList con ID corrispondente al parametro
     }
@@ -173,7 +173,7 @@ public class SceneBlueprint
      * @return Restituisce l’oggetto che corrisponde al nome specificato, se ci
      * sono più oggetti con lo stesso nome restituisce il primo
      */
-    public GameObject getObject(String objectName)
+    protected GameObject getObject(String objectName)
     {
         for (int i = 0; i < objectList.size(); i++)
         { //analisi di ogni oggetto nella lista di objectList
@@ -190,7 +190,7 @@ public class SceneBlueprint
      *
      * @return Restituisce la lista degli oggetti
      */
-    public ArrayList<GameObject> getObjectList()
+    protected ArrayList<GameObject> getObjectList()
     {
         return objectList;
     }
@@ -200,7 +200,8 @@ public class SceneBlueprint
      *
      * @return Resituisce la lista degli elementi dell’UI
      */
-    public ArrayList<UIElement> getUiElements()
+    @Deprecated
+    protected ArrayList<UIElement> getUiElements()
     {
         return uiElements;
     }
@@ -309,6 +310,7 @@ public class SceneBlueprint
         this.defaultObjectList = objectList;
         return this;
     }
+
     public SceneBlueprint setObjectList(GameObject... objectList) {
         this.defaultObjectList = new ArrayList<>(Arrays.asList(objectList));
         return this;
@@ -401,6 +403,4 @@ public class SceneBlueprint
         this.backgroundColor = backgroundColor;
         return this;
     }
-
-
 }

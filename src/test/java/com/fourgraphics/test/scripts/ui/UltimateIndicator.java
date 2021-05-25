@@ -23,6 +23,6 @@ public class UltimateIndicator extends Script
 
     public void Update()
     {
-        gameObject.getComponent(Panel.class).setTexture(textureList.get(SceneManager.getActiveScene().getObject("player").getComponent(PlayerCombat.class).ultCharge));
+        gameObject.getComponent(Panel.class).setTexture(textureList.get(SceneManager.findObject("player").getComponent(PlayerCombat.class).ultCharge));
     }
 }

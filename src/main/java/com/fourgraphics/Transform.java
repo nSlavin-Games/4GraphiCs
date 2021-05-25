@@ -7,7 +7,7 @@ public class Transform {
     /**
      * Costruttore default
      */
-    public Transform() {
+    protected Transform() {
         this.position = new Vector2();
         this.scale = new Vector2();
     }
@@ -18,7 +18,7 @@ public class Transform {
      * @param position Posizione
      * @param scale    Dimensione
      */
-    public Transform(Vector2 position, Vector2 scale) {
+    protected Transform(Vector2 position, Vector2 scale) {
         this.position = position;
         this.scale = scale;
     }
@@ -31,7 +31,7 @@ public class Transform {
      * @param width  Larghezza
      * @param height Altezza
      */
-    public Transform(float x, float y, float width, float height) {
+    protected Transform(float x, float y, float width, float height) {
         this.position = new Vector2(x, y);
         this.scale = new Vector2(width, height);
     }

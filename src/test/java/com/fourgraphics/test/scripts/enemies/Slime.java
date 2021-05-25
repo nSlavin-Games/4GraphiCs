@@ -13,13 +13,15 @@ public class Slime extends Enemy
     float randomAttackDuration = 0;
 
     boolean canAttack;
+    boolean canMove;
 
     Vector2 lastDir = new Vector2();
     Vector2 randomDir = new Vector2();
 
-    public Slime(boolean canAttack)
+    public Slime(boolean canAttack, boolean canMove)
     {
         this.canAttack = canAttack;
+        this.canMove = canMove;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class Slime extends Enemy
         if ((anim.getCurrentAnimation().getName().contains("Chase") && distance > attackRange || attackTimer > 0) && randomAttackDuration <= 0)
             PlayIdleAnim();
 
-        if (canAttack)
+        if (canMove)
         {
             if (distance <= attackRange && attackTimer <= 0)
             {

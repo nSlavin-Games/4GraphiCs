@@ -10,7 +10,7 @@ public class Ultimate extends Attack
 {
     float projectileSpeed = 70f;
     Vector2 projectileDirection = new Vector2();
-    float lifeTime = 5f; //tempo di vita in secondi
+    float lifeTime = 2f; //tempo di vita in secondi
     float timeLived; //da quanto è nato
 
     public void Update()

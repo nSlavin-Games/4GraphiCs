@@ -19,7 +19,7 @@ public class Enemy extends Combat
 
     public void Start() {
         currentHealth = 1;
-        player = SceneManager.getActiveScene().getObject("player");
+        player = SceneManager.findObject("player");
     }
 
     public void Update() {

@@ -307,7 +307,18 @@ public class Input {
 
     public static boolean getMouseButtonDown(int button)
     {
-        if(manager.mouseButtons.containsKey(button)) return manager.mouseButtons.get(button) == 1;
+        switch (button)
+        {
+            case 0:
+                if(manager.mouseButtons.containsKey(37))
+                    return manager.mouseButtons.get(37) == 1;
+            case 1:
+                if(manager.mouseButtons.containsKey(39))
+                    return manager.mouseButtons.get(39) == 1;
+            case 2:
+                if(manager.mouseButtons.containsKey(3))
+                    return manager.mouseButtons.get(3) == 1;
+        }
         return false;
     }
 

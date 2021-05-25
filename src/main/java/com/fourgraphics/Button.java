@@ -67,8 +67,8 @@ public class Button extends UIElement {
      * @return Se il bottone è in evidenza (mouse sopra il bottone) restituisce true, altrimenti restituisce false
      */
     public boolean mouseOver() {
-        float rx = Rescaler.resizeW(transform.getPosition().getX());
-        float ry = Rescaler.resizeH(transform.getPosition().getY());
+        float rx = Rescaler.resizeW(transform.getPosition().getX()) + Rescaler.DEFAULT_WIDTH/2;
+        float ry = Rescaler.resizeH(transform.getPosition().getY()) + Rescaler.DEFAULT_HEIGHT/2;
         float rw = Rescaler.resizeH(transform.getScale().getX());
         float rh = Rescaler.resizeH(transform.getScale().getY());
 
@@ -82,5 +82,10 @@ public class Button extends UIElement {
         } catch (Exception ignored) {
             return new Button(this.text, this.color, this.worldSpace);
         }
+    }
+
+    public void setTexture(PImage texture)
+    {
+        this.texture = texture;
     }
 }

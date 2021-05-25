@@ -2,8 +2,11 @@ package com.fourgraphics.test;
 
 import com.fourgraphics.*;
 import com.fourgraphics.test.scripts.enemies.*;
+import com.fourgraphics.test.scripts.generic.FellOff;
 import com.fourgraphics.test.scripts.player.*;
 import com.fourgraphics.test.scripts.ui.*;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
@@ -226,9 +229,44 @@ public class ShowcaseGame extends PApplet
         //TODO(samu): prendere il framerate cap da options.ini(/config, DA FARE, tbd), e vedere se è possibile prendere il refresh rate del monitor alla creazione del config base
         SceneManager.setProjectTitle("4GraphiCs Showcase");
         ((PGraphicsOpenGL) g).textureSampling(3);
+        MainMenu();
         NiceTutorial();
         FirstLevel();
         SceneManager.startGame();
+    }
+
+    void MainMenu()
+    {
+        PImage title = loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/MainMenu/Title.png")).getPath());
+
+        SceneManager.addScene(new SceneBlueprint()
+                .setObjectList(
+                        GameObject.Compose(
+                                "menu manager",
+                                0,0,
+                                0,0,
+                                new MainMenuManager()
+                        ),
+                        GameObject.Compose(
+                                "Title",
+                                0,-350,
+                                630,120,
+                                new Panel(" ", title,false)
+                        ),
+                        GameObject.Compose(
+                                "play button",
+                                0,-75,
+                                150,50,
+                                new Button(" ", title,false)
+                        ),
+                        GameObject.Compose(
+                                "exit button",
+                                0,0,
+                                150,50,
+                                new Button(" ", title,false)
+                        )
+                ).setBackground(firstLevelBackground)
+        );
     }
 
     void NiceTutorial()
@@ -260,6 +298,9 @@ public class ShowcaseGame extends PApplet
 
         int tallHeight = 288;
         int tallWidth = (int)(tallHeight * 0.333333333f);
+
+        int wideWidth = 200;
+        int wideHeight = wideWidth/3;
 
         int playerHeight = 85;
         int playerWidth = (int)(playerHeight * 0.9375f);
@@ -338,12 +379,61 @@ public class ShowcaseGame extends PApplet
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
+                                "terrain",
+                                terrainWidth*11 + 450,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false, false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*12 + 450,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false, false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*5 + 450,-terrainWidth/2f-200,
+                                wideWidth,wideHeight,
+                                new RectCollider(false, false),
+                                new Renderer(terrainWide)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*6 + 450,-terrainWidth/2f-350,
+                                wideWidth,wideHeight,
+                                new RectCollider(false, false),
+                                new Renderer(terrainWide)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*7 + 450,-terrainWidth/2f-350,
+                                wideWidth,wideHeight,
+                                new RectCollider(false, false),
+                                new Renderer(terrainWide)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*8 + 450,-terrainWidth/2f-350,
+                                wideWidth,wideHeight,
+                                new RectCollider(false, false),
+                                new Renderer(terrainWide)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*9 + 450,-terrainWidth/2f-350,
+                                wideWidth,wideHeight,
+                                new RectCollider(false, false),
+                                new Renderer(terrainWide)
+                        ),
+                        GameObject.Compose(
                                 "slime",
                                 terrainWidth*2.5f + 450, -terrainWidth/2f,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(false)
+                                new Slime(false,false)
                         ),
                         GameObject.Compose(
                                 "slime",
@@ -351,7 +441,23 @@ public class ShowcaseGame extends PApplet
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true)
+                                new Slime(true,true)
+                        ),
+                        GameObject.Compose(
+                                "slime",
+                                terrainWidth*9 + wideWidth/2.5f + 450,-terrainWidth/2f-370,
+                                slimeWidth, slimeHeight,
+                                new RectCollider(true, false),
+                                new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
+                                new Slime(true,false)
+                        ),
+                        GameObject.Compose(
+                                "slime",
+                                terrainWidth*11.5f + 450, -terrainWidth/2f,
+                                slimeWidth, slimeHeight,
+                                new RectCollider(true, false),
+                                new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
+                                new Slime(true,true)
                         ),
                         GameObject.Compose(
                                 "player",
@@ -394,6 +500,13 @@ public class ShowcaseGame extends PApplet
                                 ultSize,ultSize,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Ultimate/UltiBar0.png")).getPath()), false),
                                 new UltimateIndicator()
+                        ),
+                        GameObject.Compose(
+                                "Death Limit",
+                                0,250500,
+                                500000,500000,
+                                new RectCollider(true,true),
+                                new FellOff()
                         )
         ).setBackground(firstLevelBackground));
     }
@@ -498,7 +611,7 @@ public class ShowcaseGame extends PApplet
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true)
+                                new Slime(true,true)
                         )
                         //endregion
                 )

@@ -45,7 +45,7 @@ public class Melee extends Attack
         atk.SetParent(parent);
 
         SceneManager.instantiate(GameObject.Compose(
-                "projectile",
+                "melee",
                 spawnPosition,
                 new Vector2(size, size),
                 new RectCollider(true, true),

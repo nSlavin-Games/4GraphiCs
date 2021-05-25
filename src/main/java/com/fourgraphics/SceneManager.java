@@ -237,6 +237,7 @@ public class SceneManager
         }
 
         sceneList.get(activeSceneIndex).calculateCollisions(); //calcolo le collisioni
+        sceneList.get(activeSceneIndex).getCamera().calculateCamera(); //aggiorno la telecamera
 
         sceneList.get(activeSceneIndex).renderObjects(); //renderizzo gli oggetti
         sceneList.get(activeSceneIndex).renderUI(); //renderizzo l'UI

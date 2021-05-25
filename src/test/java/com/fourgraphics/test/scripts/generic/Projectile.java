@@ -11,7 +11,7 @@ public class Projectile extends Attack
 {
     float projectileSpeed = 70f;
     Vector2 projectileDirection = new Vector2();
-    float lifeTime = 2f; //tempo di vita in secondi
+    float lifeTime = 1f; //tempo di vita in secondi
     float timeLived; //da quanto è nato
 
     public void Update()
@@ -33,12 +33,13 @@ public class Projectile extends Attack
         if (other.gameObject.getName().equalsIgnoreCase("player") && !parentName.equalsIgnoreCase("player"))
         {
             other.gameObject.getComponent(PlayerCombat.class).damage();
-            destroy(gameObject);
         } else if (parentName.equalsIgnoreCase("player") && other.gameObject.hasComponent(Enemy.class))
         {
             other.gameObject.getComponent(Enemy.class).damage();
-            destroy(gameObject);
         }
+
+        if(!other.gameObject.getName().equals("player") && !other.gameObject.getName().equals("ult") && !other.gameObject.getName().equals("melee"))
+            destroy(gameObject);
     }
 
     public static void CreateAttack(Vector2 spawnPosition, Vector2 direction, String parent, int size)
@@ -62,7 +63,7 @@ public class Projectile extends Attack
                 "projectile",
                 spawnPosition,
                 new Vector2(size * 1.66f, size),
-                new CircleCollider(true, true),
+                new CircleCollider(true, false),
                 animator,
                 proj
         ));

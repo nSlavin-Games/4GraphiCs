@@ -86,7 +86,7 @@ public class PlayerCombat extends Combat
     public void die()
     {
         super.die();
-        SceneManager.loadScene(1);
+        SceneManager.loadScene(SceneManager.getActiveSceneIndex());
     }
 
     @Override
@@ -96,7 +96,7 @@ public class PlayerCombat extends Combat
         {
             PlayDamageAnim();
             currentIframes = iFrames;
-            SceneManager.destroy(SceneManager.getActiveScene().getObject("Health " + currentHealth));
+            SceneManager.destroy(SceneManager.findObject("Health " + currentHealth));
             super.damage();
         }
     }
