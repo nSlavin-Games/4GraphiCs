@@ -95,7 +95,7 @@ public class ShowcaseGame extends PApplet
     public void settings()
     {
         classLoader = Thread.currentThread().getContextClassLoader();
-        SceneManager.initialize(this,2);
+        SceneManager.initialize(this, 2);
         noSmooth();
         //TODO(samu): usare un file di config per i keybinds e creare un file default se assente
         Input.createAxis("Horizontal", "d", "a", "right", "left");
@@ -218,7 +218,7 @@ public class ShowcaseGame extends PApplet
             ignored.printStackTrace();
         }
 
-        SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
+        //SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
     }
 
     public void setup()
@@ -226,7 +226,7 @@ public class ShowcaseGame extends PApplet
         //TODO(samu): prendere il framerate cap da options.ini(/config, DA FARE, tbd), e vedere se è possibile prendere il refresh rate del monitor alla creazione del config base
         SceneManager.setProjectTitle("4GraphiCs Showcase");
         ((PGraphicsOpenGL) g).textureSampling(3);
-        //NiceTutorial();
+        NiceTutorial();
         FirstLevel();
         SceneManager.startGame();
     }
@@ -246,8 +246,122 @@ public class ShowcaseGame extends PApplet
         ▏╳▕▇▇▕ ▏╳▕▇▇▕
         ╲▂ ╲▂ ╲▂
          */
-        SceneManager.addScene(new SceneBlueprint().setObjectList(
-            new GameObject("")
+        PImage terrainWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_wide.png")).getPath());
+        PImage terrainSquare = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_square.png")).getPath());
+        PImage terrainTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_tall.png")).getPath());
+        PImage terrainDot = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_dot.png")).getPath());
+        PImage terrainMWide = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mWide.png")).getPath());
+        PImage terrainMTall = loadImage(Objects.requireNonNull(classLoader.getResource("Images/Terrain/Level_1/terrain_mTall.png")).getPath());
+
+        PImage heartImage = loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Heart.png")).getPath());
+
+        int terrainWidth = 500;
+        int terrainHeight = (int) (terrainWidth * 0.3379f);
+
+        int tallHeight = 288;
+        int tallWidth = (int)(tallHeight * 0.333333333f);
+
+        int playerHeight = 85;
+        int playerWidth = (int)(playerHeight * 0.9375f);
+
+        int heartHeight = 60;
+        int heartWidth = (int) (heartHeight * 1.16666666f);
+
+        int ultSize = 150;
+
+        SceneManager.addScene(new SceneBlueprint()
+                .setObjectList(
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*1.5f-tallWidth*3f-25,-terrainWidth/2f+30,
+                                tallWidth,tallHeight,
+                                new RectCollider(false),
+                                new Renderer(terrainTall)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*1.5f-tallWidth/2f,-terrainWidth/2f-80,
+                                tallWidth,tallHeight,
+                                new RectCollider(false),
+                                new Renderer(terrainTall)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                0,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*2 + 250,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*3 + 250,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "terrain",
+                                terrainWidth*4 + 250,0,
+                                terrainWidth,terrainWidth,
+                                new RectCollider(false),
+                                new Renderer(terrainSquare)
+                        ),
+                        GameObject.Compose(
+                                "player",
+                                -200,-terrainWidth/2f,
+                                playerWidth, playerHeight,
+                                new RectCollider(true),
+                                new Animator(
+                                        playerFallLeft.clone(), playerFallRight.clone(),
+                                        playerIdleLeft.clone(), playerIdleRight.clone(),
+                                        playerRunLeft.clone(), playerRunRight.clone(),
+                                        playerJumpLeft.clone(), playerJumpRight.clone(),
+                                        playerSlashLeft.clone(), playerSlashRight.clone(),
+                                        playerThrowLeft.clone(), playerThrowRight.clone(),
+                                        playerDamageLeft.clone(), playerDamageRight.clone()
+                                ),
+                                new PlayerMovement(),
+                                new PlayerCombat()
+                        ),
+                        GameObject.Compose(
+                                "Health 1",
+                                -1920/2f+heartWidth/2f+25,-1080/2f+heartHeight/2f+25,
+                                heartWidth,heartHeight,
+                                new Panel(" ", heartImage, false)
+                        ),
+                        GameObject.Compose(
+                                "Health 2",
+                                -1920/2f+heartWidth*2f,-1080/2f+heartHeight/2f+25,
+                                heartWidth,heartHeight,
+                                new Panel(" ", heartImage, false)
+                        ),
+                        GameObject.Compose(
+                                "Health 3",
+                                -1920/2f+heartWidth*2.5f+45,-1080/2f+heartHeight/2f+25,
+                                heartWidth,heartHeight,
+                                new Panel(" ", heartImage, false)
+                        ),
+                        GameObject.Compose(
+                                "ult indicator",
+                                1920/2f-ultSize/2f-25,1080/2f-ultSize/2f-25,
+                                ultSize,ultSize,
+                                new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Ultimate/UltiBar0.png")).getPath()), false),
+                                new UltimateIndicator()
+                        )
         ).setBackground(firstLevelBackground));
     }
 
@@ -308,19 +422,19 @@ public class ShowcaseGame extends PApplet
                         //region Cuori UI
                         GameObject.Compose(
                                 "Health 1",
-                                -width / 2f + heartWidth / 2f + 20, -height / 2f + hearthHeight / 2f + 20,
+                                -1920 / 2f + heartWidth / 2f + 20, -1080 / 2f + hearthHeight / 2f + 20,
                                 heartWidth, hearthHeight,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Heart.png")).getPath()), false)
                         ),
                         GameObject.Compose(
                                 "Health 2",
-                                -width / 2f + heartWidth * 1.75f + 20, -height / 2f + hearthHeight / 2f + 20,
+                                -1920 / 2f + heartWidth * 1.75f + 20, -1080 / 2f + hearthHeight / 2f + 20,
                                 heartWidth, hearthHeight,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("resources/Images/UI/Heart.png")).getPath()), false)
                         ),
                         GameObject.Compose(
                                 "Health 3",
-                                -width / 2f + heartWidth * 3f + 20, -height / 2f + hearthHeight / 2f + 20,
+                                -1920 / 2f + heartWidth * 3f + 20, -1080 / 2f + hearthHeight / 2f + 20,
                                 heartWidth, hearthHeight,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Heart.png")).getPath()), false)
                         ),
@@ -328,7 +442,7 @@ public class ShowcaseGame extends PApplet
                         //region Ultimate Indicator
                         GameObject.Compose(
                                 "ult indicator",
-                                width / 2f - ultSize / 2f - 20, height / 2f - ultSize / 2f - 20,
+                                1920 / 2f - ultSize / 2f - 20, 1080 / 2f - ultSize / 2f - 20,
                                 ultSize, ultSize,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Ultimate/UltiBar0.png")).getPath()), false),
                                 new UltimateIndicator()

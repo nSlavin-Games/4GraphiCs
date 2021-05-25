@@ -21,6 +21,7 @@ class Rescaler
 
     public static float resizeW(float value)
     {
+        //System.out.println("Value: " + value + " | Current Width: " + currentWidth + " | Rescaled: " + (value * currentWidth) + ":" + (value * currentWidth) / DEFAULT_WIDTH);
         return (value * currentWidth) / DEFAULT_WIDTH;
     }
 }

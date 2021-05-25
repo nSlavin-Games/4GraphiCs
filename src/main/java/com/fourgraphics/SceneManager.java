@@ -71,7 +71,6 @@ public class SceneManager
         inputManager = new InputManager();
         Input.setup(inputManager);
         setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
-        Rescaler.setSize(app.displayWidth, app.displayHeight);
         introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
         CreateIntro();
     }
@@ -84,7 +83,6 @@ public class SceneManager
         inputManager = new InputManager();
         Input.setup(inputManager);
         setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
-        Rescaler.setSize(app.displayWidth, app.displayHeight);
         introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
         CreateIntro();
     }
@@ -104,6 +102,7 @@ public class SceneManager
 
     public static void startGame()
     {
+        Rescaler.setSize(getApp().width, getApp().height);
         loadSceneInternal(0);
     }
 
