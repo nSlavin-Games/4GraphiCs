@@ -198,10 +198,10 @@ public class SceneManager
             getApp().getSurface().hideCursor();
     }
 
-    private static void setCursorImage()
+    public static void setCursorImage(PImage image)
     {
         //TODO: not yet implemented
-        //getApp().getSurface().setCursor();
+        getApp().getSurface().setCursor(image,0,0);
     }
 
     /**
