@@ -27,8 +27,6 @@ public class MainMenuManager extends Script
 
         play.setTexture(playNormal);
         exit.setTexture(exitNormal);
-
-        DebugConsole.Info("finished loading");
     }
 
     public void Update()
@@ -36,7 +34,6 @@ public class MainMenuManager extends Script
         if(play.mouseOver())
         {
             play.setTexture(playHover);
-            DebugConsole.Info("hovered play");
             if(Input.getMouseButtonDown(0))
                 Play();
         } else
