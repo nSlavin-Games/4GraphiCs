@@ -1,9 +1,8 @@
-package com.fourgraphics.test.scripts.Player;
+package com.fourgraphics.test.scripts.player;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.scripts.Enemies.Enemy;
-import com.fourgraphics.test.scripts.Enemies.Slime;
-import com.fourgraphics.test.scripts.Generic.*;
+import com.fourgraphics.test.scripts.enemies.Slime;
+import com.fourgraphics.test.scripts.generic.*;
 
 public class PlayerCombat extends Combat
 {
@@ -107,7 +106,6 @@ public class PlayerCombat extends Combat
     {
         if (other.gameObject.hasComponent(Attack.class) || (other.gameObject.hasComponent(Slime.class) && other.gameObject.getComponent(Slime.class).attackTimer <= 0))
         {
-            System.out.println("pog");
             if (direction.equals(CollisionDirection.LEFT))
                 damageDirection.set(Vector2.RIGHT());
             if (direction.equals(CollisionDirection.RIGHT))

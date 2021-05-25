@@ -1,7 +1,7 @@
-package com.fourgraphics.test.scripts.UI;
+package com.fourgraphics.test.scripts.ui;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.scripts.Player.PlayerCombat;
+import com.fourgraphics.test.scripts.player.PlayerCombat;
 import processing.core.PImage;
 
 import java.util.ArrayList;
