@@ -110,7 +110,6 @@ public class ShowcaseGame extends PApplet {
         finalArgs.addAll(Arrays.asList(appletArgs));
         ShowcaseGame sketch = new ShowcaseGame();
         for (String finalArg : finalArgs) {
-            System.out.println(finalArg);
             if (finalArg.equals("console")) {
                 flags.add("console");
                 console = new CheatConsole();

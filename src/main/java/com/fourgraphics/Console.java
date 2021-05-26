@@ -1,14 +1,16 @@
 package com.fourgraphics;
 
+import org.w3c.dom.css.RGBColor;
+
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.Element;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.sql.SQLOutput;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 class Console
@@ -19,25 +21,37 @@ class Console
     private JScrollPane scroll;
     private JPanel infoPanel;
     private JTextArea displayMessage;
+    private JScrollPane infoScroll;
+    private JSplitPane splitPane;
     GridBagConstraints constraint = new GridBagConstraints();
     JPanel filler = new JPanel();
+
+    private DebugMessage currentMessage;
 
     private ArrayList<DebugMessage> existingMessages = new ArrayList<>();
 
     public Console()
     {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {}
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {}
         console = new JFrame("4GraphiCs Console");
         consoleBase.setBackground(Color.getHSBColor(180,0.042f,0.094f));
         console.setContentPane(consoleBase);
         console.pack();
+        console.setMinimumSize(new Dimension(400,400));
         console.setVisible(true);
-        createUIComponents();
+        splitPane.setDividerLocation(500);
+
+        infoScroll.setMinimumSize(new Dimension(400,50));
+
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setViewportView(messageList);
         scroll.getViewport().getView().setBackground(Color.getHSBColor(180,0.042f,0.094f));
+
+        infoScroll.setBorder(BorderFactory.createEmptyBorder());
+        infoScroll.setViewportView(displayMessage);
+        infoScroll.getViewport().getView().setBackground(Color.getHSBColor(180,0.042f,0.094f));
 
         Border border = BorderFactory.createLineBorder(Color.getHSBColor(0,0.813f,0.42f),5);
         infoPanel.setBorder(border);
@@ -49,6 +63,17 @@ class Console
             public void componentResized(ComponentEvent e)
             {
                 UpdateMessageList();
+                UpdateCurrentInfo();
+            }
+        });
+
+        splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener()
+        {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt)
+            {
+                UpdateMessageList();
+                UpdateCurrentInfo();
             }
         });
 
@@ -58,12 +83,14 @@ class Console
             public void componentAdded(ContainerEvent e)
             {
                 UpdateMessageList();
+                UpdateCurrentInfo();
             }
 
             @Override
             public void componentRemoved(ContainerEvent e)
             {
                 UpdateMessageList();
+                UpdateCurrentInfo();
             }
         });
 
@@ -81,7 +108,7 @@ class Console
         //System.out.println(existingMessages.size());
         if(existingMessages.size() == 0)
         {
-            message.occurencies++;
+            message.occurrences++;
             existingMessages.add(message);
             CreateMessage(message);
         }
@@ -90,16 +117,18 @@ class Console
             boolean found = false;
             for(int i = existingMessages.size() -1; i >= 0; i--)
             {
-                if(existingMessages.get(i).content.equalsIgnoreCase(message.content) && existingMessages.get(i).messageType == message.messageType)
+                if(existingMessages.get(i).content.equalsIgnoreCase(message.content) && existingMessages.get(i).messageType == message.messageType
+                && existingMessages.get(i).callerFile.equalsIgnoreCase(message.callerFile) && existingMessages.get(i).callerLine == message.callerLine)
                 {
-                    existingMessages.get(i).occurencies++;
-                    existingMessages.get(i).setText(existingMessages.get(i).content + " | " + existingMessages.get(i).occurencies);
+                    existingMessages.get(i).occurrences++;
+                    existingMessages.get(i).setText(existingMessages.get(i).ButtonTextLayout());
+                    existingMessages.get(i).timeReceived = new Date();
                     found = true;
                 }
             }
             if(!found)
             {
-                message.occurencies++;
+                message.occurrences++;
                 existingMessages.add(message);
                 CreateMessage(message);
             }
@@ -132,10 +161,40 @@ class Console
                 break;
         }
         message.setIcon(logIcon);
-        message.setText(message.content);
-        message.addActionListener(e -> UpdateCurrentInfo(message));
+        message.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(107,20,20)));
+        message.setText(message.ButtonTextLayout());
+        message.addActionListener(e -> {
+                currentMessage = message;
+                UpdateCurrentInfo();
+        });
         message.setHorizontalAlignment(SwingConstants.LEADING);
         message.setVisible(true);
+        message.setBackground(new Color(23,24,24));
+        message.setForeground(Color.decode("#e5e5e5"));
+        message.addPropertyChangeListener(JButton.TEXT_CHANGED_PROPERTY, new PropertyChangeListener()
+        {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt)
+            {
+                message.setBackground(new Color(107,20,20));
+                Timer timer = new Timer(350, new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        message.setBackground(new Color(23, 24, 24));
+                    }
+                });
+                timer.setRepeats(false);
+                timer.start();
+            }
+        });
+        if(currentMessage == null)
+        {
+            currentMessage = message;
+            UpdateCurrentInfo();
+        }
+
         messageList.add(message, constraint);
     }
 
@@ -151,14 +210,16 @@ class Console
         messageList.revalidate();
     }
 
-    private void createUIComponents()
+    private void UpdateCurrentInfo()
     {
-        messageList = new JPanel(new GridBagLayout());
-
-    }
-
-    private void UpdateCurrentInfo(DebugMessage message)
-    {
-        displayMessage.setText(message.GetLayoutMessage());
+        if(currentMessage != null)
+        {
+            displayMessage.setText(currentMessage.GetLayoutMessage());
+            int lineAmount = currentMessage.GetLayoutMessage().split(System.lineSeparator()).length;
+            //System.out.println(lineAmount);
+            //System.out.println(new Dimension(displayMessage.getSize().width, (int)(displayMessage.getFont().getSize()*lineAmount*1.3f)));
+            displayMessage.setPreferredSize(new Dimension(displayMessage.getSize().width, (int)(displayMessage.getFont().getSize()*lineAmount*1.3f)));
+            displayMessage.setSize(new Dimension(displayMessage.getSize().width, (int)(displayMessage.getFont().getSize()*lineAmount*1.3f)));
+        }
     }
 }

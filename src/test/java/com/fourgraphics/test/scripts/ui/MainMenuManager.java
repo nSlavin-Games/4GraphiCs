@@ -22,7 +22,7 @@ public class MainMenuManager extends Script
         playHover = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/playHover.png")).getPath());
         exitNormal = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/exit.png")).getPath());
         exitHover = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/exitHover.png")).getPath());
-        play = SceneManager.findObject("play fbutton").getComponent(Button.class);
+        play = SceneManager.findObject("play bfutton").getComponent(Button.class);
         exit = SceneManager.findObject("exit button").getComponent(Button.class);
 
         play.setTexture(playNormal);
@@ -32,6 +32,8 @@ public class MainMenuManager extends Script
 
     public void Update()
     {
+        if(Input.getKeyDown("F"))
+            DebugConsole.Info("F");
         if(play.mouseOver())
         {
             play.setTexture(playHover);
@@ -56,6 +58,6 @@ public class MainMenuManager extends Script
 
     private void Exit()
     {
-        sketch.exit();
+        SceneManager.quit();
     }
 }

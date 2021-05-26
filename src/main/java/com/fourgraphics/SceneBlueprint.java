@@ -109,7 +109,7 @@ public class SceneBlueprint
             }
         } catch(Exception e)
         {
-            DebugConsole.ErrorInternal(e.getStackTrace(),Thread.currentThread().getStackTrace());
+            DebugConsole.ErrorInternal("Script Initialization Error", e.getStackTrace(),Thread.currentThread().getStackTrace());
         }
     }
 
@@ -144,7 +144,7 @@ public class SceneBlueprint
             }
         } catch (Exception e)
         {
-            DebugConsole.ErrorInternal(e.getStackTrace(),Thread.currentThread().getStackTrace());
+            DebugConsole.ErrorInternal("Script Update Error", e.getStackTrace(),Thread.currentThread().getStackTrace());
         }
     }
 
@@ -172,7 +172,7 @@ public class SceneBlueprint
     {
         if(objectID >= objectList.size() || objectID < 0)
         {
-            DebugConsole.ErrorInternal("ID Cannot be found, make sure it's greater than 0 and less than the amount of objects in the scene", Thread.currentThread().getStackTrace());
+            DebugConsole.ErrorInternal("Object Retrieval Error", "ID Cannot be found, make sure it's greater than 0 and less than the amount of objects in the scene", Thread.currentThread().getStackTrace());
             return null;
         } else
             return objectList.get(objectID); //restituzione dell'oggetto contenuto in objectList con ID corrispondente al parametro
@@ -196,7 +196,7 @@ public class SceneBlueprint
                 return objectList.get(i); //restituzione dell'oggetto nella posizione corrente (i)
             }
         }
-        DebugConsole.ErrorInternal("Specified object [" + objectName + "] cannot be found!", Thread.currentThread().getStackTrace());
+        DebugConsole.ErrorInternal("Object Retrieval Error", "Specified object [" + objectName + "] cannot be found!", Thread.currentThread().getStackTrace());
         return null; //restituzione di default
     }
 

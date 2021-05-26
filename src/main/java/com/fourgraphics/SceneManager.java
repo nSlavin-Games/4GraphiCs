@@ -1,9 +1,11 @@
 package com.fourgraphics;
 
+import com.jogamp.nativewindow.WindowClosingProtocol;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PJOGL;
 
+import java.awt.event.WindowEvent;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -115,7 +117,7 @@ public class SceneManager
 
     public static void startGame()
     {
-        Rescaler.setSize(getApp().width, getApp().height);
+        setQuitMode();
         if(!debugMode)
             loadSceneInternal(0);
         else
@@ -247,6 +249,8 @@ public class SceneManager
             accumulator = 0;
         }
 
+        Rescaler.setSize(getApp().width, getApp().height);
+
         sceneList.get(activeSceneIndex).update();
         sceneList.get(activeSceneIndex).getCamera().calculateCamera(); //aggiorno la telecamera
 
@@ -372,5 +376,31 @@ public class SceneManager
     public static float fixedDeltaTime()
     {
         return fixedTimestep;
+    }
+
+    private static void setQuitMode()
+    {
+        if(debugMode)
+        {
+            // Get OpenGL window
+            com.jogamp.newt.opengl.GLWindow newtCanvas = (com.jogamp.newt.opengl.GLWindow) getApp().getSurface().getNative();
+            // Remove listeners added by Processing
+            for (com.jogamp.newt.event.WindowListener l : newtCanvas.getWindowListeners())
+                if (l.getClass().getName().startsWith("processing"))
+                    newtCanvas.removeWindowListener(l);
+            // Set on close action to do nothing i.e. keep the window open
+            newtCanvas.setDefaultCloseOperation(WindowClosingProtocol.WindowClosingMode.DISPOSE_ON_CLOSE);
+        }
+    }
+
+    public static void quit()
+    {
+        if(debugMode)
+        {
+            // Get OpenGL window
+            com.jogamp.newt.opengl.GLWindow newtCanvas = (com.jogamp.newt.opengl.GLWindow) getApp().getSurface().getNative();
+            newtCanvas.sendWindowEvent(WindowEvent.WINDOW_CLOSED);
+        } else
+            getApp().dispose();
     }
 }
