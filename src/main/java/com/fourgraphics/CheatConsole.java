@@ -1,5 +1,9 @@
 package com.fourgraphics;
 
+import com.fourgraphics.commands.Command;
+import com.fourgraphics.commands.DefaultCommands;
+import com.fourgraphics.commands.ICommandEvent;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -11,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +28,7 @@ public class CheatConsole {
     static DocOutputStream out;
     static PrintStream pout;
     static DocInputStream in;
+    private static HashMap<Command, ICommandEvent> commands = new HashMap<>();
     JFrame frame;
     StyledDocument doc;
     private JTextField consoleInput;
@@ -32,17 +38,13 @@ public class CheatConsole {
     private JScrollPane outputScrollPane;
     //    JTextField inputBox;
 
-    public void updateConsoleName(String name){
-        cheatsConsoleForProjectLabel.setText("Cheats Console for project " + SceneManager.getProjectTitle());
-        new JTextArea().setWrapStyleWord(true);
-    }
-
     public CheatConsole() {
         super();
-        cheatsConsoleForProjectLabel.setText(cheatsConsoleForProjectLabel.getText()+SceneManager.getProjectTitle());
+        cheatsConsoleForProjectLabel.setText(cheatsConsoleForProjectLabel.getText() + SceneManager.getProjectTitle());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {}
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
+        }
 
         consoleOutput.setPreferredSize(new Dimension(500, 500));
         doc = consoleOutput.getStyledDocument();
@@ -70,14 +72,33 @@ public class CheatConsole {
                 super.keyTyped(e);
                 if (e.getKeyChar() == "\n".toCharArray()[0]) {
                     try {
-                        out.write((consoleInput.getText() + "\n" ).getBytes(StandardCharsets.UTF_8));
+                        out.write(("> " + consoleInput.getText() + "\n").getBytes(StandardCharsets.UTF_8));
+//                        String command = consoleInput.getText().split(" ")[0];
+//                        ArrayList<String> listArgs = new ArrayList<>(Arrays.asList(consoleInput.getText().split(" ")));
+//                        listArgs.remove(0);
+//                        String[] args = listArgs.toArray(new String[0]);
+                        commands.forEach((commandProvider, commandEvent) -> {
+                            commandEvent.commandSent(consoleInput.getText());
+                        });
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
+                        consoleInput.setText("");
                     }
                     consoleInput.setText("");
                 }
             }
         });
+
+        registerCommand(new DefaultCommands());
+
+        commands.forEach((commandProvider, commandEvent) -> {
+            commandProvider.registerConsole(this);
+            commandProvider.registerCommands();
+        });
+    }
+
+    public static void updateCycle() {
+        commands.forEach((command, event) -> command.updateCycle());
     }
 
     public static InputStream getIn() {
@@ -86,6 +107,28 @@ public class CheatConsole {
 
     public static PrintStream getOut() {
         return pout;
+    }
+
+    public void updateConsoleName(String name) {
+        cheatsConsoleForProjectLabel.setText("Cheats Console for project " + SceneManager.getProjectTitle());
+        new JTextArea().setWrapStyleWord(true);
+    }
+
+    public void registerCommand(Command command) {
+        command.registerConsole(this);
+        command.registerCommands();
+    }
+
+    public void loadCommands() {
+        commands.forEach((command, event) -> {
+            command.registerCommands();
+            command.registerConsole(this);
+        });
+    }
+
+    public void commandReceivedEvent(Command provider, ICommandEvent event) {
+        if (commands.containsKey(provider)) commands.replace(provider, event);
+        else commands.put(provider, event);
     }
 
     public void setFGColor(Color c) {

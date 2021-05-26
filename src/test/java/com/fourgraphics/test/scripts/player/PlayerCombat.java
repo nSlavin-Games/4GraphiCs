@@ -26,6 +26,12 @@ public class PlayerCombat extends Combat
     Animator anim;
     Vector2 damageDirection = new Vector2();
 
+    public void setGod(boolean god) {
+        this.god = god;
+    }
+
+    public boolean god = false;
+
     public void Start()
     {
         anim = gameObject.getComponent(Animator.class);
@@ -34,10 +40,13 @@ public class PlayerCombat extends Combat
         fireballTimer = 0;
         meleeTimer = 0;
         currentIframes = 0;
+        god = false;
     }
 
     public void Update()
     {
+        if (god) currentIframes = 0.5f;
+
         if (meleeTimer >= 0)
             meleeTimer -= SceneManager.deltaTime();
         if (fireballTimer >= 0)

@@ -82,6 +82,10 @@ public class SceneManager
             DebugConsole.LaunchConsole();
     }
 
+    public static int getNumberOfScenes(){
+        return sceneList.size();
+    }
+
     public static void initialize(PApplet app, int screen, boolean debug)
     {
         mainApp = app;
@@ -229,7 +233,6 @@ public class SceneManager
      */
     public static void executeScene()
     {
-
         // Eseguo come prima cosa il calcolo del deltaTime, ovvero quanto è durato
         // l'ultimo frame
         float lastTime = time; // salvo quand'è cominciata l'ultima escuzione
@@ -265,6 +268,7 @@ public class SceneManager
         sceneList.get(activeSceneIndex).renderObjects(); //renderizzo gli oggetti
         sceneList.get(activeSceneIndex).renderUI(); //renderizzo l'UI
 
+        try{ CheatConsole.updateCycle(); } catch (Exception e) { e.printStackTrace(); }
         Input.updateKeyStatus(); //aggiorno lo stato degli Input
     }
 
@@ -354,7 +358,7 @@ public class SceneManager
      *
      * @return l'app principale
      */
-    protected static PApplet getApp()
+    public static PApplet getApp()
     {
         return mainApp;
     }

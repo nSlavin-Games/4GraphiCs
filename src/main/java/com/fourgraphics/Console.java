@@ -24,6 +24,7 @@ class Console
 
     private ArrayList<DebugMessage> existingMessages = new ArrayList<>();
 
+
     public Console()
     {
         try {
