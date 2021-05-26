@@ -22,11 +22,12 @@ public class MainMenuManager extends Script
         playHover = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/playHover.png")).getPath());
         exitNormal = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/exit.png")).getPath());
         exitHover = sketch.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Images/UI/MainMenu/exitHover.png")).getPath());
-        play = SceneManager.findObject("play button").getComponent(Button.class);
+        play = SceneManager.findObject("play fbutton").getComponent(Button.class);
         exit = SceneManager.findObject("exit button").getComponent(Button.class);
 
         play.setTexture(playNormal);
         exit.setTexture(exitNormal);
+        DebugConsole.Info("Loaded Menu");
     }
 
     public void Update()

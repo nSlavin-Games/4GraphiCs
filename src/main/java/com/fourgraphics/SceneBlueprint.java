@@ -97,16 +97,20 @@ public class SceneBlueprint
             }
         }
 
-
-        if(scriptList.size() > 0)
+        try
         {
-            //scena già inizializzata
-            for (Script s : scriptList)
-            { //per ogni script della lista scriptList
-                s.Start(); //inizializzazione di tutti gli script della scena
+            if(scriptList.size() > 0)
+            {
+                //scena già inizializzata
+                for (Script s : scriptList)
+                { //per ogni script della lista scriptList
+                    s.Start(); //inizializzazione di tutti gli script della scena
+                }
             }
+        } catch(Exception e)
+        {
+            DebugConsole.ErrorInternal(e.getStackTrace(),Thread.currentThread().getStackTrace());
         }
-
     }
 
     /**
@@ -128,15 +132,20 @@ public class SceneBlueprint
             SceneManager.getApp().popMatrix();
         }
 
-        if(scriptList.size() > 0)
+        try
         {
-            //NOTE(dfmolinari): ora esegue solo l'update degli script
-            for (int i = scriptList.size() - 1; i >= 0; i--)
+            if(scriptList.size() > 0)
             {
-                scriptList.get(i).Update();
+                //NOTE(dfmolinari): ora esegue solo l'update degli script
+                for (int i = scriptList.size() - 1; i >= 0; i--)
+                {
+                    scriptList.get(i).Update();
+                }
             }
+        } catch (Exception e)
+        {
+            DebugConsole.ErrorInternal(e.getStackTrace(),Thread.currentThread().getStackTrace());
         }
-
     }
 
     /**
@@ -161,7 +170,12 @@ public class SceneBlueprint
      */
     protected GameObject getObject(int objectID)
     {
-        return objectList.get(objectID); //restituzione dell'oggetto contenuto in objectList con ID corrispondente al parametro
+        if(objectID >= objectList.size() || objectID < 0)
+        {
+            DebugConsole.ErrorInternal("ID Cannot be found, make sure it's greater than 0 and less than the amount of objects in the scene", Thread.currentThread().getStackTrace());
+            return null;
+        } else
+            return objectList.get(objectID); //restituzione dell'oggetto contenuto in objectList con ID corrispondente al parametro
     }
 
     /**
@@ -182,6 +196,7 @@ public class SceneBlueprint
                 return objectList.get(i); //restituzione dell'oggetto nella posizione corrente (i)
             }
         }
+        DebugConsole.ErrorInternal("Specified object [" + objectName + "] cannot be found!", Thread.currentThread().getStackTrace());
         return null; //restituzione di default
     }
 

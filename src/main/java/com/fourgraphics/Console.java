@@ -7,35 +7,37 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Objects;
 
 class Console
 {
-    protected static Console Instance;
-
     private JFrame console;
-    protected JLabel displayedMessage;
     private JPanel consoleBase;
     protected JPanel messageList;
     private JScrollPane scroll;
     private JPanel infoPanel;
+    private JTextArea displayMessage;
 
-    public static void main(String[] args)
-    {
-        Instance = new Console();
-    }
+    private ArrayList<DebugMessage> existingMessages = new ArrayList<>();
 
     public Console()
     {
         console = new JFrame("4GraphiCs Console");
+        consoleBase.setBackground(Color.getHSBColor(180,0.042f,0.094f));
         console.setContentPane(consoleBase);
         console.pack();
         console.setVisible(true);
         createUIComponents();
+        scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setViewportView(messageList);
         scroll.getViewport().getView().setBackground(Color.getHSBColor(180,0.042f,0.094f));
+
         Border border = BorderFactory.createLineBorder(Color.getHSBColor(0,0.813f,0.42f),5);
         infoPanel.setBorder(border);
+        console.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         consoleBase.addComponentListener(new ComponentAdapter()
         {
             @Override
@@ -63,13 +65,45 @@ class Console
 
     protected void AddMessage(DebugMessage message)
     {
+        //System.out.println(existingMessages.size());
+        if(existingMessages.size() == 0)
+        {
+            message.occurencies++;
+            existingMessages.add(message);
+            CreateMessage(message);
+        }
+        else
+        {
+            boolean found = false;
+            for(int i = existingMessages.size() -1; i >= 0; i--)
+            {
+                if(existingMessages.get(i).content.equalsIgnoreCase(message.content) && existingMessages.get(i).messageType == message.messageType)
+                {
+                    existingMessages.get(i).occurencies++;
+                    existingMessages.get(i).setText(existingMessages.get(i).content + " | " + existingMessages.get(i).occurencies);
+                    found = true;
+                }
+            }
+            if(!found)
+            {
+                message.occurencies++;
+                existingMessages.add(message);
+                CreateMessage(message);
+            }
+        }
+    }
+
+    private void CreateMessage(DebugMessage message)
+    {
         GridBagConstraints constraint = new GridBagConstraints();
-        constraint.anchor = GridBagConstraints.NORTH;
-        constraint.fill = GridBagConstraints.NONE;
+        constraint.anchor = GridBagConstraints.FIRST_LINE_START;
+        constraint.fill = GridBagConstraints.HORIZONTAL;
         constraint.gridx = 0;
         constraint.gridy = GridBagConstraints.RELATIVE;
         constraint.weightx = 1.0f;
-        constraint.weighty = 1.0f;
+        constraint.weighty = 1f;
+        constraint.insets = new Insets(0,0,0,0);
+
         Icon logIcon = new ImageIcon();
         switch (message.messageType)
         {
@@ -86,8 +120,7 @@ class Console
         message.setIcon(logIcon);
         message.setText(message.content);
         message.addActionListener(e -> UpdateCurrentInfo(message));
-        message.setPreferredSize(new Dimension(messageList.getBounds().width, 50));
-        message.setSize(new Dimension(messageList.getBounds().width, 50));
+        message.setHorizontalAlignment(SwingConstants.LEADING);
         message.setVisible(true);
         messageList.add(message, constraint);
     }
@@ -96,9 +129,10 @@ class Console
     {
         for (int i = 0; i < messageList.getComponentCount(); i++)
         {
-            messageList.getComponent(i).setPreferredSize(new Dimension(console.getBounds().width - 5, 50));
-            messageList.getComponent(i).setSize(new Dimension(console.getBounds().width - 5, 50));
+            messageList.getComponent(i).setPreferredSize(new Dimension(console.getBounds().width, 50));
+            messageList.getComponent(i).setSize(new Dimension(console.getBounds().width, 50));
             messageList.getComponent(i).setVisible(true);
+            ((JButton)messageList.getComponent(i)).setVerticalAlignment(JButton.TOP);
         }
         messageList.revalidate();
     }
@@ -106,10 +140,11 @@ class Console
     private void createUIComponents()
     {
         messageList = new JPanel(new GridBagLayout());
+
     }
 
     private void UpdateCurrentInfo(DebugMessage message)
     {
-        displayedMessage.setText(message.GetLayoutMessage());
+        displayMessage.setText(message.GetLayoutMessage());
     }
 }

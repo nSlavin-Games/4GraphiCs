@@ -70,8 +70,7 @@ public class GameObject {
                 addComponent(other.componentList.get(i).clone());
             }
         } catch (Exception e) {
-            Logger.getLogger("4GraphiCs | GameObject").log(Level.WARNING, "Unable to clone element in GameObject: ");
-            e.printStackTrace();
+            DebugConsole.ErrorInternal("Unknown Error, unable to clone element in GameObject",Thread.currentThread().getStackTrace());
         }
         name = other.name;
     }
@@ -93,7 +92,8 @@ public class GameObject {
             }
         }
         //se non viene trovato nessun componente dello stesso tipo di type viene mandato un errore
-        throw new InvalidParameterException("There is no component of the specified type");
+        DebugConsole.ErrorInternal("Cannot find component of type [" + type.getName() + "] on this object", Thread.currentThread().getStackTrace());
+        return null;
     }
 
     /**
@@ -109,7 +109,8 @@ public class GameObject {
                 if(component.getClass().equals(obj.getClass())
                 || (component instanceof Renderable && obj instanceof Renderable)
                 || (component instanceof UIElement && obj instanceof UIElement)){
-                    throw new InvalidParameterException("A component of the specified type (" + component.getClass().getName() + ") already exists");
+                    DebugConsole.ErrorInternal("A component of the specified type (" + component.getClass().getName() + ") already exists",Thread.currentThread().getStackTrace());
+                    return;
                 }
             }
         }
