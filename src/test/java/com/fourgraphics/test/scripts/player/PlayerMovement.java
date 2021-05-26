@@ -8,6 +8,7 @@ public class PlayerMovement extends Script {
 
     Animator anim;
 
+    public boolean moonJump = false;
     boolean isGrounded;
     float yVelocity;
     float yForce;
@@ -22,6 +23,7 @@ public class PlayerMovement extends Script {
         SceneManager.getActiveScene().getCamera().setOffset(new Vector2(0,-sketch.height/2+300));
         anim = gameObject.getComponent(Animator.class);
         anim.playAnimation("playerIdleRight");
+        moonJump = false;
     }
 
     public void Update() {
@@ -44,7 +46,7 @@ public class PlayerMovement extends Script {
         lastDirection = Input.getAxis("Horizontal") != 0 ? (int) Input.getAxis("Horizontal") : lastDirection;
         boolean dirChanged = temp != lastDirection;
         //Controllo se sono a terra
-        if (isGrounded) {
+        if (isGrounded || moonJump) {
             if((!anim.getCurrentAnimation().getName().contains("Slash") && !anim.getCurrentAnimation().getName().contains("Throw") && !anim.getCurrentAnimation().getName().contains("Damage")) ||
               ((anim.getCurrentAnimation().getName().contains("Slash") || anim.getCurrentAnimation().getName().contains("Throw") || anim.getCurrentAnimation().getName().contains("Damage")) && anim.getCurrentAnimation().isEnded()))
             {
@@ -72,6 +74,10 @@ public class PlayerMovement extends Script {
         }
 
         isGrounded = false; //resetto il grounded
+    }
+
+    public void setMoonJump(boolean moonJump) {
+        this.moonJump = moonJump;
     }
 
     public void FixedUpdate()

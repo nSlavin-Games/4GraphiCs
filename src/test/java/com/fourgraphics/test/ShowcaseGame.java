@@ -1,11 +1,10 @@
 package com.fourgraphics.test;
 
 import com.fourgraphics.*;
+import com.fourgraphics.test.commands.ConsoleCommands;
 import com.fourgraphics.test.scripts.enemies.Mage;
 import com.fourgraphics.test.scripts.enemies.Slime;
 import com.fourgraphics.test.scripts.generic.FellOff;
-import com.fourgraphics.test.scripts.player.*;
-import com.fourgraphics.test.scripts.ui.*;
 import com.fourgraphics.test.scripts.player.PlayerCombat;
 import com.fourgraphics.test.scripts.player.PlayerMovement;
 import com.fourgraphics.test.scripts.ui.MainMenuManager;
@@ -113,8 +112,8 @@ public class ShowcaseGame extends PApplet {
             if (finalArg.equals("console")) {
                 flags.add("console");
                 console = new CheatConsole();
+                console.registerCommand(new ConsoleCommands());
             }
-
         }
         PApplet.runSketch(appletArgs, sketch);
     }
