@@ -5,8 +5,6 @@ import com.fourgraphics.test.scripts.enemies.*;
 import com.fourgraphics.test.scripts.generic.FellOff;
 import com.fourgraphics.test.scripts.player.*;
 import com.fourgraphics.test.scripts.ui.*;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
@@ -98,6 +96,8 @@ public class ShowcaseGame extends PApplet
     PImage heartImage;
 
     ClassLoader classLoader;
+    static boolean debug = false;
+    static boolean noIntro = false;
 
     public static void main(String[] args)
     {
@@ -111,7 +111,7 @@ public class ShowcaseGame extends PApplet
     public void settings()
     {
         classLoader = Thread.currentThread().getContextClassLoader();
-        SceneManager.initialize(this, 2);
+        SceneManager.initialize(this, 2, true);
         noSmooth();
         //TODO(samu): usare un file di config per i keybinds e creare un file default se assente
         Input.createAxis("Horizontal", "d", "a", "right", "left");

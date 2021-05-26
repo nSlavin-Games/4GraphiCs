@@ -6,6 +6,7 @@ import processing.opengl.PJOGL;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -60,10 +61,14 @@ public class SceneManager
 
     private static ArrayList<PImage> introImages = new ArrayList<>();
 
+    private static boolean debugMode;
+
+    private static HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
+
     /**
      * Inizializza la lista delle scene e l’index della scena attiva
      */
-    public static void initialize(PApplet app)
+    public static void initialize(PApplet app, boolean debug)
     {
         mainApp = app;
         app.fullScreen(app.P3D);
@@ -73,9 +78,27 @@ public class SceneManager
         setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
         introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
         CreateIntro();
+        debugMode = debug;
+        if (debugMode)
+            DebugConsole.LaunchConsole();
     }
 
-    public static void initialize(PApplet app, int screen)
+    public static void initialize(PApplet app, HashMap<String, Boolean> flags)
+    {
+        mainApp = app;
+        app.fullScreen(app.P3D);
+        sceneList = new ArrayList<>();
+        inputManager = new InputManager();
+        Input.setup(inputManager);
+        setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
+        introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
+        if (!flags.get("noIntro") && flags.get("noIntro") != null)
+            CreateIntro();
+        if (flags.get("debug"))
+            DebugConsole.LaunchConsole();
+    }
+
+    public static void initialize(PApplet app, int screen, boolean debug)
     {
         mainApp = app;
         app.fullScreen(app.P3D, screen);
@@ -85,12 +108,15 @@ public class SceneManager
         setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
         introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
         CreateIntro();
+        debugMode = debug;
+        if (debugMode)
+            DebugConsole.LaunchConsole();
     }
 
-    public static void initialize(PApplet app, int width, int height)
+    public static void initialize(PApplet app, int width, int height, boolean debug)
     {
         mainApp = app;
-        app.size(width,height,app.P3D);
+        app.size(width, height, app.P3D);
         sceneList = new ArrayList<>();
         inputManager = new InputManager();
         Input.setup(inputManager);
@@ -98,12 +124,18 @@ public class SceneManager
         Rescaler.setSize(width, height);
         introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
         CreateIntro();
+        debugMode = debug;
+        if (debugMode)
+            DebugConsole.LaunchConsole();
     }
 
     public static void startGame()
     {
         Rescaler.setSize(getApp().width, getApp().height);
-        loadSceneInternal(0);
+        if(!debugMode)
+            loadSceneInternal(0);
+        else
+            loadScene(1);
     }
 
     public static void addIntroLogo(PImage logo)
@@ -122,24 +154,24 @@ public class SceneManager
 
         public void Update()
         {
-            if(!fadedIn && alpha < 255)
+            if (!fadedIn && alpha < 255)
             {
                 alpha += 3;
-                if(alpha >= 255)
+                if (alpha >= 255)
                 {
                     alpha = 255;
                     fadedIn = true;
                 }
             }
-            if(fadedIn)
+            if (fadedIn)
             {
                 introTimer += SceneManager.deltaTime();
                 if (introTimer >= introDuration)
                 {
-                    if(alpha > 0)
+                    if (alpha > 0)
                     {
                         alpha -= 3;
-                        if(alpha <= 0)
+                        if (alpha <= 0)
                         {
                             alpha = 0;
                             currentIndex++;
@@ -161,7 +193,7 @@ public class SceneManager
                     }
                 }
             }
-            sketch.tint(255,alpha);
+            sketch.tint(255, alpha);
         }
     }
 
@@ -172,11 +204,11 @@ public class SceneManager
                         GameObject.Compose(
                                 "4GC Logo",
                                 0, 0,
-                                introImages.get(0).width,introImages.get(0).height,
+                                introImages.get(0).width, introImages.get(0).height,
                                 new Renderer(introImages.get(0)),
                                 new Intro()
                         )
-                ).setBackground(getApp().color(23,24,24)));
+                ).setBackground(getApp().color(23, 24, 24)));
     }
 
     public static void setProjectIcon(String icon)
@@ -191,7 +223,7 @@ public class SceneManager
 
     public static void setCursorState(boolean state)
     {
-        if(state)
+        if (state)
             getApp().getSurface().showCursor();
         else
             getApp().getSurface().hideCursor();
@@ -200,7 +232,7 @@ public class SceneManager
     public static void setCursorImage(PImage image)
     {
         //TODO: not yet implemented
-        getApp().getSurface().setCursor(image,0,0);
+        getApp().getSurface().setCursor(image, 0, 0);
     }
 
     /**
@@ -220,7 +252,8 @@ public class SceneManager
 
         accumulator += deltaTime(); //utilizzato per eseguire un metodo in un fixed timestep
 
-        if (skipInitialFrames < 5) {
+        if (skipInitialFrames < 5)
+        {
             skipInitialFrames++;
             accumulator = 0;
         }
@@ -229,7 +262,8 @@ public class SceneManager
         sceneList.get(activeSceneIndex).getCamera().calculateCamera(); //aggiorno la telecamera
 
         //il valore si può accumulare fino a diventare maggiore del fixed timestep e viene eseguito finché non torna minore
-        while (accumulator >= fixedTimestep) {
+        while (accumulator >= fixedTimestep)
+        {
             sceneList.get(activeSceneIndex).fixedUpdate(); //eseguo il fixed update nella scena attuale
             accumulator -= fixedTimestep; //all'accumulator tolgo il valore del fixed timestep, se rimane sopra rieseguo il fixed update
             sceneList.get(activeSceneIndex).calculateCollisions(); //calcolo le collisioni
@@ -252,7 +286,7 @@ public class SceneManager
      */
     public static void loadScene(int index)
     {
-        if(index > 0)
+        if (index > 0)
         {
             activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
             sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
