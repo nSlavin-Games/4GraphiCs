@@ -19,11 +19,16 @@ class Console
     private JScrollPane scroll;
     private JPanel infoPanel;
     private JTextArea displayMessage;
+    GridBagConstraints constraint = new GridBagConstraints();
+    JPanel filler = new JPanel();
 
     private ArrayList<DebugMessage> existingMessages = new ArrayList<>();
 
     public Console()
     {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {}
         console = new JFrame("4GraphiCs Console");
         consoleBase.setBackground(Color.getHSBColor(180,0.042f,0.094f));
         console.setContentPane(consoleBase);
@@ -61,6 +66,14 @@ class Console
                 UpdateMessageList();
             }
         });
+
+
+        GridBagConstraints fillerConstraints = new GridBagConstraints();
+        filler.setOpaque(false);
+        fillerConstraints.weightx = 2f;
+        fillerConstraints.weighty = 2f;
+        fillerConstraints.gridy = 100;
+        messageList.add(filler, fillerConstraints);
     }
 
     protected void AddMessage(DebugMessage message)
@@ -95,13 +108,14 @@ class Console
 
     private void CreateMessage(DebugMessage message)
     {
-        GridBagConstraints constraint = new GridBagConstraints();
+        if(constraint.gridy == 99)
+            messageList.remove(filler);
         constraint.anchor = GridBagConstraints.FIRST_LINE_START;
         constraint.fill = GridBagConstraints.HORIZONTAL;
         constraint.gridx = 0;
-        constraint.gridy = GridBagConstraints.RELATIVE;
+        constraint.gridy++;
         constraint.weightx = 1.0f;
-        constraint.weighty = 1f;
+//        constraint.weighty = 0.1f;
         constraint.insets = new Insets(0,0,0,0);
 
         Icon logIcon = new ImageIcon();
@@ -132,7 +146,7 @@ class Console
             messageList.getComponent(i).setPreferredSize(new Dimension(console.getBounds().width, 50));
             messageList.getComponent(i).setSize(new Dimension(console.getBounds().width, 50));
             messageList.getComponent(i).setVisible(true);
-            ((JButton)messageList.getComponent(i)).setVerticalAlignment(JButton.TOP);
+//            ((JButton)messageList.getComponent(i)).setVerticalAlignment(JButton.TOP);
         }
         messageList.revalidate();
     }
