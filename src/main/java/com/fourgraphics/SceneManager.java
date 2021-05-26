@@ -6,7 +6,6 @@ import processing.opengl.PJOGL;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -61,9 +60,9 @@ public class SceneManager
 
     private static ArrayList<PImage> introImages = new ArrayList<>();
 
-    private static boolean debugMode;
+    private static String projectTitle = "4GraphiCs Project";
 
-    private static HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
+    private static boolean debugMode;
 
     /**
      * Inizializza la lista delle scene e l’index della scena attiva
@@ -80,21 +79,6 @@ public class SceneManager
         CreateIntro();
         debugMode = debug;
         if (debugMode)
-            DebugConsole.LaunchConsole();
-    }
-
-    public static void initialize(PApplet app, HashMap<String, Boolean> flags)
-    {
-        mainApp = app;
-        app.fullScreen(app.P3D);
-        sceneList = new ArrayList<>();
-        inputManager = new InputManager();
-        Input.setup(inputManager);
-        setProjectIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath());
-        introImages.add(app.loadImage(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo_Transparent.png")).getPath()));
-        if (!flags.get("noIntro") && flags.get("noIntro") != null)
-            CreateIntro();
-        if (flags.get("debug"))
             DebugConsole.LaunchConsole();
     }
 
@@ -141,6 +125,10 @@ public class SceneManager
     public static void addIntroLogo(PImage logo)
     {
         introImages.add(logo);
+    }
+
+    public static String getProjectTitle(){
+        return projectTitle;
     }
 
     private static class Intro extends Script
@@ -219,6 +207,7 @@ public class SceneManager
     public static void setProjectTitle(String title)
     {
         getApp().getSurface().setTitle(title);
+        projectTitle = title;
     }
 
     public static void setCursorState(boolean state)

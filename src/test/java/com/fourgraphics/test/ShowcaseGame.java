@@ -1,18 +1,22 @@
 package com.fourgraphics.test;
 
 import com.fourgraphics.*;
-import com.fourgraphics.test.scripts.enemies.*;
+import com.fourgraphics.test.scripts.enemies.Mage;
+import com.fourgraphics.test.scripts.enemies.Slime;
 import com.fourgraphics.test.scripts.generic.FellOff;
 import com.fourgraphics.test.scripts.player.*;
 import com.fourgraphics.test.scripts.ui.*;
+import com.fourgraphics.test.scripts.player.PlayerCombat;
+import com.fourgraphics.test.scripts.player.PlayerMovement;
+import com.fourgraphics.test.scripts.ui.MainMenuManager;
+import com.fourgraphics.test.scripts.ui.UltimateIndicator;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
 
-import java.util.Objects;
+import java.util.*;
 
-public class ShowcaseGame extends PApplet
-{
+public class ShowcaseGame extends PApplet {
     //region Animations
     //region Ultimate
     public static Animation ultimateLeft = new Animation(0.1f, true, "ultimateLeft");
@@ -53,7 +57,7 @@ public class ShowcaseGame extends PApplet
     //endregion
     //region Run
     public static Animation playerRunLeft = new Animation(0.1f, true, "playerRunLeft");
-    public static Animation playerRunRight = new Animation(0.1f, true,"playerRunRight");
+    public static Animation playerRunRight = new Animation(0.1f, true, "playerRunRight");
     //endregion
     //region Slash
     public static Animation playerSlashLeft = new Animation(0.05f, "playerSlashLeft");
@@ -68,12 +72,13 @@ public class ShowcaseGame extends PApplet
     public static Animation playerJumpRight = new Animation(0.08f, "playerJumpRight");
     //endregion
     //region Fall
-    public static Animation playerFallLeft = new Animation(0.08f, true,"playerFallLeft");
-    public static Animation playerFallRight = new Animation(0.08f, true,"playerFallRight");
+    public static Animation playerFallLeft = new Animation(0.08f, true, "playerFallLeft");
+    public static Animation playerFallRight = new Animation(0.08f, true, "playerFallRight");
     //endregion
     //region Damage
-    public static Animation playerDamageLeft = new Animation(0.5f,"playerDamageLeft");
-    public static Animation playerDamageRight = new Animation(0.5f,"playerDamageRight");
+    public static Animation playerDamageLeft = new Animation(0.5f, "playerDamageLeft");
+    public static Animation playerDamageRight = new Animation(0.5f, "playerDamageRight");
+    static CheatConsole console;
     //endregion
     //endregion
     //region Portal
@@ -96,20 +101,27 @@ public class ShowcaseGame extends PApplet
     PImage heartImage;
 
     ClassLoader classLoader;
-    static boolean debug = false;
-    static boolean noIntro = false;
+    private static ArrayList<String> flags = new ArrayList<>();
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         //TODO(samu): settings override fatto bene con args (appendere args a appletArgs e sfruttarlo per le options (file options.ini?))
         String[] appletArgs = {"Test Game"};
+        ArrayList<String> finalArgs = new ArrayList<>(Arrays.asList(args));
+        finalArgs.addAll(Arrays.asList(appletArgs));
         ShowcaseGame sketch = new ShowcaseGame();
+        for (String finalArg : finalArgs) {
+            System.out.println(finalArg);
+            if (finalArg.equals("console")) {
+                flags.add("console");
+                console = new CheatConsole();
+            }
+
+        }
         PApplet.runSketch(appletArgs, sketch);
     }
 
 
-    public void settings()
-    {
+    public void settings() {
         classLoader = Thread.currentThread().getContextClassLoader();
         SceneManager.initialize(this, 2, true);
         noSmooth();
@@ -136,56 +148,48 @@ public class ShowcaseGame extends PApplet
 
         //Carica le animazioni
         //TODO(sv-molinari): DOBBIAMO TROVARE UNA SOLUZIONE A QUESTO SCHIFO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        try
-        {
+        try {
             //Ultimate
-            for (int i = 0; i < 10; i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 if (i < 5)
                     ultimateRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Ultimate/ultimate_" + i + ".png")).getPath()));
                 else
                     ultimateLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Ultimate/ultimate_" + i + ".png")).getPath()));
             }
             //Fireball
-            for (int i = 0; i < 12; i++)
-            {
+            for (int i = 0; i < 12; i++) {
                 if (i < 6)
                     fireballAnimationLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Fireball/fireball_" + i + ".png")).getPath()));
                 else
                     fireballAnimationRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Fireball/fireball_" + i + ".png")).getPath()));
             }
             //Melee
-            for (int i = 0; i < 10; i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 if (i < 5)
                     meleeAnimationRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Melee_Attack/melee_" + i + ".png")).getPath()));
                 else
                     meleeAnimationLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Melee_Attack/melee_" + i + ".png")).getPath()));
             }
             //Mage Idle
-            for (int i = 0; i < 12; i++)
-            {
+            for (int i = 0; i < 12; i++) {
                 if (i < 6)
                     mageIdleLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Idle/mage_" + i + ".png")).getPath()));
                 else
                     mageIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Idle/mage_" + i + ".png")).getPath()));
             }
             //Mage Attack
-            for (int i = 0; i < 14; i++)
-            {
+            for (int i = 0; i < 14; i++) {
                 if (i < 7)
                     mageAttackLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Attack/mage_attack_" + i + ".png")).getPath()));
                 else
                     mageAttackRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Mage/Attack/mage_attack_" + i + ".png")).getPath()));
             }
             //Slime Idle
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 slimeIdle.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Slime/Idle/slime_" + i + ".png")).getPath()));
             }
             //Slime Attack
-            for (int i = 0; i < 12; i++)
-            {
+            for (int i = 0; i < 12; i++) {
                 if (i < 6)
                     slimeChaseLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Slime/Attack/slime_attack_" + i + ".png")).getPath()));
                 else
@@ -193,32 +197,28 @@ public class ShowcaseGame extends PApplet
             }
 
             //Player Idle
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 if (i < 4)
                     playerIdleLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
                 else
                     playerIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
             }
             //Player Run
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 if (i < 4)
                     playerRunRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Run/Player_Run_" + i + ".png")).getPath()));
                 else
                     playerRunLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Run/Player_Run_" + i + ".png")).getPath()));
             }
             //Player Slash
-            for (int i = 0; i < 10; i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 if (i < 5)
                     playerSlashRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Slash/Player_Slash_" + i + ".png")).getPath()));
                 else
                     playerSlashLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Slash/Player_Slash_" + i + ".png")).getPath()));
             }
             //Player Throw
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 if (i < 4)
                     playerThrowRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Throw/Player_Throw_" + i + ".png")).getPath()));
                 else
@@ -228,8 +228,7 @@ public class ShowcaseGame extends PApplet
             playerJumpRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Jump_0.png")).getPath()));
             playerJumpLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Jump_1.png")).getPath()));
             //Player Fall
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 if (i < 2)
                     playerFallRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Jump/Player_Fall_" + i + ".png")).getPath()));
                 else
@@ -239,23 +238,22 @@ public class ShowcaseGame extends PApplet
             playerDamageRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_0.png")).getPath()));
             playerDamageLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Hit/Player_Hit_1.png")).getPath()));
             //Portal
-            for(int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 portal.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Portal/portal_" + i + ".png")).getPath()));
             }
 
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
             ignored.printStackTrace();
         }
 
         SceneManager.addIntroLogo(loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/NSG_Transparent.png")).getPath()));
     }
 
-    public void setup()
-    {
+    public void setup() {
         //TODO(samu): prendere il framerate cap da options.ini(/config, DA FARE, tbd), e vedere se è possibile prendere il refresh rate del monitor alla creazione del config base
         SceneManager.setProjectTitle("4GraphiCs Showcase");
+        if (flags.contains("console"))
+            console.updateConsoleName("4GraphiCs Showcase");
         ((PGraphicsOpenGL) g).textureSampling(3);
         MainMenu();
         NiceTutorial();
@@ -263,42 +261,40 @@ public class ShowcaseGame extends PApplet
         SceneManager.startGame();
     }
 
-    void MainMenu()
-    {
+    void MainMenu() {
         PImage title = loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/MainMenu/Title.png")).getPath());
 
         SceneManager.addScene(new SceneBlueprint()
                 .setObjectList(
                         GameObject.Compose(
                                 "menu manager",
-                                0,0,
-                                0,0,
+                                0, 0,
+                                0, 0,
                                 new MainMenuManager()
                         ),
                         GameObject.Compose(
                                 "Title",
-                                0,-350,
-                                630,120,
-                                new Panel(" ", title,false)
+                                0, -350,
+                                630, 120,
+                                new Panel(" ", title, false)
                         ),
                         GameObject.Compose(
                                 "play button",
-                                0,-75,
-                                150,50,
-                                new Button(" ", title,false)
+                                0, -75,
+                                150, 50,
+                                new Button(" ", title, false)
                         ),
                         GameObject.Compose(
                                 "exit button",
-                                0,0,
-                                150,50,
-                                new Button(" ", title,false)
+                                0, 0,
+                                150, 50,
+                                new Button(" ", title, false)
                         )
                 ).setBackground(firstLevelBackground)
         );
     }
 
-    void NiceTutorial()
-    {
+    void NiceTutorial() {
         /*
         ━━╮
         ╰┃ ┣▇━▇
@@ -316,13 +312,13 @@ public class ShowcaseGame extends PApplet
         int terrainHeight = (int) (terrainWidth * 0.3379f);
 
         int tallHeight = 288;
-        int tallWidth = (int)(tallHeight * 0.333333333f);
+        int tallWidth = (int) (tallHeight * 0.333333333f);
 
         int wideWidth = 200;
-        int wideHeight = wideWidth/3;
+        int wideHeight = wideWidth / 3;
 
         int playerHeight = 85;
-        int playerWidth = (int)(playerHeight * 0.9375f);
+        int playerWidth = (int) (playerHeight * 0.9375f);
 
         int heartHeight = 60;
         int heartWidth = (int) (heartHeight * 1.16666666f);
@@ -330,166 +326,166 @@ public class ShowcaseGame extends PApplet
         int ultSize = 150;
 
         int slimeHeight = 54;
-        int slimeWidth = (int)(slimeHeight * 2.22222f);
+        int slimeWidth = (int) (slimeHeight * 2.22222f);
 
         int portalHeight = 200;
-        int portalWidth = (int)(portalHeight * 0.542857f);
+        int portalWidth = (int) (portalHeight * 0.542857f);
 
         SceneManager.addScene(new SceneBlueprint()
                 .setObjectList(
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*1.5f-tallWidth*3f-25,-terrainWidth/2f+30,
-                                tallWidth,tallHeight,
+                                terrainWidth * 1.5f - tallWidth * 3f - 25, -terrainWidth / 2f + 30,
+                                tallWidth, tallHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainTall)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*1.5f-tallWidth/2f,-terrainWidth/2f-80,
-                                tallWidth,tallHeight,
+                                terrainWidth * 1.5f - tallWidth / 2f, -terrainWidth / 2f - 80,
+                                tallWidth, tallHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainTall)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                0,0,
-                                terrainWidth,terrainWidth,
+                                0, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*2 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 2 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*3 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 3 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*4 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 4 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*5 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 5 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*6 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 6 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*11 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 11 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*12 + 450,0,
-                                terrainWidth,terrainWidth,
+                                terrainWidth * 12 + 450, 0,
+                                terrainWidth, terrainWidth,
                                 new RectCollider(false, false),
                                 new Renderer(terrainSquare)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*5 + 450,-terrainWidth/2f-200,
-                                wideWidth,wideHeight,
+                                terrainWidth * 5 + 450, -terrainWidth / 2f - 200,
+                                wideWidth, wideHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*6 + 450,-terrainWidth/2f-350,
-                                wideWidth,wideHeight,
+                                terrainWidth * 6 + 450, -terrainWidth / 2f - 350,
+                                wideWidth, wideHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*7 + 450,-terrainWidth/2f-350,
-                                wideWidth,wideHeight,
+                                terrainWidth * 7 + 450, -terrainWidth / 2f - 350,
+                                wideWidth, wideHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*8 + 450,-terrainWidth/2f-350,
-                                wideWidth,wideHeight,
+                                terrainWidth * 8 + 450, -terrainWidth / 2f - 350,
+                                wideWidth, wideHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         GameObject.Compose(
                                 "terrain",
-                                terrainWidth*9 + 450,-terrainWidth/2f-350,
-                                wideWidth,wideHeight,
+                                terrainWidth * 9 + 450, -terrainWidth / 2f - 350,
+                                wideWidth, wideHeight,
                                 new RectCollider(false, false),
                                 new Renderer(terrainWide)
                         ),
                         GameObject.Compose(
                                 "slime",
-                                terrainWidth*2.5f + 450, -terrainWidth/2f,
+                                terrainWidth * 2.5f + 450, -terrainWidth / 2f,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(false,false)
+                                new Slime(false, false)
                         ),
                         GameObject.Compose(
                                 "slime",
-                                terrainWidth*4f + 450, -terrainWidth/2f,
+                                terrainWidth * 4f + 450, -terrainWidth / 2f,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true,true)
+                                new Slime(true, true)
                         ),
                         GameObject.Compose(
                                 "slime",
-                                terrainWidth*9 + wideWidth/2.5f + 450,-terrainWidth/2f-370,
+                                terrainWidth * 9 + wideWidth / 2.5f + 450, -terrainWidth / 2f - 370,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true,false)
+                                new Slime(true, false)
                         ),
                         GameObject.Compose(
                                 "slime",
-                                terrainWidth*11.5f + 450, -terrainWidth/2f,
+                                terrainWidth * 11.5f + 450, -terrainWidth / 2f,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true,false)
+                                new Slime(true, false)
                         ),
                         GameObject.Compose(
                                 "portal",
-                                terrainWidth*12 + 450,-terrainWidth/2f-portalHeight/2f,
-                                portalWidth,portalHeight,
+                                terrainWidth * 12 + 450, -terrainWidth / 2f - portalHeight / 2f,
+                                portalWidth, portalHeight,
                                 new Animator(portal.clone())
                         ),
                         GameObject.Compose(
                                 "player",
-                                -200,-terrainWidth/2f,
+                                -200, -terrainWidth / 2f,
                                 playerWidth, playerHeight,
                                 new RectCollider(true, false),
                                 new Animator(
@@ -506,37 +502,37 @@ public class ShowcaseGame extends PApplet
                         ),
                         GameObject.Compose(
                                 "Health 1",
-                                -1920/2f+heartWidth/2f+25,-1080/2f+heartHeight/2f+25,
-                                heartWidth,heartHeight,
+                                -1920 / 2f + heartWidth / 2f + 25, -1080 / 2f + heartHeight / 2f + 25,
+                                heartWidth, heartHeight,
                                 new Panel(" ", heartImage, false)
                         ),
                         GameObject.Compose(
                                 "Health 2",
-                                -1920/2f+heartWidth*2f,-1080/2f+heartHeight/2f+25,
-                                heartWidth,heartHeight,
+                                -1920 / 2f + heartWidth * 2f, -1080 / 2f + heartHeight / 2f + 25,
+                                heartWidth, heartHeight,
                                 new Panel(" ", heartImage, false)
                         ),
                         GameObject.Compose(
                                 "Health 3",
-                                -1920/2f+heartWidth*2.5f+45,-1080/2f+heartHeight/2f+25,
-                                heartWidth,heartHeight,
+                                -1920 / 2f + heartWidth * 2.5f + 45, -1080 / 2f + heartHeight / 2f + 25,
+                                heartWidth, heartHeight,
                                 new Panel(" ", heartImage, false)
                         ),
                         GameObject.Compose(
                                 "ult indicator",
-                                1920/2f-ultSize/2f-25,1080/2f-ultSize/2f-25,
-                                ultSize,ultSize,
+                                1920 / 2f - ultSize / 2f - 25, 1080 / 2f - ultSize / 2f - 25,
+                                ultSize, ultSize,
                                 new Panel(" ", loadImage(Objects.requireNonNull(classLoader.getResource("Images/UI/Ultimate/UltiBar0.png")).getPath()), false),
                                 new UltimateIndicator()
                         ),
                         GameObject.Compose(
                                 "Death Limit",
-                                0,250500,
-                                500000,500000,
-                                new RectCollider(true,true),
+                                0, 250500,
+                                500000, 500000,
+                                new RectCollider(true, true),
                                 new FellOff()
                         )
-        ).setBackground(firstLevelBackground));
+                ).setBackground(firstLevelBackground));
     }
 
     void FirstLevel() {
@@ -560,7 +556,7 @@ public class ShowcaseGame extends PApplet
         int mageWidth = (int) (mageHeight * 0.7826f);
 
         int slimeHeight = 54;
-        int slimeWidth = (int)(slimeHeight * 2.22222f);
+        int slimeWidth = (int) (slimeHeight * 2.22222f);
 
 
         SceneManager.addScene(new SceneBlueprint()
@@ -577,7 +573,7 @@ public class ShowcaseGame extends PApplet
                         //region Creazione Personaggio
                         GameObject.Compose(
                                 "player",
-                                0, -terrainHeight/2f,
+                                0, -terrainHeight / 2f,
                                 playerWidth, playerHeight,
                                 new RectCollider(true, false),
                                 new Animator(
@@ -624,7 +620,7 @@ public class ShowcaseGame extends PApplet
                         //region Creazione Enemy
                         GameObject.Compose(
                                 "enemy",
-                                550, -terrainHeight/2f,
+                                550, -terrainHeight / 2f,
                                 mageWidth, mageHeight,
                                 new RectCollider(true, false),
                                 new Animator(mageIdleLeft.clone(), mageIdleRight.clone(), mageAttackLeft.clone(), mageAttackRight.clone()),
@@ -634,11 +630,11 @@ public class ShowcaseGame extends PApplet
                         //region Slime
                         GameObject.Compose(
                                 "enemy",
-                                -550, -terrainHeight/2f,
+                                -550, -terrainHeight / 2f,
                                 slimeWidth, slimeHeight,
                                 new RectCollider(true, false),
                                 new Animator(slimeIdle.clone(), slimeChaseRight.clone(), slimeChaseLeft.clone()),
-                                new Slime(true,true)
+                                new Slime(true, true)
                         )
                         //endregion
                 )
@@ -646,8 +642,7 @@ public class ShowcaseGame extends PApplet
         );
     }
 
-    public void draw()
-    {
+    public void draw() {
         SceneManager.executeScene();
     }
 }
