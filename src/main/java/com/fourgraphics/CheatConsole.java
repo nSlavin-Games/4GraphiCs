@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,17 +30,21 @@ public class CheatConsole {
     static PrintStream pout;
     static DocInputStream in;
     private static HashMap<Command, ICommandEvent> commands = new HashMap<>();
-    JFrame frame;
+    private static JFrame frame;
     StyledDocument doc;
     private JTextField consoleInput;
     private JTextPane consoleOutput;
     private JPanel cheatsConsolePanel;
     private JLabel cheatsConsoleForProjectLabel;
     private JScrollPane outputScrollPane;
+    String[] lastCommands = new String[100];
+    int lastCommandIndex = 0;
+    private static boolean isEnabled;
     //    JTextField inputBox;
 
     public CheatConsole() {
         super();
+        isEnabled = true;
         cheatsConsoleForProjectLabel.setText(cheatsConsoleForProjectLabel.getText() + SceneManager.getProjectTitle());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -58,11 +63,13 @@ public class CheatConsole {
         System.setIn(in);
         System.setOut(pout);
         System.setErr(pout);
-        setFGColor(Color.white);
-        consoleOutput.setBackground(Color.blue);
+        setFGColor(Color.green);
+        consoleOutput.setBackground(Color.black);
         frame = new JFrame("Console");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setIconImage(new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath()).getImage());
         frame.add(cheatsConsolePanel);
+        frame.setAlwaysOnTop(true);
         frame.pack();
         frame.setVisible(true);
 
@@ -70,19 +77,23 @@ public class CheatConsole {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
+//                switch (e.getKeyCode()){
+//                    case KeyEvent.VK_UP:
+//                        lastCommandIndex++;
+//                        lastCommands[lastCommandIndex]
+//                }
+
+                consoleInput.requestFocus();
                 if (e.getKeyChar() == "\n".toCharArray()[0]) {
                     try {
                         out.write(("> " + consoleInput.getText() + "\n").getBytes(StandardCharsets.UTF_8));
-//                        String command = consoleInput.getText().split(" ")[0];
-//                        ArrayList<String> listArgs = new ArrayList<>(Arrays.asList(consoleInput.getText().split(" ")));
-//                        listArgs.remove(0);
-//                        String[] args = listArgs.toArray(new String[0]);
                         commands.forEach((commandProvider, commandEvent) -> {
                             commandEvent.commandSent(consoleInput.getText());
                         });
                     } catch (IOException ioException) {
-                        ioException.printStackTrace();
                         consoleInput.setText("");
+                        ioException.printStackTrace();
+                        DebugConsole.ErrorInternal("CheatsConsole | Failed to send command", ioException.getStackTrace(), Thread.currentThread().getStackTrace());
                     }
                     consoleInput.setText("");
                 }
@@ -97,7 +108,14 @@ public class CheatConsole {
         });
     }
 
+    public static void showConsole(){
+        frame.setVisible(true);
+    }
+
     public static void updateCycle() {
+//        if (Input.isAlive())
+//            Input.createButton("openCheatsConsole", ".", ".");
+
         commands.forEach((command, event) -> command.updateCycle());
     }
 
@@ -107,6 +125,10 @@ public class CheatConsole {
 
     public static PrintStream getOut() {
         return pout;
+    }
+
+    public static boolean isEnabled() {
+        return isEnabled;
     }
 
     public void updateConsoleName(String name) {

@@ -6,6 +6,12 @@ public class Input {
 
     private static InputManager manager;
 
+    public static boolean isAlive() {
+        return isAlive;
+    }
+
+    private static boolean isAlive;
+
     protected static void setup(InputManager manager)
     {
         Input.manager = manager;
@@ -16,6 +22,10 @@ public class Input {
         char k = Character.toUpperCase((char)keyCode);
         if(manager.keys.containsKey((int)k)) return manager.keys.get((int)k) == 1;
         return false;
+    }
+
+    public static boolean doButtonExist(String buttonName){
+        return manager.buttons.containsKey(buttonName);
     }
 
     public static boolean getKeyDown(String keyCode)

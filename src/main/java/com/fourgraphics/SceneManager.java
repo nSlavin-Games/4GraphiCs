@@ -14,8 +14,7 @@ import java.util.Objects;
  * Il gestore di tutte le scene del gioco, esegue la scena attiva e gestisce la
  * creazione e distruzione dinamica di oggetti della scena
  */
-public class SceneManager
-{
+public class SceneManager {
     /**
      * La lista delle scene esistenti
      */
@@ -69,8 +68,7 @@ public class SceneManager
     /**
      * Inizializza la lista delle scene e l’index della scena attiva
      */
-    public static void initialize(PApplet app, boolean debug)
-    {
+    public static void initialize(PApplet app, boolean debug) {
         mainApp = app;
         app.fullScreen(app.P3D);
         sceneList = new ArrayList<>();
@@ -84,12 +82,11 @@ public class SceneManager
             DebugConsole.LaunchConsole();
     }
 
-    public static int getNumberOfScenes(){
+    public static int getNumberOfScenes() {
         return sceneList.size();
     }
 
-    public static void initialize(PApplet app, int screen, boolean debug)
-    {
+    public static void initialize(PApplet app, int screen, boolean debug) {
         mainApp = app;
         app.fullScreen(app.P3D, screen);
         sceneList = new ArrayList<>();
@@ -103,8 +100,7 @@ public class SceneManager
             DebugConsole.LaunchConsole();
     }
 
-    public static void initialize(PApplet app, int width, int height, boolean debug)
-    {
+    public static void initialize(PApplet app, int width, int height, boolean debug) {
         mainApp = app;
         app.size(width, height, app.P3D);
         sceneList = new ArrayList<>();
@@ -119,80 +115,28 @@ public class SceneManager
             DebugConsole.LaunchConsole();
     }
 
-    public static void startGame()
-    {
+    public static void startGame() {
         setQuitMode();
-        if(!debugMode)
+        if (!debugMode)
             loadSceneInternal(0);
         else
             loadScene(1);
     }
 
-    public static void addIntroLogo(PImage logo)
-    {
+    public static void addIntroLogo(PImage logo) {
         introImages.add(logo);
     }
 
-    public static String getProjectTitle(){
+    public static String getProjectTitle() {
         return projectTitle;
     }
 
-    private static class Intro extends Script
-    {
-        int currentIndex = 0;
-        float introDuration = 2;
-        float introTimer;
-
-        int alpha;
-        boolean fadedIn = false;
-
-        public void Update()
-        {
-            if (!fadedIn && alpha < 255)
-            {
-                alpha += 3;
-                if (alpha >= 255)
-                {
-                    alpha = 255;
-                    fadedIn = true;
-                }
-            }
-            if (fadedIn)
-            {
-                introTimer += SceneManager.deltaTime();
-                if (introTimer >= introDuration)
-                {
-                    if (alpha > 0)
-                    {
-                        alpha -= 3;
-                        if (alpha <= 0)
-                        {
-                            alpha = 0;
-                            currentIndex++;
-                            if (currentIndex == introImages.size())
-                            {
-                                if (sceneList.size() == 1)
-                                    sceneList.add(new SceneBlueprint());
-
-                                sketch.delay(400);
-                                SceneManager.loadScene(1);
-                                alpha = 255;
-                            } else
-                            {
-                                gameObject.getComponent(Renderer.class).setTexture(introImages.get(currentIndex));
-                                fadedIn = false;
-                                introTimer = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            sketch.tint(255, alpha);
-        }
+    public static void setProjectTitle(String title) {
+        getApp().getSurface().setTitle(title);
+        projectTitle = title;
     }
 
-    private static void CreateIntro()
-    {
+    private static void CreateIntro() {
         SceneManager.addScene(new SceneBlueprint()
                 .setObjectList(
                         GameObject.Compose(
@@ -205,27 +149,18 @@ public class SceneManager
                 ).setBackground(getApp().color(23, 24, 24)));
     }
 
-    public static void setProjectIcon(String icon)
-    {
+    public static void setProjectIcon(String icon) {
         PJOGL.setIcon(icon);
     }
 
-    public static void setProjectTitle(String title)
-    {
-        getApp().getSurface().setTitle(title);
-        projectTitle = title;
-    }
-
-    public static void setCursorState(boolean state)
-    {
+    public static void setCursorState(boolean state) {
         if (state)
             getApp().getSurface().showCursor();
         else
             getApp().getSurface().hideCursor();
     }
 
-    public static void setCursorImage(PImage image)
-    {
+    public static void setCursorImage(PImage image) {
         //TODO: not yet implemented
         getApp().getSurface().setCursor(image, 0, 0);
     }
@@ -233,8 +168,7 @@ public class SceneManager
     /**
      * Esegue la scena attualmente selezionata
      */
-    public static void executeScene()
-    {
+    public static void executeScene() {
         // Eseguo come prima cosa il calcolo del deltaTime, ovvero quanto è durato
         // l'ultimo frame
         float lastTime = time; // salvo quand'è cominciata l'ultima escuzione
@@ -246,8 +180,7 @@ public class SceneManager
 
         accumulator += deltaTime(); //utilizzato per eseguire un metodo in un fixed timestep
 
-        if (skipInitialFrames < 5)
-        {
+        if (skipInitialFrames < 5) {
             skipInitialFrames++;
             accumulator = 0;
         }
@@ -258,8 +191,7 @@ public class SceneManager
         sceneList.get(activeSceneIndex).getCamera().calculateCamera(); //aggiorno la telecamera
 
         //il valore si può accumulare fino a diventare maggiore del fixed timestep e viene eseguito finché non torna minore
-        while (accumulator >= fixedTimestep)
-        {
+        while (accumulator >= fixedTimestep) {
             sceneList.get(activeSceneIndex).fixedUpdate(); //eseguo il fixed update nella scena attuale
             accumulator -= fixedTimestep; //all'accumulator tolgo il valore del fixed timestep, se rimane sopra rieseguo il fixed update
             sceneList.get(activeSceneIndex).calculateCollisions(); //calcolo le collisioni
@@ -272,7 +204,14 @@ public class SceneManager
         sceneList.get(activeSceneIndex).renderObjects(); //renderizzo gli oggetti
         sceneList.get(activeSceneIndex).renderUI(); //renderizzo l'UI
 
-        try{ CheatConsole.updateCycle(); } catch (Exception e) { e.printStackTrace(); }
+        if (CheatConsole.isEnabled()) {
+            try {
+                CheatConsole.updateCycle();
+//                if(Input.getButtonDown("openCheatsConsole")) CheatConsole.showConsole();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Input.updateKeyStatus(); //aggiorno lo stato degli Input
     }
 
@@ -281,18 +220,15 @@ public class SceneManager
      *
      * @param index Index della scena da caricare
      */
-    public static void loadScene(int index)
-    {
-        if (index > 0)
-        {
+    public static void loadScene(int index) {
+        if (index > 0) {
             activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
             sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
         } else
             throw new InvalidParameterException("Cannot reload intro");
     }
 
-    private static void loadSceneInternal(int index)
-    {
+    private static void loadSceneInternal(int index) {
         activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
         sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
     }
@@ -302,8 +238,7 @@ public class SceneManager
      *
      * @param blueprint Scena da aggiungere
      */
-    public static void addScene(SceneBlueprint blueprint)
-    {
+    public static void addScene(SceneBlueprint blueprint) {
         sceneList.add(blueprint); //inserimento della scena di tipo SceneBlueprint
     }
 
@@ -312,8 +247,7 @@ public class SceneManager
      *
      * @return Restituisce la scena attiva
      */
-    public static SceneBlueprint getActiveScene()
-    {
+    public static SceneBlueprint getActiveScene() {
         return sceneList.get(activeSceneIndex); //restituzione della scena attiva
     }
 
@@ -322,8 +256,7 @@ public class SceneManager
      *
      * @return Restituisce l’index della scena attiva
      */
-    public static int getActiveSceneIndex()
-    {
+    public static int getActiveSceneIndex() {
         return activeSceneIndex;
     }
 
@@ -332,8 +265,7 @@ public class SceneManager
      *
      * @param object Oggetto da aggiungere
      */
-    public static void instantiate(GameObject object)
-    {
+    public static void instantiate(GameObject object) {
         sceneList.get(activeSceneIndex).addObject(object); //inserimento dell'oggetto, passato come parametro, alla scena attualmente attiva, indicata da activeSceneIndex
     }
 
@@ -342,18 +274,15 @@ public class SceneManager
      *
      * @param object Oggetto da rimuovere
      */
-    public static void destroy(GameObject object)
-    {
+    public static void destroy(GameObject object) {
         sceneList.get(activeSceneIndex).removeObject(object); //rimozione dell'oggetto, passato come parametro, dalla scena attualmente attiva, indicata da activeSceneIndex
     }
 
-    public static GameObject findObject(String name)
-    {
+    public static GameObject findObject(String name) {
         return sceneList.get(activeSceneIndex).getObject(name);
     }
 
-    public static GameObject findObject(int index)
-    {
+    public static GameObject findObject(int index) {
         return sceneList.get(activeSceneIndex).getObject(index);
     }
 
@@ -362,8 +291,7 @@ public class SceneManager
      *
      * @return l'app principale
      */
-    public static PApplet getApp()
-    {
+    public static PApplet getApp() {
         return mainApp;
     }
 
@@ -372,20 +300,16 @@ public class SceneManager
      *
      * @return il valore del deltaTime
      */
-    public static float deltaTime()
-    {
+    public static float deltaTime() {
         return deltaTime;
     }
 
-    public static float fixedDeltaTime()
-    {
+    public static float fixedDeltaTime() {
         return fixedTimestep;
     }
 
-    private static void setQuitMode()
-    {
-        if(debugMode)
-        {
+    private static void setQuitMode() {
+        if (debugMode) {
             // Get OpenGL window
             com.jogamp.newt.opengl.GLWindow newtCanvas = (com.jogamp.newt.opengl.GLWindow) getApp().getSurface().getNative();
             // Remove listeners added by Processing
@@ -397,14 +321,56 @@ public class SceneManager
         }
     }
 
-    public static void quit()
-    {
-        if(debugMode)
-        {
+    public static void quit() {
+        if (debugMode) {
             // Get OpenGL window
             com.jogamp.newt.opengl.GLWindow newtCanvas = (com.jogamp.newt.opengl.GLWindow) getApp().getSurface().getNative();
             newtCanvas.sendWindowEvent(WindowEvent.WINDOW_CLOSED);
         } else
             getApp().dispose();
+    }
+
+    private static class Intro extends Script {
+        int currentIndex = 0;
+        float introDuration = 2;
+        float introTimer;
+
+        int alpha;
+        boolean fadedIn = false;
+
+        public void Update() {
+            if (!fadedIn && alpha < 255) {
+                alpha += 3;
+                if (alpha >= 255) {
+                    alpha = 255;
+                    fadedIn = true;
+                }
+            }
+            if (fadedIn) {
+                introTimer += SceneManager.deltaTime();
+                if (introTimer >= introDuration) {
+                    if (alpha > 0) {
+                        alpha -= 3;
+                        if (alpha <= 0) {
+                            alpha = 0;
+                            currentIndex++;
+                            if (currentIndex == introImages.size()) {
+                                if (sceneList.size() == 1)
+                                    sceneList.add(new SceneBlueprint());
+
+                                sketch.delay(400);
+                                SceneManager.loadScene(1);
+                                alpha = 255;
+                            } else {
+                                gameObject.getComponent(Renderer.class).setTexture(introImages.get(currentIndex));
+                                fadedIn = false;
+                                introTimer = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            sketch.tint(255, alpha);
+        }
     }
 }

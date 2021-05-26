@@ -35,6 +35,7 @@
           <component id="a9157" class="javax.swing.JTextPane" binding="consoleOutput">
             <constraints/>
             <properties>
+              <focusable value="true"/>
               <text value=""/>
             </properties>
           </component>
