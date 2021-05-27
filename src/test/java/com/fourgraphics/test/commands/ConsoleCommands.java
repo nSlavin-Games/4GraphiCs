@@ -25,25 +25,29 @@ public class ConsoleCommands extends Command {
         } catch (Exception ignored) {
         }
         String text = fullCommand.replace(command + " " + arg1, "");
-        if (command.equals("moonJump")) {
-            SceneManager.findObject("player").getComponent(PlayerMovement.class).setMoonJump(arg1.equals("true"));
-        }
-        if (command.equals("god")) {
-            SceneManager.findObject("player").getComponent(PlayerCombat.class).setGod(arg1.equals("true"));
-        }
-        if (command.equals("get")) {
-            if (arg1.equals("isGod")) {
-                System.out.println("God status: " + SceneManager.findObject("player").getComponent(PlayerCombat.class).god);
-            }
-            if (arg1.equals("moonJumping")) {
-                System.out.println("MoonJumping status: " + SceneManager.findObject("player").getComponent(PlayerMovement.class).moonJump);
-            }
-        }
-        if (command.equals("help")) {
-            System.out.println("Available Commands for ConsoleCommands:\n" +
-                    "get [attribute]\n\t- Get an attribute from the engine.\n\t Available attributes:\n\t\t- isGod: returns the godmode status.\n\t\t- moonJumping: returns the moonJump status.\n" +
-                    "god [true|false]\n\t- Set player godmode status.\n" +
-                    "moonJump [true|false] \"[message]\"\n\t- Set player moonjump status.\n");
+        switch (command) {
+            case "moonJump":
+                SceneManager.findObject("player").getComponent(PlayerMovement.class).setMoonJump(arg1.equals("true"));
+                break;
+            case "god":
+                SceneManager.findObject("player").getComponent(PlayerCombat.class).setGod(arg1.equals("true"));
+                break;
+            case "get":
+                switch (arg1) {
+                    case "isGod":
+                        System.out.println("God status: " + SceneManager.findObject("player").getComponent(PlayerCombat.class).god);
+                        break;
+                    case "moonJumping":
+                        System.out.println("MoonJumping status: " + SceneManager.findObject("player").getComponent(PlayerMovement.class).moonJump);
+                        break;
+                }
+                break;
+            case "help":
+                System.out.println("Available Commands for ConsoleCommands:\n" +
+                        "\tget [attribute]\n\t\t- Get an attribute from the engine.\n\t\t  Available attributes:\n\t\t\t- isGod: returns the godmode status.\n\t\t\t- moonJumping: returns the moonJump status.\n" +
+                        "\tgod [true|false]\n\t\t- Set player godmode status.\n" +
+                        "\tmoonJump [true|false] \"[message]\"\n\t\t- Set player moonjump status.\n");
+                break;
         }
     }
 }

@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -32,15 +31,15 @@ public class CheatConsole {
     static DocInputStream in;
     private static HashMap<Command, ICommandEvent> commands = new HashMap<>();
     private static JFrame frame;
+    private static boolean isEnabled;
     StyledDocument doc;
+    String[] lastCommands = new String[100];
+    int lastCommandIndex = 0;
     private JTextField consoleInput;
     private JTextPane consoleOutput;
     private JPanel cheatsConsolePanel;
     private JLabel cheatsConsoleForProjectLabel;
     private JScrollPane outputScrollPane;
-    String[] lastCommands = new String[100];
-    int lastCommandIndex = 0;
-    private static boolean isEnabled;
     //    JTextField inputBox;
 
     public CheatConsole() {
@@ -69,6 +68,16 @@ public class CheatConsole {
         frame = new JFrame("Console");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setIconImage(new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath()).getImage());
+        consoleOutput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                consoleInput.requestFocus();
+                if (e.getKeyChar() != "\n".toCharArray()[0])
+                    consoleInput.setText(consoleInput.getText() + e.getKeyChar());
+                else sendTypedCommand();
+            }
+        });
         frame.add(cheatsConsolePanel);
         frame.setAlwaysOnTop(true);
         frame.pack();
@@ -83,27 +92,8 @@ public class CheatConsole {
 //                        lastCommandIndex++;
 //                        lastCommands[lastCommandIndex]
 //                }
-
-                consoleInput.requestFocus();
                 if (e.getKeyChar() == "\n".toCharArray()[0]) {
-                    try {
-                        out.write(("> " + consoleInput.getText() + "\n").getBytes(StandardCharsets.UTF_8));
-                        commands.forEach((commandProvider, commandEvent) -> {
-                            try {
-                                commandEvent.commandSent(consoleInput.getText());
-                            } catch (Exception exception) {
-//                                DebugConsole.ErrorInternal("CheatsConsole | Failed to send command:\n"+"The command is currently not available or there was an error with the registered command \"" + consoleInput.getText() + "\".", exception.getStackTrace(), Thread.currentThread().getStackTrace());
-                                DebugConsole.ErrorInternal("CheatsConsole | Command Fail:\n"+"\"" + consoleInput.getText() + "\" not available or throws error.", exception.getStackTrace(), Thread.currentThread().getStackTrace());
-                                exception.printStackTrace();
-                                consoleInput.setText("");
-                            }
-                        });
-                    } catch (IOException ioException) {
-                        consoleInput.setText("");
-                        ioException.printStackTrace();
-                        DebugConsole.ErrorInternal("CheatsConsole | Failed to send the command to input stream, please report this error on GitHub!", ioException.getStackTrace(), Thread.currentThread().getStackTrace());
-                    }
-                    consoleInput.setText("");
+                    sendTypedCommand();
                 }
             }
         });
@@ -116,7 +106,7 @@ public class CheatConsole {
         });
     }
 
-    public static void showConsole(){
+    public static void showConsole() {
         frame.setVisible(true);
     }
 
@@ -137,6 +127,27 @@ public class CheatConsole {
 
     public static boolean isEnabled() {
         return isEnabled;
+    }
+
+    private void sendTypedCommand() {
+        try {
+            out.write(("> " + consoleInput.getText() + "\n").getBytes(StandardCharsets.UTF_8));
+            commands.forEach((commandProvider, commandEvent) -> {
+                try {
+                    commandEvent.commandSent(consoleInput.getText());
+                } catch (Exception exception) {
+//                                DebugConsole.ErrorInternal("CheatsConsole | Failed to send command:\n"+"The command is currently not available or there was an error with the registered command \"" + consoleInput.getText() + "\".", exception.getStackTrace(), Thread.currentThread().getStackTrace());
+                    DebugConsole.ErrorInternal("CheatsConsole | Command Fail:\n" + "\"" + consoleInput.getText() + "\" not available or throws error.", exception.getStackTrace(), Thread.currentThread().getStackTrace());
+                    exception.printStackTrace();
+                    consoleInput.setText("");
+                }
+            });
+        } catch (IOException ioException) {
+            consoleInput.setText("");
+            ioException.printStackTrace();
+            DebugConsole.ErrorInternal("CheatsConsole | Failed to send the command to input stream, please report this error on GitHub!", ioException.getStackTrace(), Thread.currentThread().getStackTrace());
+        }
+        consoleInput.setText("");
     }
 
     public void updateConsoleName(String name) {

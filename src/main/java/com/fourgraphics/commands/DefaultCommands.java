@@ -5,15 +5,15 @@ import com.fourgraphics.Input;
 import com.fourgraphics.SceneManager;
 
 public class DefaultCommands extends Command {
-    String currentlyBinded = "";
+    String currentlyBound = "";
 
     public DefaultCommands() {
     }
 
     @Override
     public Command registerCommands() {
-        try{
-        getConsole().commandReceivedEvent(this, this::commandInterpreter);
+        try {
+            getConsole().commandReceivedEvent(this, this::commandInterpreter);
         } catch (Exception e) {
             DebugConsole.Error(e.toString());
         }
@@ -28,70 +28,82 @@ public class DefaultCommands extends Command {
         } catch (Exception ignored) {
         }
         String text = fullCommand.replace(command + " " + arg1, "");
-        if (command.equals("log")) {
-            if (text.contains("\"")) {
-                text = text.replace("\"", "");
+        switch (command) {
+            case "log":
+                if (text.contains("\"")) {
+                    text = text.replace("\"", "");
 
-                switch (arg1) {
-                    case "warn":
-                        DebugConsole.Warn(text);
-                        break;
-                    case "error":
-                        DebugConsole.Error(text);
-                        break;
-                    default:
-                        DebugConsole.Info(text);
+                    switch (arg1) {
+                        case "warn":
+                            DebugConsole.Warn(text);
+                            break;
+                        case "error":
+                            DebugConsole.Error(text);
+                            break;
+                        default:
+                            DebugConsole.Info(text);
+                    }
+                } else {
+                    System.out.println("ERROR: the log command requires the message to be in commas (\"message\").");
                 }
-            } else {
-                System.out.println("ERROR: the log command requires the message to be in commas (\"message\").");
-            }
-        }
-        if (command.equals("loadScene")) {
-            SceneManager.loadScene(Integer.parseInt(arg1));
-        }
-        if (command.equals("get")) {
-            if (arg1.equals("numberOfScenes")) {
-                System.out.println("There are " + (SceneManager.getNumberOfScenes() - 1) + " scenes.");
-            }
-        }
-        if (command.equals("restartScene")) {
-            SceneManager.loadScene(SceneManager.getActiveSceneIndex());
-        }
-
-        if (command.equals("bind")) {
-            if (arg1.contains("\"")) {
-                currentlyBinded = arg1 + text;
-                currentlyBinded = currentlyBinded.substring(currentlyBinded.indexOf("\"") + 1, currentlyBinded.lastIndexOf("\""));
-                String[] args = fullCommand.replace("bind \"" + currentlyBinded + "\" ", "").replace("\n", "").split(" ");
-                Input.createButton("commandBind", args[0], args[1]);
-                System.out.println("Successfully bound key " + args[0] + " (and alt key " + args[1] + ") to command " + currentlyBinded + ".");
-            } else {
-                System.out.println("ERROR: the bind command requires the command to be in commas (\"command\").");
-            }
-        }
-
-        if (command.equals("reloadConsole"))
-            getConsole().loadCommands();
-
-        if (command.equals("help")) {
-            System.out.println("Available Commands for DefaultCommands:\n" +
-                    "bind \"[command]\" [button] [altButton]\n\t- Binds a key to a command, only works for one command at a time for now and does not support extra commands :(\n" +
-                    "exit \n\t- Closes the program.\n" +
-                    "get [attribute]\n\t- Get an attribute from the engine.\n\t Available attributes:\n\t\t- numberOfScenes: returns the number of available scenes.\n" +
-                    "loadScene [sceneIndex]\n\t- Load a scene with the specified index.\n" +
-                    "log [info|warn|error] \"[message]\"\n\t- Sends a message to the Debug Console.\n" +
-                    "restartScene\n\t- Restarts the current scene.\n");
-        }
-        if (command.equals("exit")){
-            SceneManager.getApp().exit();
+                break;
+            case "loadScene":
+                SceneManager.loadScene(Integer.parseInt(arg1));
+                break;
+            case "get":
+                switch (arg1) {
+                    case "numberOfScenes":
+                        System.out.println("There are " + (SceneManager.getNumberOfScenes() - 1) + " scenes.");
+                        break;
+                    case "currentSceneIndex":
+                        System.out.println("Current scene index: " + (SceneManager.getActiveSceneIndex()));
+                }
+                break;
+            case "restartScene":
+                SceneManager.loadScene(SceneManager.getActiveSceneIndex());
+                break;
+            case "bind":
+                if (arg1.contains("\"")) {
+                    currentlyBound = arg1 + text;
+                    currentlyBound = currentlyBound.substring(currentlyBound.indexOf("\"") + 1, currentlyBound.lastIndexOf("\""));
+                    String[] args = fullCommand.replace("bind \"" + currentlyBound + "\" ", "").replace("\n", "").split(" ");
+                    Input.createButton("commandBind", args[0], args[1]);
+                    System.out.println("Successfully bound key " + args[0] + " (and alt key " + args[1] + ") to command " + currentlyBound + ".");
+                } else {
+                    System.out.println("ERROR: the bind command requires the command to be in commas (\"command\").");
+                }
+                break;
+            case "reloadConsole":
+                getConsole().loadCommands();
+                break;
+            case "clear":
+                for (int i = 0; i < 50; i++) {
+                    System.out.println("\n");
+                }
+                System.out.flush();
+                break;
+            case "help":
+                System.out.println("Available Commands for DefaultCommands:\n" +
+                        "\tbind \"[command]\" [button] [altButton]\n\t\t- Binds a key to a command, only works for one command at a time for now and does not support extra commands :(\n" +
+                        "\tclear \n\t\t- Clears the console.\n" +
+                        "\texit \n\t\t- Terminates the program.\n" +
+                        "\tget [attribute]\n\t\t- Get an attribute from the engine.\n\t\t  Available attributes:\n\t\t\t- numberOfScenes: returns the number of available scenes.\n\t\t\t- currentSceneIndex: returns the ID of the current scene.\n" +
+                        "\tloadScene [sceneIndex]\n\t\t- Load a scene with the specified index.\n" +
+                        "\tlog [info|warn|error] \"[message]\"\n\t\t- Sends a message to the Debug Console.\n" +
+                        "\trestartScene\n\t\t- Restarts the current scene.\n");
+                break;
+            case "quit":
+            case "exit":
+                SceneManager.getApp().exit();
+                break;
         }
     }
 
     @Override
     public void updateCycle() {
-        if (!currentlyBinded.equals("")) {
+        if (!currentlyBound.equals("")) {
             if (Input.getButtonDown("commandBind")) {
-                commandInterpreter(currentlyBinded);
+                commandInterpreter(currentlyBound);
             }
         }
     }
