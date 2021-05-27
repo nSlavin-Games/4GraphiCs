@@ -68,13 +68,13 @@ class DebugMessage extends JButton
         timeReceived = new Date();
     }
 
-    protected String GetLayoutMessage()
-    {
+    @SuppressWarnings("deprecated")
+    protected String GetLayoutMessage() {
         return "[" + timeReceived.getHours() + ":" + timeReceived.getMinutes() + ":" + timeReceived.getSeconds() + "] " + messageType.toString() + ": " + content + System.lineSeparator() + stackTraceInfo;
     }
 
-    protected String ButtonTextLayout()
-    {
+    @SuppressWarnings("deprecated")
+    protected String ButtonTextLayout() {
         String layout = "[" + timeReceived.getHours() + ":" + timeReceived.getMinutes() + ":" + timeReceived.getSeconds() + "] " + buttonText;
         if(occurrences > 1)
             layout += " | " + occurrences;

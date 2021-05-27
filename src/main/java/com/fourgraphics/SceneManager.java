@@ -6,7 +6,6 @@ import processing.core.PImage;
 import processing.opengl.PJOGL;
 
 import java.awt.event.WindowEvent;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -225,7 +224,7 @@ public class SceneManager {
             activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
             sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
         } else
-            throw new InvalidParameterException("Cannot reload intro");
+            DebugConsole.ErrorInternal("Scene Manager | Scene Loading Error: Cannot reload intro", "Cannot reload intro", Thread.currentThread().getStackTrace());
     }
 
     private static void loadSceneInternal(int index) {

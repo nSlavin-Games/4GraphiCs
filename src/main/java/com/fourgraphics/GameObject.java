@@ -1,11 +1,8 @@
 package com.fourgraphics;
 //librerie importate
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameObject {
 
@@ -78,8 +75,8 @@ public class GameObject {
     /**
      * metodo getComponent restituisce un componente in base al tipo di classe inserita
      *
-     * @param type tipo di classe
-     * @param <T>
+     * @param type riferimento alla classe
+     * @param <T>  tipo di classe
      * @return obj oggetto del tipo di classe inserito
      */
     public <T> T getComponent(Class<T> type) {

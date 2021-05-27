@@ -180,15 +180,15 @@ public class CheatConsole {
         StyleConstants.setBackground(out.cur, c);
     }
 
-    public void setData(CustomTextPane data) {
-    }
-
-    public void getData(CustomTextPane data) {
-    }
-
-    public boolean isModified(CustomTextPane data) {
-        return false;
-    }
+//    public void setData(CustomTextPane data) {
+//    }
+//
+//    public void getData(CustomTextPane data) {
+//    }
+//
+//    public boolean isModified(CustomTextPane data) {
+//        return false;
+//    }
 
     private static class DocOutputStream extends OutputStream {
 

@@ -3,10 +3,15 @@ package com.fourgraphics;
 import javax.swing.*;
 import javax.swing.text.*;
 
+/**
+ * Not implemented yet
+ */
+@Deprecated
 public class CustomTextPane extends JTextPane {
     private boolean lineWrap;
 
-    public CustomTextPane(){}
+    public CustomTextPane() {
+    }
 
     public CustomTextPane(final boolean lineWrap) {
         this.lineWrap = lineWrap;

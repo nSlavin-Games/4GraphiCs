@@ -110,6 +110,7 @@ public class CheckBox extends UIElement
             } catch (CloneNotSupportedException e)
             {
                 e.printStackTrace();
+                DebugConsole.ErrorInternal("Unable to clone CheckBox", e.getStackTrace(), Thread.currentThread().getStackTrace());
                 return null;
             }
         }
