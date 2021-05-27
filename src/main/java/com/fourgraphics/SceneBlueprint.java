@@ -3,7 +3,6 @@ package com.fourgraphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javafx.scene.Scene;
 import processing.core.PImage;
 
 /**
@@ -350,6 +349,19 @@ public class SceneBlueprint
         { //per ogni oggetto di tipo Object della lista obj
             if (o instanceof Script)
             { //se l'oggetto è uno script
+                if(o.getClass().isAnnotationPresent(RequireComponent.class))
+                {
+                    RequireComponent annotation = o.getClass().getAnnotation(RequireComponent.class);
+                    for(int i = 0; i < annotation.requiredComponents().length; i++)
+                    {
+                        if(!o.gameObject.hasComponent(annotation.requiredComponents()[i]))
+                        {
+                            DebugConsole.Fatal("Missing Component Error",
+                                    o.getClass().getName() + " requires " + annotation.requiredComponents()[i] + " as a component",
+                                    Thread.currentThread().getStackTrace());
+                        }
+                    }
+                }
                 scriptList.add((Script) o); //casting da Object a Script e inserimento dell'oggetto alla lista per gli script
             } else if (o instanceof Renderable)
             { //se l'oggetto è un render

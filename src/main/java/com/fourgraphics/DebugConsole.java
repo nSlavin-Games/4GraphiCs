@@ -1,8 +1,5 @@
 package com.fourgraphics;
 
-import java.awt.*;
-import java.util.ArrayList;
-
 public class DebugConsole
 {
     private static Console console;
@@ -10,11 +7,6 @@ public class DebugConsole
     protected static void LaunchConsole()
     {
         console = new Console();
-        Info("Initializing console...");
-        Info("Testing Warning...");
-        Warn("Works!");
-        Info("Testing Errors...");
-        Error("Works!");
     }
 
     public static void Info(String message)
@@ -60,6 +52,12 @@ public class DebugConsole
     protected static void WarnInternal(String errorName, StackTraceElement[] error, StackTraceElement[] trace)
     {
         console.AddMessage(new DebugMessage(DebugMessageType.WARNING,errorName,error,trace));
+    }
+
+    protected static void Fatal(String errorName, String message, StackTraceElement[] trace)
+    {
+        console.AddMessage(new DebugMessage(DebugMessageType.ERROR,errorName, message, trace));
+        SceneManager.getApp().dispose();
     }
 
     public static void Log(DebugMessageType logLevel, String message){

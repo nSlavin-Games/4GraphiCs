@@ -4,6 +4,7 @@ import com.fourgraphics.*;
 
 import static com.fourgraphics.SceneManager.fixedDeltaTime;
 
+@RequireComponent(requiredComponents = {RectCollider.class,PlayerCombat.class})
 public class PlayerMovement extends Script {
 
     Animator anim;

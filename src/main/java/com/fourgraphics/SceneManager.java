@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PJOGL;
 
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -322,11 +321,9 @@ public class SceneManager {
 
     public static void quit() {
         if (debugMode) {
-            // Get OpenGL window
-            com.jogamp.newt.opengl.GLWindow newtCanvas = (com.jogamp.newt.opengl.GLWindow) getApp().getSurface().getNative();
-            newtCanvas.sendWindowEvent(WindowEvent.WINDOW_CLOSED);
-        } else
             getApp().dispose();
+        } else
+            getApp().exit();
     }
 
     private static class Intro extends Script {
