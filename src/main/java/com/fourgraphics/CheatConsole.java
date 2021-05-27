@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -46,10 +47,10 @@ public class CheatConsole {
         super();
         isEnabled = true;
         cheatsConsoleForProjectLabel.setText(cheatsConsoleForProjectLabel.getText() + SceneManager.getProjectTitle());
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
-        }
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
+//        }
 
         consoleOutput.setPreferredSize(new Dimension(500, 500));
         doc = consoleOutput.getStyledDocument();
@@ -88,12 +89,19 @@ public class CheatConsole {
                     try {
                         out.write(("> " + consoleInput.getText() + "\n").getBytes(StandardCharsets.UTF_8));
                         commands.forEach((commandProvider, commandEvent) -> {
-                            commandEvent.commandSent(consoleInput.getText());
+                            try {
+                                commandEvent.commandSent(consoleInput.getText());
+                            } catch (Exception exception) {
+//                                DebugConsole.ErrorInternal("CheatsConsole | Failed to send command:\n"+"The command is currently not available or there was an error with the registered command \"" + consoleInput.getText() + "\".", exception.getStackTrace(), Thread.currentThread().getStackTrace());
+                                DebugConsole.ErrorInternal("CheatsConsole | Command Fail:\n"+"\"" + consoleInput.getText() + "\" not available or throws error.", exception.getStackTrace(), Thread.currentThread().getStackTrace());
+                                exception.printStackTrace();
+                                consoleInput.setText("");
+                            }
                         });
                     } catch (IOException ioException) {
                         consoleInput.setText("");
                         ioException.printStackTrace();
-                        DebugConsole.ErrorInternal("CheatsConsole | Failed to send command", ioException.getStackTrace(), Thread.currentThread().getStackTrace());
+                        DebugConsole.ErrorInternal("CheatsConsole | Failed to send the command to input stream, please report this error on GitHub!", ioException.getStackTrace(), Thread.currentThread().getStackTrace());
                     }
                     consoleInput.setText("");
                 }
