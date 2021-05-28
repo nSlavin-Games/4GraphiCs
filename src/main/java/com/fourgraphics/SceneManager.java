@@ -223,7 +223,7 @@ public class SceneManager {
             activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
             sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
         } else
-            DebugConsole.ErrorInternal("Scene Manager | Scene Loading Error: Cannot reload intro", "Cannot reload intro", Thread.currentThread().getStackTrace());
+            DebugConsole.ErrorInternal("Scene Loading Error", "Cannot reload intro", Thread.currentThread().getStackTrace());
     }
 
     private static void loadSceneInternal(int index) {
@@ -282,6 +282,11 @@ public class SceneManager {
 
     public static GameObject findObject(int index) {
         return sceneList.get(activeSceneIndex).getObject(index);
+    }
+
+    public static <T> GameObject findObjectWithType(Class<T> type)
+    {
+        return sceneList.get(activeSceneIndex).getObject(type);
     }
 
     /**

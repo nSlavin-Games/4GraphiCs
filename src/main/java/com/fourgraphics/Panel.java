@@ -40,7 +40,7 @@ public class Panel extends UIElement
         {
             Vector2 cameraPosition = SceneManager.getActiveScene().getCamera().getOffsetPosition();
             sketch.pushMatrix();
-            sketch.translate(Rescaler.resizeW(cameraPosition.getX()), Rescaler.resizeH(cameraPosition.getY()));
+            sketch.translate(Rescaler.resizeH(cameraPosition.getX()), Rescaler.resizeH(cameraPosition.getY()));
         }
 
         float rx = Rescaler.resizeW(transform.getPosition().getX());

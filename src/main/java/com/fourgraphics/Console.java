@@ -39,9 +39,11 @@ class Console
         console = new JFrame("4GraphiCs Console");
         consoleBase.setBackground(Color.getHSBColor(180,0.042f,0.094f));
         console.setContentPane(consoleBase);
+        console.setAlwaysOnTop(true);
         console.pack();
         console.setMinimumSize(new Dimension(400,400));
         console.setVisible(true);
+        console.setIconImage(new ImageIcon(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("4GC_Logo.png")).getPath()).getImage());
         splitPane.setDividerLocation(500);
 
         infoScroll.setMinimumSize(new Dimension(400,50));

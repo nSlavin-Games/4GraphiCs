@@ -121,7 +121,7 @@ public class ShowcaseGame extends PApplet {
 
     public void settings() {
         classLoader = Thread.currentThread().getContextClassLoader();
-        SceneManager.initialize(this, 2, true);
+        SceneManager.initialize(this, 1080,720, true);
         noSmooth();
         //TODO(samu): usare un file di config per i keybinds e creare un file default se assente
         Input.createAxis("Horizontal", "d", "a", "right", "left");
@@ -249,6 +249,7 @@ public class ShowcaseGame extends PApplet {
 
     public void setup() {
         //TODO(samu): prendere il framerate cap da options.ini(/config, DA FARE, tbd), e vedere se è possibile prendere il refresh rate del monitor alla creazione del config base
+        //frameRate(1);
         SceneManager.setProjectTitle("4GraphiCs Showcase");
         if (flags.contains("console"))
             console.updateConsoleName("4GraphiCs Showcase");

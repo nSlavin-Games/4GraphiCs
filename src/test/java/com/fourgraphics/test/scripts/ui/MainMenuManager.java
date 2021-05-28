@@ -3,6 +3,7 @@ package com.fourgraphics.test.scripts.ui;
 import com.fourgraphics.*;
 import processing.core.PImage;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class MainMenuManager extends Script
@@ -24,6 +25,9 @@ public class MainMenuManager extends Script
         play = SceneManager.findObject("play button").getComponent(Button.class);
         exit = SceneManager.findObject("exit button").getComponent(Button.class);
 
+        play.addOnClickMethods(Utils.getMethodInCurrentClass("Play"));
+        exit.addOnClickMethods(Utils.getMethodInCurrentClass("Exit"));
+
         play.setTexture(playNormal);
         exit.setTexture(exitNormal);
         DebugConsole.Info("Loaded Menu");
@@ -33,29 +37,24 @@ public class MainMenuManager extends Script
     {
         if(Input.getKeyDown("F"))
             DebugConsole.Info("F");
+
         if(play.mouseOver())
-        {
             play.setTexture(playHover);
-            if(Input.getMouseButtonDown(0))
-                Play();
-        } else
+        else
             play.setTexture(playNormal);
 
         if(exit.mouseOver())
-        {
             exit.setTexture(exitHover);
-            if(Input.getMouseButtonDown(0))
-                Exit();
-        } else
+        else
             exit.setTexture(exitNormal);
     }
 
-    private void Play()
+    public void Play()
     {
         SceneManager.loadScene(2);
     }
 
-    private void Exit()
+    public void Exit()
     {
         SceneManager.quit();
     }

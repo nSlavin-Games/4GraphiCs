@@ -126,7 +126,7 @@ public class SceneBlueprint
         {
             SceneManager.getApp().imageMode(SceneManager.getApp().CENTER);
             SceneManager.getApp().pushMatrix();
-            SceneManager.getApp().translate(Rescaler.resizeW(sceneCamera.getOffsetPosition().getX()), Rescaler.resizeH(sceneCamera.getOffsetPosition().getY()));
+            SceneManager.getApp().translate(Rescaler.resizeH(sceneCamera.getOffsetPosition().getX()), Rescaler.resizeH(sceneCamera.getOffsetPosition().getY()));
             SceneManager.getApp().image(background, 0, 0, SceneManager.getApp().width, SceneManager.getApp().height);
             SceneManager.getApp().popMatrix();
         }
@@ -144,6 +144,16 @@ public class SceneBlueprint
         } catch (Exception e)
         {
             DebugConsole.ErrorInternal("Script Update Error", e.getStackTrace(),Thread.currentThread().getStackTrace());
+        }
+
+        if(uiElements.size() > 0)
+        {
+            for(int i = 0; i < uiElements.size(); i++)
+            {
+                if(uiElements.get(i) instanceof Button &&
+                    ((Button) uiElements.get(i)).onClick())
+                    break;
+            }
         }
     }
 
@@ -196,6 +206,19 @@ public class SceneBlueprint
             }
         }
         DebugConsole.ErrorInternal("Object Retrieval Error", "Specified object [" + objectName + "] cannot be found!", Thread.currentThread().getStackTrace());
+        return null; //restituzione di default
+    }
+
+    protected <T> GameObject getObject(Class<T> type)
+    {
+        for (int i = 0; i < objectList.size(); i++)
+        { //analisi di ogni oggetto nella lista di objectList
+            if (objectList.get(i).hasComponent(type))
+            { //confronto del nome dell'oggetto corrente con quello dell'oggetto passato come parametro
+                return objectList.get(i); //restituzione dell'oggetto nella posizione corrente (i)
+            }
+        }
+        DebugConsole.ErrorInternal("Object Retrieval Error", "Specified type [" + type + "] cannot be found anywhere!", Thread.currentThread().getStackTrace());
         return null; //restituzione di default
     }
 
