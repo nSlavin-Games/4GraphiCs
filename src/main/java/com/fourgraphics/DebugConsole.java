@@ -39,6 +39,11 @@ public class DebugConsole
         console.AddMessage(new DebugMessage(DebugMessageType.ERROR,errorName,error,trace));
     }
 
+    protected static void ErrorInternal(String errorName, String message, StackTraceElement[] error, StackTraceElement[] trace)
+    {
+        console.AddMessage(new DebugMessage(DebugMessageType.ERROR,errorName,message,error,trace));
+    }
+
     public static void Warn(String message)
     {
         console.AddMessage(new DebugMessage(DebugMessageType.WARNING,message));
