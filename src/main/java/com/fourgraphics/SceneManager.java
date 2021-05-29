@@ -219,11 +219,18 @@ public class SceneManager {
      * @param index Index della scena da caricare
      */
     public static void loadScene(int index) {
-        if (index > 0) {
-            activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
-            sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
-        } else
-            DebugConsole.ErrorInternal("Scene Manager | Scene Loading Error: Cannot reload intro", "Cannot reload intro", Thread.currentThread().getStackTrace());
+        if (index < sceneList.size() && index > -1) {
+            if (index > 0) {
+                activeSceneIndex = index; //aggiornamento dell'indice della scena attiva
+                sceneList.get(index).initialize(); //inizializzazione della scena in posizione passata come parametro
+            } else {
+                DebugConsole.ErrorInternal("Scene Manager | Scene Loading Error: Cannot reload intro", "Cannot reload intro.", Thread.currentThread().getStackTrace());
+                System.err.println("[ERROR] Scene Manager | Scene Loading: Cannot reload intro.");
+            }
+        } else {
+            DebugConsole.ErrorInternal("Scene Manager | Scene Loading Error: Invalid scene index", "The given scene index (" + index + ") is invalid.", Thread.currentThread().getStackTrace());
+            System.err.println("[ERROR] Scene Manager | Scene Loading: The given scene index (" + index + ") is invalid.");
+        }
     }
 
     private static void loadSceneInternal(int index) {
