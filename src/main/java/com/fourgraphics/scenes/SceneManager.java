@@ -1,6 +1,5 @@
 package com.fourgraphics.scenes;
 
-import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -15,15 +14,19 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class SceneManager
 {
+    private static FGCApp mainApp;
+
     private static long window;
 
-    private static boolean debugMode;
+    private static float deltaTime;
+    private static float time;
 
-    public static void run(int width, int height, String title, boolean debug)
+    public static void Run(FGCApp app)
     {
-        debugMode = debug;
-        start(width, height, title);
-        update();
+        mainApp = app;
+        Start();
+        mainApp.OnGameStart();
+        Update();
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
@@ -34,7 +37,7 @@ public class SceneManager
         glfwSetErrorCallback(null).free();
     }
 
-    private static void start(int width, int height, String title)
+    private static void Start()
     {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
@@ -49,14 +52,14 @@ public class SceneManager
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); //window resizable
 
         //Creating the window
-        window = glfwCreateWindow(width,height,title, NULL, NULL);
+        window = glfwCreateWindow(mainApp.width, mainApp.height, mainApp.gameTitle, NULL, NULL);
         if(window == NULL)
             throw new RuntimeException("Failed to create GLFW Window");
 
         //setup key callback
         glfwSetKeyCallback(window, (window,key,scancode,action,mods) ->
         {
-            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE && debugMode)
+            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE && mainApp.debugMode)
                 glfwSetWindowShouldClose(window,true);
         });
 
@@ -89,7 +92,7 @@ public class SceneManager
         glfwShowWindow(window);
     }
 
-    private static void update()
+    private static void Update()
     {
         //Actual game loop
         // This line is critical for LWJGL's interoperation with GLFW's
@@ -105,11 +108,20 @@ public class SceneManager
         //Run loop
         while(!glfwWindowShouldClose(window))
         {
+            float lastTime = time;
+            time = System.currentTimeMillis();
+            deltaTime = (time-lastTime)/1000f;
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glfwSwapBuffers(window);
 
             glfwPollEvents();
         }
+    }
+
+    public static float DeltaTime()
+    {
+        return deltaTime;
     }
 }
