@@ -4,15 +4,18 @@ import com.google.errorprone.annotations.ForOverride;
 
 public class FGCApp
 {
-    public int width = 1280, height = 720;
-
-    public boolean debugMode = false;
-
-    public String gameTitle = "4GC Project";
-
-    @ForOverride
-    protected void OnGameStart()
+    public FGCApp()
     {
-        System.out.println("DEFAULT: Nothing to do");
+
+    }
+
+    public void finalize()
+    {
+
+    }
+
+    public void Run()
+    {
+        while(true);
     }
 }
