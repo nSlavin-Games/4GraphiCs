@@ -13,7 +13,10 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
 
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ShowcaseGame extends PApplet {
     //region Animations
@@ -51,7 +54,7 @@ public class ShowcaseGame extends PApplet {
     //endregion
     //region Player
     //region Idle
-    public static Animation playerIdleLeft = new Animation(0.2f, true, "playerIdleLeft");
+    public static Animation playerIdleLeft = new Animation(0.2f, true, "playerIdleLeft", new File(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("Animations/Player/Idle/")).getPath()), "Player_Idle_", 4, "png");
     public static Animation playerIdleRight = new Animation(0.2f, true, "playerIdleRight");
     //endregion
     //region Run
@@ -78,29 +81,25 @@ public class ShowcaseGame extends PApplet {
     public static Animation playerDamageLeft = new Animation(0.5f, "playerDamageLeft");
     public static Animation playerDamageRight = new Animation(0.5f, "playerDamageRight");
     static CheatConsole console;
+    private static ArrayList<String> flags = new ArrayList<>();
+    //endregion
+    //endregion
     //endregion
     //endregion
     //region Portal
     Animation portal = new Animation(0.07f, true, "portal");
-    //endregion
-    //endregion
-
-    private PImage firstLevelBackground;
-    private PImage secondLevelBackground;
-    private PImage thirdLevelBackground;
-    private PImage fourthLevelBackground;
-
     PImage terrainWide;
     PImage terrainSquare;
     PImage terrainTall;
     PImage terrainDot;
     PImage terrainMWide;
     PImage terrainMTall;
-
     PImage heartImage;
-
     ClassLoader classLoader;
-    private static ArrayList<String> flags = new ArrayList<>();
+    private PImage firstLevelBackground;
+    private PImage secondLevelBackground;
+    private PImage thirdLevelBackground;
+    private PImage fourthLevelBackground;
 
     public static void main(String[] args) {
         //TODO(samu): settings override fatto bene con args (appendere args a appletArgs e sfruttarlo per le options (file options.ini?))
@@ -195,11 +194,20 @@ public class ShowcaseGame extends PApplet {
             }
 
             //Player Idle
-            for (int i = 0; i < 8; i++) {
-                if (i < 4)
-                    playerIdleLeft.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
-                else
-                    playerIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
+            Animation playerIdleLeftT = Animation.loadCachedAnimation(new File(playerIdleLeft.getResourcesPath().toString() + "/" + "Player_Idle_.sac"));
+            println(playerIdleLeftT == null);
+            DebugConsole.Info(""+(playerIdleLeftT == null));
+            if (playerIdleLeftT == null) {
+                for (int i = 0; i < 8; i++) {
+                    if (i < 4){
+                        System.out.println((Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
+                        playerIdleLeft.addFrame((Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));}
+                    else
+                        playerIdleRight.addFrame(loadImage(Objects.requireNonNull(classLoader.getResource("Animations/Player/Idle/Player_Idle_" + i + ".png")).getPath()));
+                }
+                playerIdleLeft.serialize();
+            } else {
+                playerIdleLeft = playerIdleLeftT;
             }
             //Player Run
             for (int i = 0; i < 8; i++) {
@@ -543,7 +551,7 @@ public class ShowcaseGame extends PApplet {
         int heartWidth = (int) (hearthHeight * 1.16666666f);
 
         int playerHeight = 115;
-        int playerWidth = (int)(playerHeight * 0.9375f);
+        int playerWidth = (int) (playerHeight * 0.9375f);
 
         //Ultimate indicator
         int ultSize = 150;

@@ -3,10 +3,12 @@ package com.fourgraphics;
 
 import processing.core.PImage;
 
+import java.io.Serializable;
+
 /**
  * @author Dareisa, Furriolo, Iurcea
  */
-public class Renderer extends Renderable
+public class Renderer extends Renderable implements Serializable
 {
     private final DrawType renderType;
     private int color;
@@ -64,6 +66,13 @@ public class Renderer extends Renderable
         }
     }
 
+    public void setTexture(PImage texture)
+    {
+        this.texture = texture;
+    }
+
+    //region utils
+
     public Renderer clone()
     {
         if (this.renderType == DrawType.TEXTURED)
@@ -75,8 +84,9 @@ public class Renderer extends Renderable
         }
     }
 
-    public void setTexture(PImage texture)
-    {
-        this.texture = texture;
+    public void serialize(){
+
     }
+
+    //endregion
 }
