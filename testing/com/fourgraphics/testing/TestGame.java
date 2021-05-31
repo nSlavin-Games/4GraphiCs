@@ -1,6 +1,6 @@
 package com.fourgraphics.testing;
 
-import com.fourgraphics.scenes.FGCApp;
+import com.fourgraphics.FGCApp;
 
 public class TestGame extends FGCApp
 {

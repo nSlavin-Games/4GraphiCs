@@ -14,18 +14,15 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class SceneManager
 {
-    private static FGCApp mainApp;
 
     private static long window;
 
     private static float deltaTime;
     private static float time;
 
-    public static void Run(FGCApp app)
+    public static void Run()
     {
-        mainApp = app;
         Start();
-        mainApp.OnGameStart();
         Update();
 
         // Free the window callbacks and destroy the window
@@ -52,14 +49,14 @@ public class SceneManager
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); //window resizable
 
         //Creating the window
-        window = glfwCreateWindow(mainApp.width, mainApp.height, mainApp.gameTitle, NULL, NULL);
+        window = glfwCreateWindow(1280, 720, "4GC Project", NULL, NULL);
         if(window == NULL)
             throw new RuntimeException("Failed to create GLFW Window");
 
         //setup key callback
         glfwSetKeyCallback(window, (window,key,scancode,action,mods) ->
         {
-            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE && mainApp.debugMode)
+            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window,true);
         });
 
