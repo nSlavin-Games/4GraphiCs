@@ -291,6 +291,11 @@ public class SceneManager {
         return sceneList.get(activeSceneIndex).getObject(index);
     }
 
+    public static <T> GameObject findObjectWithType(Class<T> type)
+    {
+        return sceneList.get(activeSceneIndex).getObject(type);
+    }
+
     /**
      * Getter per l'app principale
      *

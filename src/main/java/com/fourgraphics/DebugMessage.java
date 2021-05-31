@@ -68,6 +68,26 @@ class DebugMessage extends JButton
         timeReceived = new Date();
     }
 
+    public DebugMessage(DebugMessageType type, String errorName, String message, StackTraceElement[] error, StackTraceElement[] stackTrace)
+    {
+        occurrences = 0;
+        callerFile = error[0].getFileName();
+        stackTraceInfo += callerFile;
+        callerLine = error[0].getLineNumber();
+        stackTraceInfo += "(" + callerLine + ")";
+        buttonText = errorName + " " + callerFile;
+        content = errorName + ": " + message + System.lineSeparator();
+        for(int i = 0; i < error.length; i++)
+        {
+            content += error[i] + System.lineSeparator();
+        }
+        stackTraceInfo = "Called at: ";
+        stackTraceInfo += callerFile;
+        stackTraceInfo += "(" + callerLine + ")";
+        messageType = type;
+        timeReceived = new Date();
+    }
+
     @SuppressWarnings("deprecated")
     protected String GetLayoutMessage() {
         return "[" + timeReceived.getHours() + ":" + timeReceived.getMinutes() + ":" + timeReceived.getSeconds() + "] " + messageType.toString() + ": " + content + System.lineSeparator() + stackTraceInfo;

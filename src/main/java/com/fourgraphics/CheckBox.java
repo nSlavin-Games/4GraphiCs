@@ -34,7 +34,7 @@ public class CheckBox extends UIElement
             sketch.noStroke();
 
             sketch.pushMatrix();
-            sketch.translate(Rescaler.resizeW(cameraPosition.getX()), Rescaler.resizeH(cameraPosition.getY()));
+            sketch.translate(Rescaler.resizeH(cameraPosition.getX()), Rescaler.resizeH(cameraPosition.getY()));
 
         }
 
