@@ -1,7 +1,7 @@
 Manifest-Version: 1.0.1
 Name: com/fourgraphics
 Created-By: Builded on 1.8.0_252 (OpenJDK) with Processing 3.5.4 by Davide Furfaro and Samuele Verga
-Automatic-Module-Name: 4GraphiCs-Engine
+Automatic-Module-Name: fourgraphics
 Specification-Title: 4GraphiCs Processing-based Game Engine
 Specification-Version: 1.0.1a
 Specification-Vendor: nSlavin Games
