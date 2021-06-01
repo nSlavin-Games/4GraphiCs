@@ -3,6 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/4GraphiCs.iml" filepath="$PROJECT_DIR$/4GraphiCs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_engine/fourgraphics_engine.iml" filepath="$PROJECT_DIR$/fourgraphics_engine/fourgraphics_engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_logging/fourgraphics_logging.iml" filepath="$PROJECT_DIR$/fourgraphics_logging/fourgraphics_logging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_logging_internal/fourgraphics_logging_internal.iml" filepath="$PROJECT_DIR$/fourgraphics_logging_internal/fourgraphics_logging_internal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_math/fourgraphics_math.iml" filepath="$PROJECT_DIR$/fourgraphics_math/fourgraphics_math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_objects/fourgraphics_objects.iml" filepath="$PROJECT_DIR$/fourgraphics_objects/fourgraphics_objects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fourgraphics_scenes/fourgraphics_scenes.iml" filepath="$PROJECT_DIR$/fourgraphics_scenes/fourgraphics_scenes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testgame/testgame.iml" filepath="$PROJECT_DIR$/testgame/testgame.iml" />
     </modules>
   </component>
 </project>
